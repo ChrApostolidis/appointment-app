@@ -62,6 +62,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
         email: data.email,
         password: hashedPassword,
         salt,
+        role: data.role,
       })
       .returning({ id: UserTable.id, role: UserTable.role });
 

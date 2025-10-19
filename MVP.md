@@ -1,63 +1,115 @@
-# Tech Stack
-* FrontEnd: 
-- Next.js
-- Tailwindcss
-- Shadcn/ui
-- Auth
+# 🧭 MVP Development Roadmap
 
-# MVP 
-Purpose: Distinguish between providers (the people offering appointments) and clients (people booking them).
+Purpose: Build a simple booking platform that connects **Providers** (offering appointments) and **Clients** (booking them).
 
-Sign up / log in (NextAuth.js, Clerk, or Supabase Auth)
-User roles: provider or client
-Simple profile: name, email
+---
 
-# Provider 
-Features:
-Provider can:
-Select days of the week
-Define available time slots (e.g., Mon 9:00–12:00, Wed 14:00–17:00)
-Data stored in DB (via API route /api/availability)
+## 🧱 Tech Stack
 
-UI:
-Simple calendar or day/time picker
-Availability list view (to see what’s set)
+**Frontend**
+- [x] Next.js
+- [x] Tailwind CSS
+- [x] shadcn/ui
+- [x] Authentication 
 
-Backend:
-POST /api/availability → create/update
-GET /api/availability?userId= → fetch availability
+**Backend / Infra**
+- [ ] Next.js API Routes
+- [ ] Database (PostgreSQL / Supabase / Prisma)
+- [ ] Email Service (Resend / Nodemailer)
 
-## Booking System
+---
 
-Purpose: Clients pick a slot and confirm booking.
-Features:
-Show available time slots for a provider
-Client selects one and books it
-Prevent double-booking
-Store in DB as an Appointment
+## 👤 Authentication & User Roles
 
-Backend:
-POST /api/bookings → create booking
-GET /api/bookings?providerId= → list provider bookings
+**Goal:** Distinguish between *providers* and *clients*.
 
-Validation:
-Ensure slot is free before even rendering
+**Tasks**
+- [x] Implement sign up / login  
+- [ ] Role selection (provider or client) on first login  
+- [x] Basic profile (name, email) 
+- [ ] Advanced profile ()
+- [x] Store role in user table  
+- [ ] Protect routes by role (middleware or server-side check)
 
+---
 
-## Dashboards
+## 🗓️ Provider Availability
 
-Purpose: Let both sides view relevant data easily.
-Provider Dashboard:
-List of upcoming appointments
-Button to manage availability
+**Goal:** Let providers define and manage their available time slots.
 
-Client Dashboard:
-List of booked appointments
+**Tasks**
+- [ ] UI: Availability management page  
+- [ ] UI: Day & time picker component  
+- [ ] API:  
+  - [ ] `POST /api/availability` → Create / update availability  
+  - [ ] `GET /api/availability?userId=` → Fetch provider availability  
+- [ ] DB schema for availability  
+- [ ] Display availability list view  
+- [ ] Validation: Prevent overlapping slots  
 
-### Email Confirmation (Optional but Strong for MVP)
-Feature:
-When a booking is made, send a confirmation email to client & provider
+**Done When**
+- Provider can add, edit, and delete time slots from dashboard  
 
-Tech:
-Use Resend or Nodemailer
-Template includes: date, time, provider name
+---
+
+## 📅 Booking System
+
+**Goal:** Allow clients to browse available slots and confirm bookings.
+
+**Tasks**
+- [ ] Fetch available time slots (provider view)  
+- [ ] Booking form (slot selection + confirm)  
+- [ ] API:
+  - [ ] `POST /api/bookings` → Create booking  
+  - [ ] `GET /api/bookings?providerId=` → List provider’s bookings  
+- [ ] Prevent double-booking (check before insert)  
+- [ ] Save booking in database  
+
+**Done When**
+- Clients can see availability and successfully book a time  
+
+---
+
+## 📊 Dashboards
+
+**Goal:** Give users visibility into their upcoming appointments.
+
+### Provider Dashboard
+- [ ] List upcoming bookings  
+- [ ] Button → manage availability  
+
+### Client Dashboard
+- [ ] List all booked appointments  
+
+**Done When**
+- Both roles can see relevant data after login  
+
+---
+
+## 📧 Email Notifications (Optional for MVP)
+
+**Goal:** Notify both parties of new bookings.
+
+**Tasks**
+- [ ] Integrate Resend or Nodemailer  
+- [ ] Design email template (date, time, provider name)  
+- [ ] Trigger email on successful booking  
+
+**Done When**
+- Both provider and client receive confirmation emails  
+
+---
+
+## 🧩 Future Enhancements (Post-MVP Ideas)
+
+- [ ] Google / Outlook Calendar integration  
+- [ ] Booking reschedule or cancellation  
+- [ ] Payment integration (Stripe)  
+- [ ] Reminder notifications (email or SMS)  
+- [ ] Provider bios and profile photos  
+- [ ] Client reviews  
+
+---
+
+## 📁 Suggested Folder Structure
+

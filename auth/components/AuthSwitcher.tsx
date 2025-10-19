@@ -7,12 +7,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, signUpSchema } from "@/auth/schema";
 import { useForm } from "react-hook-form";
-import { ToggleButton } from "@/app/authPage/components/ToggleButton";
+import { ToggleButton } from "@/app/authPage/components/RolePick";
 
 const AuthSwitcher: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string>();
-  const [userRole, setUserRole] = useState<"user" | "provider">("user");
 
   const toggleMode = () => setIsSignUp(!isSignUp);
 
@@ -144,8 +143,13 @@ const AuthSwitcher: React.FC = () => {
                 </p>
               )}
 
-              <button className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium text-white transition">
-                Sign In
+              <button
+                disabled={handleSignIn.formState.isSubmitting}
+                className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium text-white transition"
+              >
+                {handleSignIn.formState.isSubmitting
+                  ? "Signing In..."
+                  : "Sign In"}
               </button>
             </form>
           ) : (
@@ -200,10 +204,18 @@ const AuthSwitcher: React.FC = () => {
                 </p>
               )}
 
-              <ToggleButton value={userRole} onChange={setUserRole} />
+              <ToggleButton
+                value={handleSignUp.watch("role")}
+                onChange={(role) => handleSignUp.setValue("role", role)}
+              />
 
-              <button className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium text-white transition">
-                Sign Up
+              <button
+                disabled={handleSignUp.formState.isSubmitting}
+                className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium text-white transition"
+              >
+                {handleSignUp.formState.isSubmitting
+                  ? "Signing Up..."
+                  : "Sign Up"}
               </button>
             </form>
           )}
@@ -252,8 +264,11 @@ const AuthSwitcher: React.FC = () => {
             </p>
           )}
 
-          <button className="w-full py-2 mt-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium transition">
-            Sign In
+          <button
+            disabled={handleSignIn.formState.isSubmitting}
+            className="w-full py-2 mt-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium transition"
+          >
+            {handleSignIn.formState.isSubmitting ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
@@ -306,13 +321,19 @@ const AuthSwitcher: React.FC = () => {
               {handleSignUp.formState.errors.password.message}
             </p>
           )}
+          <div>
+            {handleSignUp.watch("role") === "user" ? "User" : "Provider"}
+          </div>
           <ToggleButton
             value={handleSignUp.watch("role")}
             onChange={(role) => handleSignUp.setValue("role", role)}
           />
 
-          <button className="w-full py-2 mt-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium transition">
-            Sign Up
+          <button
+            disabled={handleSignUp.formState.isSubmitting}
+            className="w-full py-2 mt-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium transition"
+          >
+            {handleSignUp.formState.isSubmitting ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
 
