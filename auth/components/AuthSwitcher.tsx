@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { signIn, signUp } from "@/auth/actions";
-import z from "zod";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, signUpSchema } from "@/auth/schema";
 import { useForm } from "react-hook-form";
 import { ToggleButton } from "@/app/authPage/components/ToggleButton";
-
 
 const AuthSwitcher: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -50,6 +50,7 @@ const AuthSwitcher: React.FC = () => {
   // Sign In form handling
   const handleSignIn = useForm<z.infer<typeof signInSchema>>({
     defaultValues: { email: "", password: "" },
+    resolver: zodResolver(signInSchema),
   });
 
   async function signInHandler(data: z.infer<typeof signInSchema>) {
@@ -59,12 +60,13 @@ const AuthSwitcher: React.FC = () => {
 
   // Sign Up form handling
   const handleSignUp = useForm<z.infer<typeof signUpSchema>>({
-     defaultValues: {
+    defaultValues: {
       name: "",
       email: "",
       password: "",
-      role: userRole,
+      role: "user",
     },
+    resolver: zodResolver(signUpSchema),
   });
 
   async function signUpHandler(data: z.infer<typeof signUpSchema>) {
@@ -83,8 +85,8 @@ const AuthSwitcher: React.FC = () => {
               onClick={() => setIsSignUp(false)}
               className={`flex-1 py-3 px-4 rounded-md text-sm font-medium transition-all ${
                 !isSignUp
-                  ? 'bg-cyan-500 text-white'
-                  : 'text-gray-400 hover:text-gray-200'
+                  ? "bg-cyan-500 text-white"
+                  : "text-gray-400 hover:text-gray-200"
               }`}
             >
               Sign In
@@ -93,8 +95,8 @@ const AuthSwitcher: React.FC = () => {
               onClick={() => setIsSignUp(true)}
               className={`flex-1 py-3 px-4 rounded-md text-sm font-medium transition-all ${
                 isSignUp
-                  ? 'bg-cyan-500 text-white'
-                  : 'text-gray-400 hover:text-gray-200'
+                  ? "bg-cyan-500 text-white"
+                  : "text-gray-400 hover:text-gray-200"
               }`}
             >
               Sign Up
@@ -108,11 +110,15 @@ const AuthSwitcher: React.FC = () => {
               className="space-y-4"
             >
               <div className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-100 mb-2">Welcome Back</h1>
+                <h1 className="text-2xl font-bold text-gray-100 mb-2">
+                  Welcome Back
+                </h1>
                 <p className="text-gray-400 text-sm">Sign in to your account</p>
               </div>
 
-              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+              {error && (
+                <p className="text-red-500 text-sm text-center">{error}</p>
+              )}
 
               <input
                 type="email"
@@ -148,11 +154,15 @@ const AuthSwitcher: React.FC = () => {
               className="space-y-4"
             >
               <div className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-100 mb-2">Create Account</h1>
+                <h1 className="text-2xl font-bold text-gray-100 mb-2">
+                  Create Account
+                </h1>
                 <p className="text-gray-400 text-sm">Join us today</p>
               </div>
 
-              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+              {error && (
+                <p className="text-red-500 text-sm text-center">{error}</p>
+              )}
 
               <input
                 type="text"
@@ -172,6 +182,11 @@ const AuthSwitcher: React.FC = () => {
                 {...handleSignUp.register("email")}
                 className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 focus:ring-2 focus:ring-cyan-400"
               />
+              {handleSignUp.formState.errors.email && (
+                <p className="text-red-500 text-xs">
+                  {handleSignUp.formState.errors.email.message}
+                </p>
+              )}
 
               <input
                 type="password"
@@ -179,12 +194,14 @@ const AuthSwitcher: React.FC = () => {
                 {...handleSignUp.register("password")}
                 className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 focus:ring-2 focus:ring-cyan-400"
               />
+              {handleSignUp.formState.errors.password && (
+                <p className="text-red-500 text-xs">
+                  {handleSignUp.formState.errors.password.message}
+                </p>
+              )}
 
-              <ToggleButton 
-                value={userRole}
-                onChange={setUserRole}
-              />
-              
+              <ToggleButton value={userRole} onChange={setUserRole} />
+
               <button className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-medium text-white transition">
                 Sign Up
               </button>
@@ -273,13 +290,23 @@ const AuthSwitcher: React.FC = () => {
             {...handleSignUp.register("email")}
             className="w-full px-4 py-2 mb-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 focus:ring-2 focus:ring-cyan-400"
           />
+          {handleSignUp.formState.errors.email && (
+            <p className="text-red-500 text-sm">
+              {handleSignUp.formState.errors.email.message}
+            </p>
+          )}
           <input
             type="password"
             placeholder="Password"
             {...handleSignUp.register("password")}
             className="w-full px-4 py-2 mb-3 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 focus:ring-2 focus:ring-cyan-400"
           />
-          <ToggleButton 
+          {handleSignUp.formState.errors.password && (
+            <p className="text-red-500 text-sm">
+              {handleSignUp.formState.errors.password.message}
+            </p>
+          )}
+          <ToggleButton
             value={handleSignUp.watch("role")}
             onChange={(role) => handleSignUp.setValue("role", role)}
           />
