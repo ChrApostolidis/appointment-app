@@ -5,8 +5,12 @@ import { signInSchema, signUpSchema } from "./schema";
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
-import { UserTable } from "@/drizzle/schema";
-import { comparePasswords, generateSalt, hashPassword } from "./core/passwordHasher";
+import { ProviderTable, UserTable } from "@/drizzle/schema";
+import {
+  comparePasswords,
+  generateSalt,
+  hashPassword,
+} from "./core/passwordHasher";
 import { createUserSession, removeUserFromSession } from "./core/session";
 import { cookies } from "next/headers";
 
@@ -16,7 +20,7 @@ export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
   if (!success) return "Unable to Log In";
 
   const user = await db.query.UserTable.findFirst({
-    columns: {password: true, salt: true, id: true, role: true, email: true},
+    columns: { password: true, salt: true, id: true, role: true, email: true },
     where: eq(UserTable.email, data.email),
   });
 
@@ -55,19 +59,33 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
     const salt = generateSalt();
     const hashedPassword = await hashPassword(data.password, salt);
 
-    const [user] = await db
-      .insert(UserTable)
-      .values({
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-        salt,
-        role: data.role,
-      })
-      .returning({ id: UserTable.id, role: UserTable.role });
-
-    if (user == null) return "Error creating user null user";
-    await createUserSession(user, await cookies());
+    if (data.role == "user") {
+      const [user] = await db
+        .insert(UserTable)
+        .values({
+          name: data.name,
+          email: data.email,
+          password: hashedPassword,
+          salt,
+          role: data.role,
+        })
+        .returning({ id: UserTable.id, role: UserTable.role });
+      if (user == null) return "Error creating user null user";
+      await createUserSession(user, await cookies());
+    } else {
+      const [provider] = await db
+        .insert(ProviderTable)
+        .values({
+          name: data.name,
+          email: data.email,
+          password: hashedPassword,
+          salt,
+          role: data.role,
+        })
+        .returning({ id: UserTable.id, role: UserTable.role });
+      if (provider == null) return "Error creating provider null provider";
+      await createUserSession(provider, await cookies());
+    }
   } catch (error) {
     console.log("Error creating user:", error);
     return `${error}`;

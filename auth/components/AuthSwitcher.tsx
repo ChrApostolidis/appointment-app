@@ -151,9 +151,7 @@ const AuthSwitcher: React.FC = () => {
               {handleSignUp.formState.errors.password.message}
             </p>
           )}
-          <div>
-            {handleSignUp.watch("role") === "user" ? "User" : "Provider"}
-          </div>
+          
           <RolePick
             value={handleSignUp.watch("role")}
             onChange={(role: Role) => handleSignUp.setValue("role", role)}
