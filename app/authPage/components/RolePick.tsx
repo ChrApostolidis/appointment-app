@@ -7,7 +7,7 @@ interface ToggleButtonProps {
   onChange?: (role: "user" | "provider") => void;
 }
 
-export function ToggleButton({ value, onChange }: ToggleButtonProps) {
+export function RolePick({ value, onChange }: ToggleButtonProps) {
   return (
     <div className="flex justify-center items-center mb-3">
       <div className="w-[200px] relative flex bg-primary rounded-full shadow-md p-1">
