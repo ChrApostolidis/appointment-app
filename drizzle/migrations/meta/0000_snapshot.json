@@ -1,11 +1,11 @@
 {
-  "id": "8218f9e0-d697-477f-98cd-ff19d502847a",
+  "id": "34092014-f9b7-4a1e-a938-55a9dd20048d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.providers": {
-      "name": "providers",
+    "public.customers": {
+      "name": "customers",
       "schema": "",
       "columns": {
         "id": {
@@ -15,37 +15,17 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
-          "type": "text",
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "email": {
-          "name": "email",
-          "type": "text",
+        "interests": {
+          "name": "interests",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
-        },
-        "password": {
-          "name": "password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "salt": {
-          "name": "salt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role": {
-          "name": "role",
-          "type": "user_roles",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'provider'"
+          "notNull": false
         },
         "createdAt": {
           "name": "createdAt",
@@ -63,17 +43,95 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "providers_email_unique": {
-          "name": "providers_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+      "foreignKeys": {
+        "customers_user_id_users_id_fk": {
+          "name": "customers_user_id_users_id_fk",
+          "tableFrom": "customers",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.providers": {
+      "name": "providers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "business_name": {
+          "name": "business_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service_category": {
+          "name": "service_category",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "providers_user_id_users_id_fk": {
+          "name": "providers_user_id_users_id_fk",
+          "tableFrom": "providers",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -91,25 +149,25 @@
         },
         "name": {
           "name": "name",
-          "type": "text",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
         "email": {
           "name": "email",
-          "type": "text",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
         "password": {
           "name": "password",
-          "type": "text",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
         "salt": {
           "name": "salt",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
@@ -118,8 +176,7 @@
           "type": "user_roles",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'user'"
+          "notNull": true
         },
         "createdAt": {
           "name": "createdAt",
@@ -145,6 +202,39 @@
           "nullsNotDistinct": false,
           "columns": [
             "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.service_category": {
+      "name": "service_category",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "service_category_name_unique": {
+          "name": "service_category_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
           ]
         }
       },
