@@ -1,5 +1,5 @@
 import AuthSwitcher from "@/auth/components/AuthSwitcher";
 
-export default function SignInPage() {
+export default function AuthPage() {
   return <AuthSwitcher />;
 }

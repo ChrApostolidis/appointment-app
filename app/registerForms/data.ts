@@ -1,7 +1,4 @@
-import { db } from "../db";
-import { serviceCategory } from "../schema";
-
-const categories : Array<string> = [
+export const categories: Array<string> = [
   "Developer",
   "Dermatologist",
   "Massage",
@@ -105,21 +102,5 @@ const categories : Array<string> = [
   "Product Manager",
   "Operations Manager",
   "Sales Representative",
-  "Customer Support Agent"
+  "Customer Support Agent",
 ];
-
-export async function seedServiceCategories() {
-  await db.insert(serviceCategory).values(
-    categories.map((name) => ({ name }))
-  ).onConflictDoNothing(); // prevents duplicates
-}
-
-seedServiceCategories()
-  .then(() => {
-    console.log("✅ Service categories seeded successfully!");
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error("❌ Error seeding service categories:", error);
-    process.exit(1);
-  });

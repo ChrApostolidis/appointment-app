@@ -5,8 +5,6 @@ import {
   uuid,
   varchar,
   integer,
-  text,
-  serial,
 } from "drizzle-orm/pg-core";
 
 
@@ -55,13 +53,6 @@ export const ProviderTable = pgTable("providers", {
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
-
-
-export const serviceCategory = pgTable("service_category", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull().unique(),
-});
-
 
 // Database mapping for drizzle generic
 export type Database = {

@@ -5,7 +5,7 @@ import { signInSchema, signUpSchema } from "./schema";
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
-import { ProviderTable, UserTable } from "@/drizzle/schema";
+import { UserTable } from "@/drizzle/schema";
 import {
   comparePasswords,
   generateSalt,
@@ -13,6 +13,8 @@ import {
 } from "./core/passwordHasher";
 import { createUserSession, removeUserFromSession } from "./core/session";
 import { cookies } from "next/headers";
+
+let isProfileComplete: boolean;
 
 export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
   const { success, data } = signInSchema.safeParse(unsafeData);
@@ -24,7 +26,7 @@ export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
     where: eq(UserTable.email, data.email),
   });
 
-  if (!user) return "Unable to log in";
+  if (!user) return "User not found";
 
   const isCorrectPassword = await comparePasswords({
     hashedPassword: user.password,
@@ -35,8 +37,11 @@ export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
   if (!isCorrectPassword) return "Unable to log in";
 
   await createUserSession(user, await cookies());
-
-  redirect("/");
+  if (isProfileComplete === false) {
+    redirect("/registerForms");
+  } else {
+    redirect("/");
+  }
 }
 
 export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
@@ -44,6 +49,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
 
   if (!success) return "Unable to create account";
   let existingUser;
+
   try {
     existingUser = await db.query.UserTable.findFirst({
       where: eq(UserTable.email, data.email),
@@ -59,39 +65,29 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
     const salt = generateSalt();
     const hashedPassword = await hashPassword(data.password, salt);
 
-    if (data.role == "user") {
-      const [user] = await db
-        .insert(UserTable)
-        .values({
-          name: data.name,
-          email: data.email,
-          password: hashedPassword,
-          salt,
-          role: data.role,
-        })
-        .returning({ id: UserTable.id, role: UserTable.role });
-      if (user == null) return "Error creating user null user";
-      await createUserSession(user, await cookies());
-    } else {
-      const [provider] = await db
-        .insert(ProviderTable)
-        .values({
-          name: data.name,
-          email: data.email,
-          password: hashedPassword,
-          salt,
-          role: data.role,
-        })
-        .returning({ id: UserTable.id, role: UserTable.role });
-      if (provider == null) return "Error creating provider null provider";
-      await createUserSession(provider, await cookies());
-    }
+    const [user] = await db
+      .insert(UserTable)
+      .values({
+        name: data.name,
+        email: data.email,
+        password: hashedPassword,
+        salt,
+        role: data.role,
+      })
+      .returning({ id: UserTable.id, role: UserTable.role });
+    if (user == null) return "Error creating user null user";
+
+    await createUserSession(user, await cookies());
+    isProfileComplete = false;
   } catch (error) {
     console.log("Error creating user:", error);
     return `${error}`;
   }
-
-  redirect("/");
+  if (isProfileComplete === false) {
+    redirect("/registerForms");
+  } else {
+    redirect("/");
+  }
 }
 
 export async function logOut() {
