@@ -2,8 +2,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { signInSchema, signUpSchema } from "@/auth/schema";
-import { signIn, signUp } from "@/auth/actions";
+import {
+  completeSignUpCustomerSchema,
+  completeSignUpProviderSchema,
+  signInSchema,
+  signUpSchema,
+} from "@/auth/schema";
+import {
+  completeSignUpAsCustomer,
+  completeSignUpAsProvider,
+  signIn,
+  signUp,
+} from "@/auth/actions";
 
 export function useAuthForms() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -36,6 +46,20 @@ export function useAuthForms() {
     setError(error);
   }
 
+  async function completeSignUpAsProviderHandler(
+    data: z.infer<typeof completeSignUpProviderSchema>
+  ) {
+    const error = await completeSignUpAsProvider(data);
+    setError(error);
+  }
+
+  async function completeSignUpAsCustomerHandler(
+    data: z.infer<typeof completeSignUpCustomerSchema>
+  ) {
+    const error = await completeSignUpAsCustomer(data);
+    setError(error);
+  }
+
   const toggleMode = () => setIsSignUp(!isSignUp);
 
   return {
@@ -44,15 +68,17 @@ export function useAuthForms() {
     setIsSignUp,
     error,
     setError,
-    
+
     // Form instances
     handleSignIn,
     handleSignUp,
-    
+
     // Handlers
     signInHandler,
     signUpHandler,
     toggleMode,
+    completeSignUpAsProviderHandler,
+    completeSignUpAsCustomerHandler
   };
 }
 

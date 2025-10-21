@@ -1,67 +1,28 @@
-"use client";
-import { FaLock, FaBuilding, FaFileAlt, FaTag } from "react-icons/fa";
+import { FaBuilding, FaFileAlt, FaTag } from "react-icons/fa";
+import { categories } from "./data";
+import { useAuthForms } from "@/auth/hooks/useAuthForms";
+import HeaderRegisterForm from "./components/HeaderRegisterForm";
+import LockedRegisterForm from "./components/LockedRegisterForm";
 
 export default function RegisterForm() {
+  // const { completeSignUpAsProviderHandler, completeSignUpAsCustomerHandler } =
+  //   useAuthForms();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         <div className="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
           {/* Header */}
-          <div className="bg-gradient-to-r from-sky-500 to-blue-500 px-8 py-6">
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Complete Your Registration
-            </h1>
-            <p className="text-indigo-100">
-              Fill in your business details to get started
-            </p>
-          </div>
-
-          {/* Form */}
+          <HeaderRegisterForm />
           <div className="p-8 space-y-6">
-            <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
-                <FaLock className="w-5 h-5 text-slate-400" />
-                Account Information
-              </h2>
-
-              <div className="relative">
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="name"
-                    disabled
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 cursor-not-allowed"
-                  />
-                  <FaLock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    name="email"
-                    disabled
-                    className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 cursor-not-allowed"
-                  />
-                  <FaLock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t border-slate-700"></div>
-
+          <LockedRegisterForm />
+          {/* {currentUser?.role == "provider" && ( */}
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-slate-200">
                 Business Details
               </h2>
 
+              {/* Form */}
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
                   Business Name <span className="text-red-400">*</span>
@@ -87,6 +48,11 @@ export default function RegisterForm() {
                     name="serviceCategory"
                     className="w-full pl-11 pr-10 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none cursor-pointer"
                   >
+                    {categories.map((category) => (
+                      <option key={category.id} className="bg-slate-800">
+                        {category.name}
+                      </option>
+                    ))}
                     <option value="" className="bg-slate-800">
                       Select a category
                     </option>
@@ -121,17 +87,18 @@ export default function RegisterForm() {
                   <textarea
                     name="description"
                     rows={4}
+                    maxLength={250}
                     placeholder="Describe your business and services..."
                     className="w-full pl-11 pr-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
                   />
                 </div>
                 <p className="mt-1 text-sm text-slate-400">
-                  Minimum 50 characters
+                  Minimum 250 characters
                 </p>
               </div>
             </div>
 
-            <button className="w-full bg-gradient-to-br from-sky-500 via-cyan-400 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-500 hover:to-sky-500 transition-all duration-200 shadow-lg shadow-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/50 transform hover:-translate-y-0.5">
+            <button className="cursor-pointer w-full bg-gradient-to-br from-sky-500 via-cyan-400 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-500 hover:to-sky-500 transition-all duration-200 shadow-lg shadow-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/50 transform hover:-translate-y-0.5">
               Complete Registration
             </button>
 
@@ -140,6 +107,14 @@ export default function RegisterForm() {
               Privacy Policy
             </p>
           </div>
+          {/* )} */}
+          {/* {currentUser?.role == "user" && ( */}
+          <div className="p-8 space-y-6">
+            <h2 className="text-lg font-semibold text-slate-200 text-center">
+              Your account is all set!
+            </h2>
+          </div>
+          {/* )} */}
         </div>
       </div>
     </div>

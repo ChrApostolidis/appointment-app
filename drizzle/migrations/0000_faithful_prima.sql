@@ -21,7 +21,7 @@ CREATE TABLE "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(50) NOT NULL,
 	"email" varchar(100) NOT NULL,
-	"password" varchar(50) NOT NULL,
+	"password" varchar NOT NULL,
 	"salt" varchar(255) NOT NULL,
 	"role" "user_roles" NOT NULL,
 	"is_profile_complete" boolean DEFAULT false NOT NULL,

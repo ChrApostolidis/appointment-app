@@ -16,7 +16,7 @@ export const UserTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 50 }).notNull(),
   email: varchar("email", { length: 100 }).notNull().unique(),
-  password: varchar("password", { length: 50 }).notNull(),
+  password: varchar("password").notNull(),
   salt: varchar("salt", { length: 255 }).notNull(),
   role: userRoleEnum("role").notNull(),
   isProfileComplete: boolean("is_profile_complete").default(false).notNull(),

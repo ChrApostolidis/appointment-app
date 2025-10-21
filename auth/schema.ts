@@ -12,9 +12,14 @@ export const signUpSchema = z.object({
   role: z.enum(["user", "provider"]),
 })
 
-export const completeSignUpSchema = z.object({
+export const completeSignUpProviderSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   businessName: z.string().min(5, "Business Name is required"),
   serviceCategory: z.string().min(2, "Service Category is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
+})
+
+export const completeSignUpCustomerSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+  interests: z.string().min(2, "Interests are required"),
 })
