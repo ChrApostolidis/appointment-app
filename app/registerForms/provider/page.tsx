@@ -1,28 +1,21 @@
+import HeaderRegisterForm from "../components/HeaderRegisterForm";
+import LockedRegisterForm from "../components/LockedRegisterForm";
 import { FaBuilding, FaFileAlt, FaTag } from "react-icons/fa";
-import { categories } from "./data";
-import { useAuthForms } from "@/auth/hooks/useAuthForms";
-import HeaderRegisterForm from "./components/HeaderRegisterForm";
-import LockedRegisterForm from "./components/LockedRegisterForm";
+import { categories } from "../data";
 
-export default function RegisterForm() {
-  // const { completeSignUpAsProviderHandler, completeSignUpAsCustomerHandler } =
-  //   useAuthForms();
-
+export default function RegisterProviderPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         <div className="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
-          {/* Header */}
           <HeaderRegisterForm />
           <div className="p-8 space-y-6">
-          <LockedRegisterForm />
-          {/* {currentUser?.role == "provider" && ( */}
+            <LockedRegisterForm />
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-slate-200">
                 Business Details
               </h2>
 
-              {/* Form */}
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
                   Business Name <span className="text-red-400">*</span>
@@ -53,12 +46,6 @@ export default function RegisterForm() {
                         {category.name}
                       </option>
                     ))}
-                    <option value="" className="bg-slate-800">
-                      Select a category
-                    </option>
-                    <option value="health" className="bg-slate-800">
-                      Health & Wellness
-                    </option>{" "}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                     <svg
@@ -107,14 +94,6 @@ export default function RegisterForm() {
               Privacy Policy
             </p>
           </div>
-          {/* )} */}
-          {/* {currentUser?.role == "user" && ( */}
-          <div className="p-8 space-y-6">
-            <h2 className="text-lg font-semibold text-slate-200 text-center">
-              Your account is all set!
-            </h2>
-          </div>
-          {/* )} */}
         </div>
       </div>
     </div>
