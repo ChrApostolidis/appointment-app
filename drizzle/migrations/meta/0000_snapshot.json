@@ -1,5 +1,5 @@
 {
-  "id": "49100256-86a8-4a25-a7df-eb8cb8e70484",
+  "id": "3a53f18c-bb31-4b54-a0ac-c93d91cf2cb9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -17,7 +17,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -77,7 +77,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -177,6 +177,13 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_profile_complete": {
+          "name": "is_profile_complete",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "createdAt": {
           "name": "createdAt",

@@ -4,7 +4,7 @@ import {
   timestamp,
   uuid,
   varchar,
-  integer,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 
@@ -19,6 +19,7 @@ export const UserTable = pgTable("users", {
   password: varchar("password", { length: 50 }).notNull(),
   salt: varchar("salt", { length: 255 }).notNull(),
   role: userRoleEnum("role").notNull(),
+  isProfileComplete: boolean("is_profile_complete").default(false).notNull(),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()
@@ -28,7 +29,7 @@ export const UserTable = pgTable("users", {
 
 export const CustomerTable = pgTable("customers", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: integer("user_id")
+  userId: uuid("user_id")
     .notNull()
     .references(() => UserTable.id, { onDelete: "cascade" }),
   interests: varchar("interests", { length: 255 }),
@@ -41,7 +42,7 @@ export const CustomerTable = pgTable("customers", {
 
 export const ProviderTable = pgTable("providers", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: integer("user_id")
+  userId: uuid("user_id")
     .notNull()
     .references(() => UserTable.id, { onDelete: "cascade" }),
   businessName: varchar("business_name", { length: 100 }).notNull(),
