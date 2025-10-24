@@ -9,6 +9,7 @@ const COOKIE_SESSION_KEY = "sessionId";
 const sessionSchema = z.object({
   id: z.string(),
   role: z.enum(userRoles),
+  isProfileComplete: z.boolean(),
 });
 
 type UserSession = z.infer<typeof sessionSchema>;

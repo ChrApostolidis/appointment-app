@@ -7,6 +7,8 @@ import {
 const privateRoutes = ["/private"];
 const adminRoutes = ["/admin"];
 const homeRoutes = ["/"];
+const registerRoutesProvider = ["/registerForms", "/registerForms/provider"];
+const registerRoutesCustomer = ["/registerForms", "/registerForms/customer"];
 
 export async function middleware(request: NextRequest) {
   const response = (await middlewareAuth(request)) ?? NextResponse.next();
@@ -43,6 +45,30 @@ async function middlewareAuth(request: NextRequest) {
       return NextResponse.redirect(new URL("/authPage", request.url));
     }
     if (user.role !== "admin") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+  // retister provider page
+  if (registerRoutesProvider.includes(request.nextUrl.pathname)) {
+    const user = await getUserFromSession(request.cookies);
+    if (user == null) {
+      return NextResponse.redirect(new URL("/authPage", request.url));
+    }
+    if (user.role !== "provider" || user.isProfileComplete) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
+  // register customer page
+  if (registerRoutesCustomer.includes(request.nextUrl.pathname)) {
+    const user = await getUserFromSession(request.cookies);
+    if (user == null) {
+      return NextResponse.redirect(new URL("/authPage", request.url));
+    }
+    if (user.role !== "user") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    if (user.isProfileComplete) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

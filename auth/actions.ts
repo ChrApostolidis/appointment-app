@@ -146,7 +146,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
         role: data.role,
         isProfileComplete: false,
       })
-      .returning({ id: UserTable.id, role: UserTable.role });
+      .returning({ id: UserTable.id, role: UserTable.role, isProfileComplete: UserTable.isProfileComplete });
     if (user == null) return "Error creating user null user";
 
     await createUserSession(user, await cookies());
