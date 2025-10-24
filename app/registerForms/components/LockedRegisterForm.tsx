@@ -1,9 +1,13 @@
 import { FaLock } from "react-icons/fa";
-import { getCurrentUser } from "@/auth/currentUser";
 
-export default async function LockedRegisterForm() {
-  const currentUser = await getCurrentUser({ withFullUser: true });
+export interface userType {
+  name?: string;
+  email?: string;
+  role?: "user" | "provider" | "admin";
+  id?: string;
+}
 
+export default function LockedRegisterForm({user}: {user: userType}) {
   return (
     <>
       <div className="space-y-4">
@@ -19,7 +23,7 @@ export default async function LockedRegisterForm() {
           <div className="relative">
             <input
               type="text"
-              placeholder={currentUser?.name || "John Doe"}
+              placeholder={user?.name || "John Doe"}
               name="name"
               disabled
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 cursor-not-allowed"
@@ -36,7 +40,7 @@ export default async function LockedRegisterForm() {
             <input
               type="email"
               name="email"
-              placeholder={currentUser?.email || "john.doe@example.com"}
+              placeholder={user?.email || "john.doe@example.com"}
               disabled
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 cursor-not-allowed"
             />
@@ -44,8 +48,6 @@ export default async function LockedRegisterForm() {
           </div>
         </div>
       </div>
-      {/* Line spacing */}
-      <div className="border-t border-slate-700"></div>
     </>
   );
 }
