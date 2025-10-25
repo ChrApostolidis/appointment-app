@@ -1,7 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { completeSignUpCustomerSchema, completeSignUpProviderSchema, signInSchema, signUpSchema } from "./schema";
+import {
+  completeSignUpCustomerSchema,
+  completeSignUpProviderSchema,
+  signInSchema,
+  signUpSchema,
+} from "./schema";
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
@@ -50,6 +55,57 @@ export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
   redirect(user.isProfileComplete ? "/" : "/registerForms");
 }
 
+export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
+  const { success, data } = signUpSchema.safeParse(unsafeData);
+
+  if (!success) return "Unable to create account";
+  let existingUser;
+
+  try {
+    existingUser = await db.query.UserTable.findFirst({
+      where: eq(UserTable.email, data.email),
+    });
+  } catch (err) {
+    console.error("DB query failed:", err);
+    return "Database unavailable. Try again later.";
+  }
+
+  if (existingUser) return "User already exists";
+
+  try {
+    const salt = generateSalt();
+    const hashedPassword = await hashPassword(data.password, salt);
+
+    const [user] = await db
+      .insert(UserTable)
+      .values({
+        name: data.name,
+        email: data.email,
+        password: hashedPassword,
+        salt,
+        role: data.role,
+        isProfileComplete: false,
+      })
+      .returning({
+        id: UserTable.id,
+        role: UserTable.role,
+        isProfileComplete: UserTable.isProfileComplete,
+      });
+    if (user == null) return "Error creating user null user";
+
+    await createUserSession(user, await cookies());
+  } catch (error) {
+    console.log("Error creating user:", error);
+    return `${error}`;
+  }
+  // Redirect to complete registration
+  if (data.role === "provider") {
+    redirect("/registerForms/provider");
+  } else {
+    redirect("/registerForms/customer");
+  }
+}
+
 export async function completeSignUpAsProvider(
   unsafeData: z.infer<typeof completeSignUpProviderSchema>
 ) {
@@ -83,7 +139,6 @@ export async function completeSignUpAsProvider(
   redirect("/");
 }
 
-
 export async function completeSignUpAsCustomer(
   unsafeData: z.infer<typeof completeSignUpCustomerSchema>
 ) {
@@ -113,48 +168,6 @@ export async function completeSignUpAsCustomer(
   }
   // Register complete - redirect to home
   redirect("/");
-}
-
-export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
-  const { success, data } = signUpSchema.safeParse(unsafeData);
-
-  if (!success) return "Unable to create account";
-  let existingUser;
-
-  try {
-    existingUser = await db.query.UserTable.findFirst({
-      where: eq(UserTable.email, data.email),
-    });
-  } catch (err) {
-    console.error("DB query failed:", err);
-    return "Database unavailable. Try again later.";
-  }
-
-  if (existingUser) return "User already exists";
-
-  try {
-    const salt = generateSalt();
-    const hashedPassword = await hashPassword(data.password, salt);
-
-    const [user] = await db
-      .insert(UserTable)
-      .values({
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-        salt,
-        role: data.role,
-        isProfileComplete: false,
-      })
-      .returning({ id: UserTable.id, role: UserTable.role, isProfileComplete: UserTable.isProfileComplete });
-    if (user == null) return "Error creating user null user";
-
-    await createUserSession(user, await cookies());
-  } catch (error) {
-    console.log("Error creating user:", error);
-    return `${error}`;
-  }
-  redirect("/registerForms");
 }
 
 export async function logOut() {

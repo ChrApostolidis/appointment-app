@@ -46,6 +46,16 @@ export function useAuthForms() {
     setError(error);
   }
 
+  const handleCompleteSignUpAsProvider = useForm<z.infer<typeof completeSignUpProviderSchema>>({
+    defaultValues: { userId: "", businessName: "", serviceCategory: "", description: "" },
+    resolver: zodResolver(completeSignUpProviderSchema),
+  });
+
+  const handleCompleteSignUpAsCustomer = useForm<z.infer<typeof completeSignUpCustomerSchema>>({
+    defaultValues: { userId: "", interests: "" },
+    resolver: zodResolver(completeSignUpCustomerSchema),
+  });
+
   async function completeSignUpAsProviderHandler(
     data: z.infer<typeof completeSignUpProviderSchema>
   ) {
@@ -72,6 +82,8 @@ export function useAuthForms() {
     // Form instances
     handleSignIn,
     handleSignUp,
+    handleCompleteSignUpAsProvider,
+    handleCompleteSignUpAsCustomer,
 
     // Handlers
     signInHandler,

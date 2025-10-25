@@ -23,7 +23,7 @@ export default function LockedRegisterForm({user}: {user: userType}) {
           <div className="relative">
             <input
               type="text"
-              placeholder={user?.name || "John Doe"}
+              placeholder={user?.name}
               name="name"
               disabled
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 cursor-not-allowed"
@@ -40,7 +40,7 @@ export default function LockedRegisterForm({user}: {user: userType}) {
             <input
               type="email"
               name="email"
-              placeholder={user?.email || "john.doe@example.com"}
+              placeholder={user?.email}
               disabled
               className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-400 cursor-not-allowed"
             />

@@ -48,13 +48,13 @@ async function middlewareAuth(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
-  // retister provider page
+  // register provider page
   if (registerRoutesProvider.includes(request.nextUrl.pathname)) {
     const user = await getUserFromSession(request.cookies);
     if (user == null) {
       return NextResponse.redirect(new URL("/authPage", request.url));
     }
-    if (user.role !== "provider" || user.isProfileComplete) {
+    if (user.role !== "provider") {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
@@ -68,8 +68,8 @@ async function middlewareAuth(request: NextRequest) {
     if (user.role !== "user") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (user.isProfileComplete) {
-      return NextResponse.redirect(new URL("/", request.url));
+    if (!user.isProfileComplete) {
+      return NextResponse.redirect(new URL("/registerForms/customer", request.url));
     }
   }
 }
