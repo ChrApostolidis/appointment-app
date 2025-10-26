@@ -20,6 +20,6 @@ export const completeSignUpProviderSchema = z.object({
 })
 
 export const completeSignUpCustomerSchema = z.object({
-  userId: z.string().min(1, "User ID is required"),
+  userId: z.string().optional(),
   interests: z.string().min(2, "Interests are required"),
 })
