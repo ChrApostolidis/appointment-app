@@ -1,6 +1,6 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { redirect } from "next/navigation"
 import {
   completeSignUpCustomerSchema,
   completeSignUpProviderSchema,
@@ -52,7 +52,7 @@ export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
 
   await createUserSession(user, await cookies());
 
-  redirect(user.isProfileComplete ? "/" : "/registerForms");
+  redirect(user.isProfileComplete ? "/" : `/registerForms/${user.role}`);
 }
 
 export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
@@ -101,8 +101,12 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
   // Redirect to complete registration
   if (data.role === "provider") {
     redirect("/registerForms/provider");
-  } else {
+  } else if (data.role === "user") {
     redirect("/registerForms/customer");
+  } else if (data.role === "admin") {
+    redirect("/");
+  } else {
+    redirect("/authPage");
   }
 }
 

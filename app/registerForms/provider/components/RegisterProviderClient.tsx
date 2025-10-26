@@ -9,6 +9,7 @@ export default function RegisterProviderClient() {
     error,
     handleCompleteSignUpAsProvider,
   } = useAuthForms();
+  
   return (
     <div className="p-8 space-y-6">
       <form

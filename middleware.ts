@@ -68,9 +68,6 @@ async function middlewareAuth(request: NextRequest) {
     if (user.role !== "user") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (!user.isProfileComplete) {
-      return NextResponse.redirect(new URL("/registerForms/customer", request.url));
-    }
   }
 }
 
