@@ -57,6 +57,10 @@ async function middlewareAuth(request: NextRequest) {
     if (user.role !== "provider") {
       return NextResponse.redirect(new URL("/", request.url));
     }
+   
+    if (user.isProfileComplete !== "toRegister") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
 
   // register customer page
@@ -66,6 +70,10 @@ async function middlewareAuth(request: NextRequest) {
       return NextResponse.redirect(new URL("/authPage", request.url));
     }
     if (user.role !== "user") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+   
+    if (user.isProfileComplete !== "toRegister") {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

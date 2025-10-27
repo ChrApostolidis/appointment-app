@@ -24,7 +24,7 @@ CREATE TABLE "users" (
 	"password" varchar NOT NULL,
 	"salt" varchar(255) NOT NULL,
 	"role" "user_roles" NOT NULL,
-	"is_profile_complete" boolean DEFAULT false NOT NULL,
+	"is_profile_complete" varchar DEFAULT 'false' NOT NULL,
 	"createdAt" timestamp with time zone DEFAULT now() NOT NULL,
 	"updatedAt" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")

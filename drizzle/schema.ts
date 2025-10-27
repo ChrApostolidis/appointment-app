@@ -4,7 +4,6 @@ import {
   timestamp,
   uuid,
   varchar,
-  boolean,
 } from "drizzle-orm/pg-core";
 
 
@@ -19,7 +18,7 @@ export const UserTable = pgTable("users", {
   password: varchar("password").notNull(),
   salt: varchar("salt", { length: 255 }).notNull(),
   role: userRoleEnum("role").notNull(),
-  isProfileComplete: boolean("is_profile_complete").default(false).notNull(),
+  isProfileComplete: varchar("is_profile_complete").default("false").notNull(),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()

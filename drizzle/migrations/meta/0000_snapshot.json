@@ -1,5 +1,5 @@
 {
-  "id": "1c001e71-af9c-4ea0-b788-bd60753ebf34",
+  "id": "4a521153-30c6-403b-84ed-c1e0fb1e614c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -180,10 +180,10 @@
         },
         "is_profile_complete": {
           "name": "is_profile_complete",
-          "type": "boolean",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true,
-          "default": false
+          "default": "'false'"
         },
         "createdAt": {
           "name": "createdAt",

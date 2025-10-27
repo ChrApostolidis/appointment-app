@@ -20,6 +20,7 @@ import {
   createUserSession,
   getUserFromSession,
   removeUserFromSession,
+  updateUserSessionData,
 } from "./core/session";
 import { cookies } from "next/headers";
 
@@ -84,7 +85,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
         password: hashedPassword,
         salt,
         role: data.role,
-        isProfileComplete: false,
+        isProfileComplete: "toRegister",
       })
       .returning({
         id: UserTable.id,
@@ -133,8 +134,20 @@ export async function completeSignUpAsProvider(
     // update user's profile completion status
     await db
       .update(UserTable)
-      .set({ isProfileComplete: true })
+      .set({ isProfileComplete: "completed" })
       .where(eq(UserTable.id, user.id));
+
+      // Sync session data so middleware will see the user as completed
+      const updated = await db.query.UserTable.findFirst({
+        columns: { id: true, role: true, isProfileComplete: true },
+        where: eq(UserTable.id, user.id),
+      });
+      if (updated) {
+        await updateUserSessionData(
+          { id: String(updated.id), role: updated.role, isProfileComplete: String(updated.isProfileComplete) },
+          await cookies()
+        );
+      }
   } catch (error) {
     console.log("Error completing registration:", error);
     return `${error}`;
@@ -164,8 +177,20 @@ export async function completeSignUpAsCustomer(
     // update user's profile completion status
     await db
       .update(UserTable)
-      .set({ isProfileComplete: true })
+      .set({ isProfileComplete: "completed" })
       .where(eq(UserTable.id, user.id));
+
+      // Sync session data so middleware will see the user as completed
+      const updated = await db.query.UserTable.findFirst({
+        columns: { id: true, role: true, isProfileComplete: true },
+        where: eq(UserTable.id, user.id),
+      });
+      if (updated) {
+        await updateUserSessionData(
+          { id: String(updated.id), role: updated.role, isProfileComplete: String(updated.isProfileComplete) },
+          await cookies()
+        );
+      }
   } catch (error) {
     console.log("Error completing registration:", error);
     return `${error}`;
