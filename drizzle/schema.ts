@@ -57,4 +57,6 @@ export const ProviderTable = pgTable("providers", {
 // Database mapping for drizzle generic
 export type Database = {
   UserTable: typeof UserTable;
+  CustomerTable: typeof CustomerTable;
+  ProviderTable: typeof ProviderTable;
 };
