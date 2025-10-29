@@ -3,20 +3,22 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { userType } from "../registerForms/components/LockedRegisterForm";
+import Profile from "./Profile";
 
 interface NavMenuItem {
   name: string;
   link: string;
 }
 
-export default function Header() {
+export default function Header({ user }: { user: userType }) {
   const [isSticky, setIsSticky] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const NavMenuItems: NavMenuItem[] = [
-    { name: "My Appointments", link: "#events"},
+    { name: "My Appointments", link: "#events" },
     { name: "Book", link: "#books" },
-    { name: "Calendar", link: "#calendar"},
+    { name: "Calendar", link: "#calendar" },
   ];
 
   useEffect(() => {
@@ -65,7 +67,15 @@ export default function Header() {
             </nav>
           </div>
           <div className="hidden lg:flex">
-            <div className="border-1 w-12 h-12 rounded-full mr-1" />
+            {user ? (
+              <Profile user={user} />
+            ) : (
+              <div>
+                <button className="mr-0.5 cursor-pointer bg-secondary-foreground text-white font-medium px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 hover:bg-[#256078] hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm">
+                  Login/Register
+                </button>
+              </div>
+            )}
           </div>
           {/* Burger Button */}
           <div className="relative bg-[#2f7899] rounded-2xl hover:cursor-pointer flex items-center justify-center p-1 m-2 lg:hidden">

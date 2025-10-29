@@ -14,7 +14,7 @@ export async function toggleRole() {
     .update(UserTable)
     .set({ role: user.role === "admin" ? "user" : "admin" })
     .where(eq(UserTable.id, user.id))
-    .returning({ id: UserTable.id, role: UserTable.role })
+    .returning({ id: UserTable.id, role: UserTable.role, isProfileComplete: UserTable.isProfileComplete });
 
   await updateUserSessionData(updatedUser, await cookies())
 }
