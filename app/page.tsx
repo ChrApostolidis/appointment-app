@@ -1,4 +1,3 @@
-import LogOutButton from "@/auth/components/LogOutButton";
 import Header from "./components/Header";
 import { getCurrentUser } from "@/auth/currentUser";
 
@@ -12,8 +11,7 @@ export default async function Home() {
   return (
     <div>
       <Header user={currentUser} />
-      <h1>Welcome</h1>
-      <LogOutButton />
+      <h1 className="mt-5 text-2xl text-center">{`Welcome ${currentUser.name}`}</h1>
     </div>
   );
 }
