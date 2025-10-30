@@ -9,9 +9,9 @@ export default async function Home() {
   }  
 
   return (
-    <div>
+    <div className="">
       <Header user={currentUser} />
-      <h1 className="mt-5 text-2xl text-center">{`Welcome ${currentUser.name}`}</h1>
+      <h1 className="mt-5 text-2xl text-center text-primary">{`Welcome ${currentUser.name}`}</h1>
     </div>
   );
 }

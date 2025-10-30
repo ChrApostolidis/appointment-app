@@ -36,7 +36,7 @@ export default function Header({ user }: { user: userType }) {
       <div className="h-20"></div>
       <header
         className={`h-20 fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-          isSticky ? "bg-primary shadow-lg" : "bg-primary"
+          isSticky ? "bg-background shadow-lg" : "bg-background"
         }`}
       >
         <div className="flex justify-between items-center h-20">
@@ -48,7 +48,7 @@ export default function Header({ user }: { user: userType }) {
                 width={64}
                 height={64}
               />
-              <p className="text-white text-xl lg:text-2xl">AppointMe</p>
+              <p className="text-primary text-xl lg:text-2xl">AppointMe</p>
             </div>
           </div>
           <div className="hidden lg:flex gap-10 items-center">
@@ -58,7 +58,7 @@ export default function Header({ user }: { user: userType }) {
                   <li key={name}>
                     <a
                       href={link}
-                      className="text-white hover:text-secondary-foreground lg:text-xl"
+                      className="text-primary hover:text-secondary lg:text-xl"
                     >
                       {name}
                     </a>
@@ -82,7 +82,7 @@ export default function Header({ user }: { user: userType }) {
             )}
           </div>
           {/* Burger Button */}
-          <div className="relative bg-[#2f7899] rounded-2xl hover:cursor-pointer flex items-center justify-center p-1 m-2 lg:hidden">
+          <div className="relative bg-secondary rounded-2xl hover:cursor-pointer flex items-center justify-center p-1 m-2 lg:hidden">
             <button
               onClick={() => setMenuOpen(() => !menuOpen)}
               className="w-10 h-10 flex items-center justify-center relative lg:hidden"

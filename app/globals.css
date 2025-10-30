@@ -1,65 +1,29 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-:root {
-  --radius: 0.625rem;
-  --background: #ffffff;
-  --foreground: #0b1220;
-  --card: #ffffff;
-  --card-foreground: #0b1220;
-  --popover: #ffffff;
-  --popover-foreground: #0b1220;
-  --primary: #101827;
-  --primary-foreground: #ffffff;
-  --secondary: #00d3f2;
-  --secondary-foreground: #2f7899;
-  --muted: #f5f7fa;
-  --muted-foreground: #6b7280;
-  --accent: #f3f4f6;
-  --accent-foreground: #0b1220;
-  --destructive: #ef4444;
-  --border: #e6eef5;
-  --input: #f8fafc;
-  --ring: #c7d2fe;
-  --chart-1: #f97316;
-  --chart-2: #06b6d4;
-  --chart-3: #7c3aed;
-  --chart-4: #f59e0b;
-  --chart-5: #10b981;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #0b1220;
-  --sidebar-primary: #0ea5b7;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #00d3f2;
-  --sidebar-accent-foreground: #0b1220;
-  --sidebar-border: #e6eef5;
-  --sidebar-ring: #c7d2fe;
-}
 
 .light {
-  --background: #ffffff;
-  --foreground: #0b1220;
-  --primary: #ffffff;
-  --primary-foreground: #ffffff;
-  --secondary: #00d3f2;
+  --background: #f3f4f6;
+  --foreground: #1a1f2b;
+  --primary: #06070a;
+  --primary-foreground: #0b1220;
+  --secondary: #00bcd4;
+  --secondary-foreground: #cceef1;
+  --muted: #d1d5db;
+  --border-c: #334155;
+  --primary-hover: #00bcd4;
 }
 
 .dark {
-  --background: #0b0f14;
+  --background: #1e293b;
   --foreground: #e6eef5;
-  --card: #0b1220;
-  --card-foreground: #e6eef5;
-  --popover: #0b1220;
-  --popover-foreground: #e6eef5;
-  --primary: #06070a;
+  --primary: #e6e9ef;
   --primary-foreground: #ffffff;
   --secondary: #2fb6c6;
   --secondary-foreground: #cceef1;
   --muted: #0f1724;
-  --muted-foreground: #9aa4b2;
-  --border: #1f2937;
-  --input: #0b1220;
-  --ring: #334155;
+  --border-c: #334155;
+  --primary-hover: #314158;
 }
 
 body {
@@ -68,7 +32,7 @@ body {
 
 /* Shadcn/Ui */
 /* @custom-variant dark (&:is(.dark *)); */
-
+/* 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -105,7 +69,7 @@ body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-}
+} */
 
 /* :root {
   --radius: 0.625rem;
@@ -142,11 +106,11 @@ body {
   --sidebar-ring: oklch(0.708 0 0);
 } */
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
+} */

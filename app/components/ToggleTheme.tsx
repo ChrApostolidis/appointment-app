@@ -15,14 +15,14 @@ export default function ToggleTheme() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center mx-5 w-15 h-12 border-1 rounded-full bg-primary">
+    <div className="flex justify-center items-center mx-5 w-15 h-12 border-1 rounded-full bg-[#a1b1b3]">
       <button
         className="cursor-pointer"
         onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         aria-label="Toggle theme"
       >
         {mounted ? (
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="wait" initial={false}> 
             {resolvedTheme === "dark" ? (
               <motion.div
                 key="moon"
