@@ -6,7 +6,7 @@ export default async function Home() {
 
   if (!currentUser) {
     return "User not found";
-  }
+  }  
 
   return (
     <div>
