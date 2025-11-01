@@ -2,25 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { userType } from "../registerForms/components/LockedRegisterForm";
 import Profile from "./Profile";
 import ToggleTheme from "./ToggleTheme";
-
-interface NavMenuItem {
-  name: string;
-  link: string;
-}
+import NavMenu from "./NavMenu";
+import BurgerButton from "./BurgerButton";
 
 export default function Header({ user }: { user: userType }) {
   const [isSticky, setIsSticky] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const NavMenuItems: NavMenuItem[] = [
-    { name: "My Appointments", link: "#events" },
-    { name: "Book", link: "#books" },
-    { name: "Calendar", link: "#calendar" },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,28 +40,14 @@ export default function Header({ user }: { user: userType }) {
               <p className="text-primary text-xl lg:text-2xl">AppointMe</p>
             </div>
           </div>
-          <div className="hidden lg:flex gap-10 items-center">
-            <nav className="">
-              <ul className="flex space-x-8">
-                {NavMenuItems.map(({ name, link }) => (
-                  <li key={name}>
-                    <a
-                      href={link}
-                      className="text-primary hover:text-secondary lg:text-xl"
-                    >
-                      {name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+          <NavMenu />
+
           <div className="hidden lg:flex">
             {user ? (
-            <>
+              <>
                 <ToggleTheme />
                 <Profile user={user} />
-            </>
+              </>
             ) : (
               <div>
                 <button className="mr-0.5 cursor-pointer bg-secondary-foreground text-white font-medium px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 hover:bg-[#256078] hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm">
@@ -81,32 +56,7 @@ export default function Header({ user }: { user: userType }) {
               </div>
             )}
           </div>
-          {/* Burger Button */}
-          <div className="relative bg-secondary rounded-2xl hover:cursor-pointer flex items-center justify-center p-1 m-2 lg:hidden">
-            <button
-              onClick={() => setMenuOpen(() => !menuOpen)}
-              className="w-10 h-10 flex items-center justify-center relative lg:hidden"
-            >
-              <span className="relative w-6 h-6">
-                <motion.span
-                  style={{ transformOrigin: "center" }}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block h-0.5 w-6 bg-white rounded"
-                  animate={
-                    menuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -6 }
-                  }
-                  transition={{ duration: 0.2 }}
-                />
-                <motion.span
-                  style={{ transformOrigin: "center" }}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block h-0.5 w-6 bg-white rounded"
-                  animate={
-                    menuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 6 }
-                  }
-                  transition={{ duration: 0.2 }}
-                />
-              </span>
-            </button>
-          </div>
+          <BurgerButton />
         </div>
       </header>
     </>
