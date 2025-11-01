@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function ToggleTheme() {
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -18,12 +18,13 @@ export default function ToggleTheme() {
     <div className="flex justify-center items-center mx-5 w-15 h-12 border-1 rounded-full bg-[#a1b1b3]">
       <button
         className="cursor-pointer"
-        onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-        aria-label="Toggle theme"
+        onClick={() => {
+          setTheme(theme === "dark" ? "light" : "dark");
+        }}
       >
         {mounted ? (
-          <AnimatePresence mode="wait" initial={false}> 
-            {resolvedTheme === "dark" ? (
+          <AnimatePresence mode="wait" initial={false}>
+            {theme === "dark" ? (
               <motion.div
                 key="moon"
                 initial={{ opacity: 0, y: -10, rotate: -90 }}
