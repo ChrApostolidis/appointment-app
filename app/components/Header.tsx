@@ -37,7 +37,7 @@ export default function Header({ user }: { user: userType }) {
                 width={64}
                 height={64}
               />
-              <p className="text-primary text-xl lg:text-2xl">AppointMe</p>
+              <p className="text-xl lg:text-2xl">Appoint<span className="text-primary">Me</span></p>
             </div>
           </div>
           <NavMenu />

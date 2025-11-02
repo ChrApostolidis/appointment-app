@@ -26,7 +26,7 @@ export default function Profile({ user }: { user: userType }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpenProfile((s) => !s)}
-        className="bg-secondary cursor-pointer flex justify-center items-center border-1 w-12 h-12 rounded-full mr-1  text-black"
+        className="bg-secondary cursor-pointer flex justify-center items-center border w-12 h-12 rounded-full mr-1  text-black"
         aria-expanded={openProfile}
         aria-haspopup="menu"
       >
@@ -51,12 +51,8 @@ export default function Profile({ user }: { user: userType }) {
             style={{ transformOrigin: "top right" }}
             className="absolute right-3 mt-2 w-64 bg-background rounded-xl shadow-lg p-4 flex flex-col gap-2 border"
           >
-            <p className="text-primary-foreground font-semibold">
-              {user.name}
-            </p>
-            <p className="text-sm text-primary-foreground">
-              {user.email}
-            </p>
+            <p className="text-primary-foreground font-semibold">{user.name}</p>
+            <p className="text-sm text-primary-foreground">{user.email}</p>
             <div className="mt-2 border-t pt-2">
               <Link
                 href="/private"
