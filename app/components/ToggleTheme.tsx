@@ -15,7 +15,7 @@ export default function ToggleTheme() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center mx-5 w-15 h-12 border-1 rounded-full bg-[#a1b1b3]">
+    <div className="flex justify-center items-center mx-5 w-15 h-12 border rounded-full bg-background">
       <button
         className="cursor-pointer"
         onClick={() => {

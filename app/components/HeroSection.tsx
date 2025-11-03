@@ -10,18 +10,38 @@ export default function HeroSection() {
   return (
     <div className="max-w-7xl mx-auto px-6 pt-20 pb-32">
       <div className="text-center max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-500 mb-8">
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-500 mb-8"
+        >
           <Zap className="w-4 h-4" />
           <span className="text-sm font-medium">
             Smart Scheduling Made Simple
           </span>
-        </div>
+        </motion.div>
 
         <h1 className="text-6xl md:text-7xl font-bold mb-6 text-gray-900 dark:text-white">
           Connect.
-          <span className="block bg-linear-to-r from-cyan-400 to-cyan-600 text-transparent bg-clip-text">
+          <motion.span
+            animate={{
+              y: [0, -10, 0],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="block bg-linear-to-r from-cyan-400 to-cyan-600 text-transparent bg-clip-text"
+          >
             Book.
-          </span>
+          </motion.span>
           Get it done.
         </h1>
 

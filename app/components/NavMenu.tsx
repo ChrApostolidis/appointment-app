@@ -19,7 +19,7 @@ export default function NavMenu() {
             <li key={name}>
               <a
                 href={link}
-                className="text-primary hover:text-[var(--secondary)] lg:text-xl"
+                className="text-foreground hover:text-primary lg:text-xl"
               >
                 {name}
               </a>
