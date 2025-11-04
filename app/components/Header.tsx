@@ -25,7 +25,7 @@ export default function Header({ user }: { user: userType }) {
       <div className="h-20"></div>
       <header
         className={`h-20 fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-          isSticky ? "bg-background shadow-lg" : "bg-background"
+          isSticky ? "bg-second-background shadow-lg" : "bg-second-background"
         }`}
       >
         <div className="flex justify-between items-center h-20">

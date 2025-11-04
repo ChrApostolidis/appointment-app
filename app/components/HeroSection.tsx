@@ -8,16 +8,18 @@ import { useState } from "react";
 export default function HeroSection() {
   const [move, setMove] = useState(false);
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-20 pb-32">
+    <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 bg-background">
       <div className="text-center max-w-4xl mx-auto">
         <motion.div
           animate={{
             y: [0, -10, 0],
+            x: [0, 5, 0],
           }}
           transition={{
-            duration: 3,
-            repeat: Infinity,
+            duration: 4,
             ease: "easeInOut",
+            repeat: Infinity,
+            repeatType: "mirror",
           }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-500 mb-8"
         >
@@ -32,11 +34,13 @@ export default function HeroSection() {
           <motion.span
             animate={{
               y: [0, -10, 0],
+              x: [0, 5, 0],
             }}
             transition={{
-              duration: 3,
-              repeat: Infinity,
+              duration: 4,
               ease: "easeInOut",
+              repeat: Infinity,
+              repeatType: "mirror",
             }}
             className="block bg-linear-to-r from-cyan-400 to-cyan-600 text-transparent bg-clip-text"
           >
