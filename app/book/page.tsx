@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/auth/currentUser";
 import BookAppoinmentSearchBar from "../components/BookAppoinmentSearchBar";
 import Header from "../components/Header";
 import Filters from "./components/Filters";
+import ProfileCard from "./components/ProfileCard";
 
 export default async function BookPage() {
   const currentUser = await getCurrentUser({ withFullUser: true });
@@ -19,8 +20,10 @@ export default async function BookPage() {
       <div className="mt-20">
         <BookAppoinmentSearchBar />
       </div>
-      <Filters />
-      
+     <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
+        <Filters />
+        <ProfileCard />
+     </div>
     </div>
   );
 }

@@ -17,13 +17,13 @@ const Button: React.FC<ButtonProps> = ({
   className = "",
 }) => {
   const baseStyles =
-    "cursor-pointer font-semibold py-2.5 px-6 rounded-lg shadow-md";
+    "cursor-pointer font-semibold py-2 px-6 rounded-lg shadow-md";
 
   const variants: Record<ButtonVariant, string> = {
     primary:
       "bg-primary hover:bg-[#00b8d6] text-foreground",
     secondary:
-      "bg-transparent border border-[#00ccee] text-[#00ccee] hover:bg-[#00ccee] hover:text-white focus:ring-[#00ccee]",
+      "bg-primary border border-[#00ccee] hover:bg-[#00ccee] text-foreground",
     danger:
       "bg-red-500 hover:bg-red-600 text-white focus:ring-red-400",
   };

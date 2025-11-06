@@ -52,7 +52,7 @@ export default function BookAppoinmentSearchBar() {
           </div>
   
         <div className="w-full lg:w-auto">
-          <MainButton className="w-full lg:w-auto">See Availability</MainButton>
+          <MainButton variant="primary" className="w-full lg:w-auto">See Availability</MainButton>
         </div>
        </form>
       </div>

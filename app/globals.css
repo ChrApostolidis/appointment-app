@@ -16,7 +16,7 @@ body {
   --primary-foreground: #0b1220;
   --secondary: #03b7ce;
   --secondary-foreground: #cceef1;
-  --muted: #6a7282;
+  --muted: #d1d5db;
   --border: #6a7282 ;
   --primary-hover: #00bcd4;
 }
@@ -29,7 +29,7 @@ body {
   --primary-foreground: #ffffff;
   --secondary: #03b7ce;
   --secondary-foreground: #0b535a;
-  --muted: #6a7282 ;
+  --muted: #2a2a2a ;
   --border: #334155;
   --primary-hover: #314158;
 }
