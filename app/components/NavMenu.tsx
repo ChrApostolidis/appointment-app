@@ -7,9 +7,9 @@ interface NavMenuItem {
 
 export default function NavMenu() {
   const NavMenuItems: NavMenuItem[] = [
-    { name: "My Appointments", link: "#events" },
-    { name: "Book", link: "#books" },
-    { name: "Calendar", link: "#calendar" },
+    { name: "My Appointments", link: "events" },
+    { name: "Book", link: "book" },
+    { name: "Calendar", link: "calendar" },
   ];
   return (
     <div className="hidden lg:flex gap-10 items-center">
