@@ -53,7 +53,7 @@ const AuthSwitcher: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
       {/* Mobile Layout */}
       <MobileLayout />
-      <div className="hidden md:block relative w-[768px] h-[500px] bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="hidden md:block relative w-3xl h-[500px] bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl shadow-2xl overflow-hidden">
         {/* Sign In */}
 
         <form
