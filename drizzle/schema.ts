@@ -1,11 +1,4 @@
-import {
-  pgEnum,
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
-
+import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 export const userRoles = ["admin", "user", "provider"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -47,6 +40,22 @@ export const ProviderTable = pgTable("providers", {
   businessName: varchar("business_name", { length: 100 }).notNull(),
   serviceCategory: varchar("service_category", { length: 100 }).notNull(),
   description: varchar("description", { length: 255 }),
+  logoId: uuid("logo_id").references(() => logoInfoTable.logoId, {
+    onDelete: "cascade",
+  }),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp({ withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export const logoInfoTable = pgTable("logo_info", {
+  logoId: uuid("logo_id").primaryKey().defaultRandom(),
+  logoUrl: varchar("logo_url").notNull(),
+  userId: uuid("user_id").references(() => UserTable.id, {
+    onDelete: "cascade",
+  }),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()

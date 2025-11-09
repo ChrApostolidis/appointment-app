@@ -14,6 +14,8 @@ export const signUpSchema = z.object({
 
 export const completeSignUpProviderSchema = z.object({
   userId: z.string().optional(),
+  logoId: z.string(),
+  logoUrl: z.url("Logo URL must be a valid URL"),
   businessName: z.string().min(5, "Business Name is required"),
   serviceCategory: z.string().min(2, "Service Category is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -22,4 +24,10 @@ export const completeSignUpProviderSchema = z.object({
 export const completeSignUpCustomerSchema = z.object({
   userId: z.string().optional(),
   interests: z.string().min(2, "Interests are required"),
+})
+
+export const logoInfoSchema = z.object({
+  logoId: z.string(),
+  logoUrl: z.url("Logo URL must be a valid URL"),
+  userId: z.string().optional(),
 })

@@ -1,5 +1,5 @@
 {
-  "id": "03900cc4-2a0e-41f6-a05b-7ec2ae4ad086",
+  "id": "61464eaa-e8a5-4668-a703-c95237c70bfc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -99,6 +99,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "logo_id": {
+          "name": "logo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp with time zone",
@@ -125,6 +131,19 @@
           ],
           "columnsTo": [
             "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "providers_logo_id_logo_info_logo_id_fk": {
+          "name": "providers_logo_id_logo_info_logo_id_fk",
+          "tableFrom": "providers",
+          "tableTo": "logo_info",
+          "columnsFrom": [
+            "logo_id"
+          ],
+          "columnsTo": [
+            "logo_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -212,6 +231,66 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.logo_info": {
+      "name": "logo_info",
+      "schema": "",
+      "columns": {
+        "logo_id": {
+          "name": "logo_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "logo_url": {
+          "name": "logo_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "logo_info_user_id_users_id_fk": {
+          "name": "logo_info_user_id_users_id_fk",
+          "tableFrom": "logo_info",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
