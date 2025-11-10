@@ -6,7 +6,7 @@ import {
   completeSignUpProviderSchema,
   signInSchema,
   signUpSchema,
-} from "./schema";
+} from "../schema";
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
@@ -20,13 +20,13 @@ import {
   comparePasswords,
   generateSalt,
   hashPassword,
-} from "./core/passwordHasher";
+} from "../core/passwordHasher";
 import {
   createUserSession,
   getUserFromSession,
   removeUserFromSession,
   updateUserSessionData,
-} from "./core/session";
+} from "../core/session";
 import { cookies } from "next/headers";
 
 export async function signIn(unsafeData: z.infer<typeof signInSchema>) {
@@ -127,16 +127,8 @@ export async function completeSignUpAsProvider(
   const user = await getUserFromSession(session);
   if (!user) return "User not authenticated";
 
-  // Ensure logo fields are present (added by client after upload)
-  if (!data.logoId || !data.logoUrl) {
-    throw new Error("Logo information is required.");
-  }
-
+  // Insert provider data
   try {
-    await db
-      .insert(logoInfoTable)
-      .values({ userId: user.id, logoUrl: data.logoUrl, logoId: data.logoId });
-
     await db.insert(ProviderTable).values({
       userId: user.id,
       logoId: data.logoId,
@@ -151,6 +143,13 @@ export async function completeSignUpAsProvider(
       .set({ isProfileComplete: "completed" })
       .where(eq(UserTable.id, user.id));
 
+    // Insert logo information
+    const logoValues = {
+      userId: user.id,
+      logoUrl: data.logoUrl ?? "",
+      logoId: data.logoId ?? "",
+    };
+    await db.insert(logoInfoTable).values(logoValues);
 
     // Sync session data so middleware will see the user as completed
     const updated = await db.query.UserTable.findFirst({
@@ -178,6 +177,7 @@ export async function completeSignUpAsProvider(
 export async function completeSignUpAsCustomer(
   unsafeData: z.infer<typeof completeSignUpCustomerSchema>
 ) {
+  // Validate input data
   const { success, data } = completeSignUpCustomerSchema.safeParse(unsafeData);
   if (!success) return "Unable to complete registration";
 
