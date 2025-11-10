@@ -56,13 +56,13 @@ export default function Profile({ user }: { user: userType }) {
             <div className="mt-2 border-t pt-2">
               <Link
                 href="/private"
-                className="block px-2 py-1 text-sm hover:bg-[var(--primary-hover)] rounded"
+                className="block px-2 py-1 text-sm hover:bg-primary-hover rounded"
               >
                 My Profile
               </Link>
               <Link
                 href="/"
-                className="block px-2 py-1 text-sm hover:bg-[var(--primary-hover)] rounded"
+                className="block px-2 py-1 text-sm hover:bg-primary-hover rounded"
               >
                 Dashboard
               </Link>

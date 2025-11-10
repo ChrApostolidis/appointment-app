@@ -20,10 +20,10 @@ export default async function BookPage() {
       <div className="mt-20">
         <BookAppoinmentSearchBar />
       </div>
-     <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
+      <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
         <Filters />
         <ProfileCard />
-     </div>
+      </div>
     </div>
   );
 }
