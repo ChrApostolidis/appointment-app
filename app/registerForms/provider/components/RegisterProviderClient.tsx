@@ -2,14 +2,35 @@
 import { FaBuilding, FaFileAlt, FaTag } from "react-icons/fa";
 import { categories } from "../../data";
 import { useAuthForms } from "@/auth/hooks/useAuthForms";
+import UploadFeature from "@/auth/components/UploadFeature";
+import { useState } from "react";
 
 export default function RegisterProviderClient() {
   const {
     completeSignUpAsProviderHandler,
     error,
+    statusMessage,
+    setError,
     handleCompleteSignUpAsProvider,
+    providerFile,
+    setProviderFile,
   } = useAuthForms();
-  
+  const [fileUrl, setFileUrl] = useState<string | undefined>();
+
+  const handleFileSelect = (selectedFile: File) => {
+    setProviderFile(selectedFile);
+    if (fileUrl) URL.revokeObjectURL(fileUrl);
+    setFileUrl(URL.createObjectURL(selectedFile));
+    // Clear error when file is selected
+    if (error) setError(undefined);
+  };
+
+  const handleFileRemove = () => {
+    if (fileUrl) URL.revokeObjectURL(fileUrl);
+    setProviderFile(undefined);
+    setFileUrl(undefined);
+  };
+
   return (
     <div className="p-8 space-y-6">
       <form
@@ -18,10 +39,26 @@ export default function RegisterProviderClient() {
         )}
       >
         <div className="space-y-4">
+          {statusMessage && (
+            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative">
+              {statusMessage}
+            </div>
+          )}
           {error && <p className="text-red-500 mb-4">{error}</p>}
+
           <h2 className="text-lg font-semibold text-slate-200">
             Business Details
           </h2>
+
+          <div>
+            <UploadFeature
+              onFileSelect={handleFileSelect}
+              file={providerFile}
+              fileUrl={fileUrl}
+              onRemove={handleFileRemove}
+              disabled={handleCompleteSignUpAsProvider.formState.isSubmitting}
+            />
+          </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
@@ -119,11 +156,22 @@ export default function RegisterProviderClient() {
         </div>
 
         <button
-          disabled={handleCompleteSignUpAsProvider.formState.isSubmitting}
-          className="cursor-pointer w-full bg-gradient-to-br from-sky-500 via-cyan-400 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-500 hover:to-sky-500 transition-all duration-200 shadow-lg shadow-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/50 transform hover:-translate-y-0.5"
+          type="submit"
+          onClick={() => {
+            console.log("🔴 BUTTON CLICKED!");
+            console.log("File exists:", !!providerFile);
+            console.log(
+              "Form errors:",
+              handleCompleteSignUpAsProvider.formState.errors
+            );
+          }}
+          disabled={
+            handleCompleteSignUpAsProvider.formState.isSubmitting || !providerFile
+          }
+          className="cursor-pointer w-full bg-linear-to-br from-sky-500 via-cyan-400 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-500 hover:to-sky-500 transition-all duration-200 shadow-lg shadow-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {handleCompleteSignUpAsProvider.formState.isSubmitting
-            ? "Registering..."
+            ? statusMessage || "Processing..."
             : "Complete Registration"}
         </button>
       </form>

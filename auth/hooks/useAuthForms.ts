@@ -20,7 +20,6 @@ import { computeSHA256 } from "../utils/helper";
 export function useAuthForms() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string>();
-
   const [statusMessage, setStatusMessage] = useState("");
   const [providerFile, setProviderFile] = useState<File | undefined>();
 
