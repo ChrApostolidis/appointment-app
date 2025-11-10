@@ -1,5 +1,5 @@
 {
-  "id": "61464eaa-e8a5-4668-a703-c95237c70bfc",
+  "id": "5becf92d-4ee7-42ed-9e96-cfef64333a01",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -101,7 +101,7 @@
         },
         "logo_id": {
           "name": "logo_id",
-          "type": "uuid",
+          "type": "varchar(128)",
           "primaryKey": false,
           "notNull": false
         },
@@ -131,19 +131,6 @@
           ],
           "columnsTo": [
             "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "providers_logo_id_logo_info_logo_id_fk": {
-          "name": "providers_logo_id_logo_info_logo_id_fk",
-          "tableFrom": "providers",
-          "tableTo": "logo_info",
-          "columnsFrom": [
-            "logo_id"
-          ],
-          "columnsTo": [
-            "logo_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -241,10 +228,9 @@
       "columns": {
         "logo_id": {
           "name": "logo_id",
-          "type": "uuid",
+          "type": "varchar(128)",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "logo_url": {
           "name": "logo_url",

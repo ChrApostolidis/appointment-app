@@ -40,9 +40,7 @@ export const ProviderTable = pgTable("providers", {
   businessName: varchar("business_name", { length: 100 }).notNull(),
   serviceCategory: varchar("service_category", { length: 100 }).notNull(),
   description: varchar("description", { length: 255 }),
-  logoId: uuid("logo_id").references(() => logoInfoTable.logoId, {
-    onDelete: "cascade",
-  }),
+  logoId: varchar("logo_id", { length: 128 }),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()
@@ -51,7 +49,7 @@ export const ProviderTable = pgTable("providers", {
 });
 
 export const logoInfoTable = pgTable("logo_info", {
-  logoId: uuid("logo_id").primaryKey().defaultRandom(),
+  logoId: varchar("logo_id", { length: 128 }).primaryKey(),
   logoUrl: varchar("logo_url").notNull(),
   userId: uuid("user_id").references(() => UserTable.id, {
     onDelete: "cascade",
