@@ -1,0 +1,37 @@
+import { db } from "@/drizzle/db";
+import { logoInfoTable, ProviderTable } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
+
+export type providers = {
+  id: string;
+  businessName: string;
+  serviceCategory: string;
+  description: string | null;
+  logoId: string | null;
+  logoUrl: string | null;
+};
+
+// The getProviders joins the tables 'providers' and 'logo_info' to fetch provider details along with their logo URLs.
+export async function getProviders(): Promise<providers[]> {
+  try {
+    const providers = await db
+      .select({
+        id: ProviderTable.id,
+        businessName: ProviderTable.businessName,
+        serviceCategory: ProviderTable.serviceCategory,
+        description: ProviderTable.description,
+        logoId: ProviderTable.logoId,
+        logoUrl: logoInfoTable.logoUrl,
+      })
+      .from(ProviderTable) 
+      .leftJoin(
+        logoInfoTable,  
+        eq(ProviderTable.logoId, logoInfoTable.logoId)  
+      );
+
+    return providers;
+  } catch (error) {
+    console.error("Error fetching providers:", error);
+    return [];
+  }
+}
