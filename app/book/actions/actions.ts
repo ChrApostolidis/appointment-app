@@ -1,3 +1,5 @@
+"use server"
+
 import { db } from "@/drizzle/db";
 import { logoInfoTable, ProviderTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
