@@ -4,11 +4,13 @@ import Header from "../components/Header";
 import Filters from "./components/Filters";
 import ProfileCard from "./components/ProfileCard";
 import { getProviders, providers } from "./actions/actions";
+import { Suspense } from "react";
+import Loading from "./components/Loading";
 
 export default async function BookPage() {
   const currentUser = await getCurrentUser({ withFullUser: true });
   const providers: providers[] = await getProviders();
-  
+
   if (!currentUser) {
     return "User not found";
   }
@@ -24,7 +26,9 @@ export default async function BookPage() {
       </div>
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
         <Filters />
-        <ProfileCard providers={providers} />
+        <Suspense fallback={<Loading />}>
+          {providers && <ProfileCard providers={providers} />}
+        </Suspense>
       </div>
     </div>
   );

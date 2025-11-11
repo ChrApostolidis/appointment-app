@@ -19,12 +19,11 @@ export default async function ProfileCard({
           .toUpperCase();
 
         return (
-          <article
+          <div
             key={provider.id}
             className="bg-slate-900/50 rounded-lg border border-slate-700/50 overflow-hidden hover:border-slate-600 transition-colors"
           >
             <div className="flex flex-col md:flex-row">
-              {/* Logo Section */}
               <div className="md:w-64 h-48 md:h-auto relative bg-slate-800/50 shrink-0">
                 {provider.logoUrl ? (
                   <Image
@@ -43,9 +42,7 @@ export default async function ProfileCard({
                 )}
               </div>
 
-              {/* Content Section */}
               <div className="flex-1 p-6 flex flex-col">
-                {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-3">
                   <div>
                     <h2 className="text-xl font-semibold text-slate-100 mb-1">
@@ -77,7 +74,7 @@ export default async function ProfileCard({
                 </div>
               </div>
             </div>
-          </article>
+          </div>
         );
       })}
     </div>
