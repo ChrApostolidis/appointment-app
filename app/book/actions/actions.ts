@@ -1,10 +1,10 @@
-"use server"
+"use server";
 
 import { db } from "@/drizzle/db";
 import { logoInfoTable, ProviderTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
-export type providers = {
+export interface providers {
   id: string;
   businessName: string;
   serviceCategory: string;
@@ -25,15 +25,40 @@ export async function getProviders(): Promise<providers[]> {
         logoId: ProviderTable.logoId,
         logoUrl: logoInfoTable.logoUrl,
       })
-      .from(ProviderTable) 
-      .leftJoin(
-        logoInfoTable,  
-        eq(ProviderTable.logoId, logoInfoTable.logoId)  
-      );
+      .from(ProviderTable)
+      .leftJoin(logoInfoTable, eq(ProviderTable.logoId, logoInfoTable.logoId));
 
     return providers;
   } catch (error) {
     console.error("Error fetching providers:", error);
     return [];
+  }
+}
+
+export interface singleProvider {
+  businessName: string;
+  serviceCategory: string;
+  description: string | null;
+  logoUrl: string | null;
+}
+
+export async function getProviderById(providerId: string): Promise<singleProvider | null> {
+  try {
+    const provider = await db
+      .select({
+        businessName: ProviderTable.businessName,
+        serviceCategory: ProviderTable.serviceCategory,
+        description: ProviderTable.description,
+        logoUrl: logoInfoTable.logoUrl,
+      })
+
+      .from(ProviderTable)
+      .leftJoin(logoInfoTable, eq(ProviderTable.logoId, logoInfoTable.logoId))
+      .where(eq(ProviderTable.id, providerId))
+      .limit(1);
+    return provider[0];
+  } catch (error) {
+    console.error("Error fetching provider by ID:", error);
+    return null;
   }
 }

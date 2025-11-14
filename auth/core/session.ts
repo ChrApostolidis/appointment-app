@@ -47,9 +47,14 @@ export async function createUserSession(
   crypto.getRandomValues(randomBytes);
   const sessionId = Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
   
-  await redis.set(`session:${sessionId}`, sessionSchema.parse(user), {
-    ex: SESSION_EXPIRATION_SECONDS,
-  });
+  try {
+    await redis.set(`session:${sessionId}`, sessionSchema.parse(user), {
+      ex: SESSION_EXPIRATION_SECONDS,
+    });
+  } catch (error) {
+    console.error('Failed to create session in Redis:', error);
+    throw new Error('Failed to create session');
+  }
 
   setCookie(sessionId, cookies);
 }
