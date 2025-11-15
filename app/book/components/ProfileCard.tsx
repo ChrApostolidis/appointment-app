@@ -1,24 +1,26 @@
 import MainButton from "@/app/components/MainButton";
-import Image from "next/image";
 import { providers } from "../actions/actions";
 import Link from "next/link";
+import ImageRender from "./ImageRender";
+import { Suspense } from "react";
+import Loading from "./Loading";
 
 export default async function ProfileCard({
   providers,
 }: {
   providers: providers[];
 }) {
+  if (providers.length === 0) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-slate-500 text-2xl">
+        No providers found.
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 space-y-6">
       {providers.map((provider) => {
-        // Generate initials for fallback
-        const initials = provider.businessName
-          .split(" ")
-          .map((w) => w[0])
-          .slice(0, 2)
-          .join("")
-          .toUpperCase();
-
         return (
           <div
             key={provider.id}
@@ -26,23 +28,9 @@ export default async function ProfileCard({
           >
             <Link href={`/book/${provider.id}`} key={provider.id}>
               <div className="flex flex-col md:flex-row">
-                <div className="md:w-64 h-48 md:h-auto relative bg-slate-800/50 shrink-0">
-                  {provider.logoUrl ? (
-                    <Image
-                      src={provider.logoUrl}
-                      alt={`${provider.businessName} logo`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 256px"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-slate-600">
-                        {initials}
-                      </span>
-                    </div>
-                  )}
-                </div>
+                <Suspense fallback={<Loading>Loading image...</Loading>}>
+                  <ImageRender provider={provider} />
+                </Suspense>
 
                 <div className="flex-1 p-6 flex flex-col">
                   <div className="flex items-start justify-between gap-4 mb-3">

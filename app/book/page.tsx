@@ -26,7 +26,7 @@ export default async function BookPage() {
       </div>
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
         <Filters />
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading>Loading providers...</Loading>}>
           {providers && <ProfileCard providers={providers} />}
         </Suspense>
       </div>
