@@ -29,7 +29,7 @@ export default async function ProfileCard({
             <Link href={`/book/${provider.id}`} key={provider.id}>
               <div className="flex flex-col md:flex-row">
                 <Suspense fallback={<Loading>Loading image...</Loading>}>
-                  <ImageRender provider={provider} />
+                  <ImageRender className="md:w-64 md:h-auto h-48" provider={provider} />
                 </Suspense>
 
                 <div className="flex-1 p-6 flex flex-col">

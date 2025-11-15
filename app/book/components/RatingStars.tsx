@@ -1,10 +1,10 @@
-import { Star } from "lucide-react";
+import { FaStar } from "react-icons/fa";
 
 interface startProps {
   value: number; // current rating (0..max)
   max?: number; // optional, default 5
   size?: number; // optional pixel size for each star, default 20
-};
+}
 
 export default function RatingStars({ value, max = 5, size = 20 }: startProps) {
   const stars = Array.from({ length: max }, (_, i) => {
@@ -14,17 +14,21 @@ export default function RatingStars({ value, max = 5, size = 20 }: startProps) {
     const isFull = filled >= 1;
 
     return (
-     <Star 
-       key={i}
-       size={size}
-       color={isFull ? "#f5a623" : "#e5e7eb"}
-       style={{ marginRight: 4 }}
-     />
+      <FaStar
+        key={i}
+        size={size}
+        color={isFull ? "#f5a623" : "#e5e7eb"}
+        style={{ marginRight: 4 }}
+      />
     );
   });
 
   return (
-    <div className="flex" role="img" aria-label={`Rating: ${value} out of ${max}`}>
+    <div
+      className="flex"
+      role="img"
+      aria-label={`Rating: ${value} out of ${max}`}
+    >
       {stars}
     </div>
   );

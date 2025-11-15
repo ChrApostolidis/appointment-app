@@ -1,9 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { providers } from "../actions/actions";
+import { singleProvider } from "../actions/actions";
 
-export default function ImageRender({ provider }: { provider: providers }) {
+export default function ImageRender({
+  provider,
+  className,
+}: {
+  provider: singleProvider;
+  className?: string;
+}) {
   const initials = provider.businessName
     .split(" ")
     .map((w) => w[0])
@@ -12,7 +18,7 @@ export default function ImageRender({ provider }: { provider: providers }) {
     .toUpperCase();
 
   return (
-    <div className="md:w-64 h-48 md:h-auto relative bg-slate-800/50 shrink-0">
+    <div className={`relative bg-slate-800/50 shrink-0 ${className}`}>
       {provider.logoUrl ? (
         <Image
           src={provider.logoUrl}
