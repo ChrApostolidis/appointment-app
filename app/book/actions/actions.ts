@@ -62,3 +62,26 @@ export async function getProviderById(providerId: string): Promise<singleProvide
     return null;
   }
 }
+
+export type trueFalse = "true" | "false";
+
+export type ProviderFilters = {
+  serviceCategory?: string;
+  gender?: string;
+  availability?: trueFalse;
+}
+  
+
+export async function getFilteredProviders(options?:ProviderFilters) {
+   await new Promise((resolve) => setTimeout(resolve, 1000));
+
+   let filteredProviders = await getProviders();
+
+   if (options?.serviceCategory) {
+    filteredProviders = filteredProviders.filter((provider) => {
+      return provider.serviceCategory === options.serviceCategory;
+    });
+  }
+
+  return filteredProviders;
+}
