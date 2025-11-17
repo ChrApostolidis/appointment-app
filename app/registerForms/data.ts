@@ -103,5 +103,4 @@ export const categories: { id: number; name: string }[] = [
   { id: 102, name: "Operations Manager" },
   { id: 103, name: "Sales Representative" },
   { id: 104, name: "Customer Support Agent" },
-  { id: 105, name: "Other(Write to description)" },
 ];

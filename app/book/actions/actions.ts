@@ -73,7 +73,6 @@ export type ProviderFilters = {
   
 
 export async function getFilteredProviders(options?:ProviderFilters) {
-   await new Promise((resolve) => setTimeout(resolve, 1000));
 
    let filteredProviders = await getProviders();
 

@@ -1,21 +1,53 @@
+"use client";
+
 import { categories } from "@/app/registerForms/data";
 import FilterSection from "./FitlerSection";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function Filters() {
+  const searchParams = useSearchParams();
+  const selectedCategory = searchParams.get("serviceCategory");
+
+  const createCategoryQuery = (categoryName: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (selectedCategory === categoryName) {
+      params.delete("serviceCategory");
+    } else {
+      params.set("serviceCategory", categoryName);
+    }
+
+    return `?${params.toString()}`;
+  };
+
   return (
-   <div className="flex justify-center items-center lg:justify-start lg:items-start lg:ml-8">
+    <div className="flex justify-center items-center lg:justify-start lg:items-start lg:ml-8">
       <div className="w-64 bg-background p-5 rounded-2xl shadow-lg border border-border">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Filters</h2>
+        <div className="flex justify-between mb-4">
+          <h2 className="text-lg font-semibold text-foreground ">Filters</h2>
+          <button className="cursor-pointer text-foreground hover:text-primary">
+            Clear
+          </button>
+        </div>
 
         <FilterSection title="Proffesions" scrollable>
           {categories.map((category) => (
-            <label key={category.id} className="block">
-              <input type="checkbox" className="mr-2 bg-foreground" /> {category.name}
-            </label>
+            <Link
+              key={category.id}
+              scroll={false}
+              href={createCategoryQuery(category.name)}
+              className={`mr-2 text-foreground block hover:bg-primary-hover rounded px-2 py-1 ${
+                selectedCategory === category.name
+                  ? "bg-primary/50 font-medium"
+                  : ""
+              }`}
+            >
+              {category.name}
+            </Link>
           ))}
-          
         </FilterSection>
-  
+
         <FilterSection title="Gender">
           <label className="block">
             <input type="checkbox" className="mr-2 bg-foreground" /> Male
@@ -24,7 +56,7 @@ export default function Filters() {
             <input type="checkbox" className="mr-2 bg-foreground" /> Female
           </label>
         </FilterSection>
-  
+
         <FilterSection title="Availability">
           <label className="block">
             <input type="checkbox" className="mr-2 bg-foreground" /> Available
@@ -34,6 +66,6 @@ export default function Filters() {
           </label>
         </FilterSection>
       </div>
-   </div>
+    </div>
   );
 }
