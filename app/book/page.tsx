@@ -3,13 +3,27 @@ import BookAppoinmentSearchBar from "../components/BookAppoinmentSearchBar";
 import Header from "../components/Header";
 import Filters from "./components/Filters";
 import ProfileCard from "./components/ProfileCard";
-import { getProviders, providers } from "./actions/actions";
+import { getFilteredProviders, providers } from "./actions/actions";
 import { Suspense } from "react";
 import Loading from "./components/Loading";
 
-export default async function BookPage() {
+export default async function BookPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const currentUser = await getCurrentUser({ withFullUser: true });
-  const providers: providers[] = await getProviders();
+
+  const sp = await searchParams;
+
+  const rawServiceCategory = sp?.serviceCategory;
+  const serviceCategory = Array.isArray(rawServiceCategory)
+    ? rawServiceCategory[0]
+    : rawServiceCategory;
+
+  const providers: providers[] = await getFilteredProviders({
+    serviceCategory: serviceCategory,
+  });
 
   if (!currentUser) {
     return "User not found";
