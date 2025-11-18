@@ -2,12 +2,14 @@
 
 import { categories } from "@/app/registerForms/data";
 import FilterSection from "./FitlerSection";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function Filters() {
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("serviceCategory");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const createCategoryQuery = (categoryName: string) => {
     const params = new URLSearchParams(searchParams);
@@ -21,14 +23,28 @@ export default function Filters() {
     return `?${params.toString()}`;
   };
 
+  const removeParams = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("serviceCategory");
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, {
+      scroll: false,
+    });
+  };
+
   return (
     <div className="flex justify-center items-center lg:justify-start lg:items-start lg:ml-8">
       <div className="w-64 bg-background p-5 rounded-2xl shadow-lg border border-border">
         <div className="flex justify-between mb-4">
           <h2 className="text-lg font-semibold text-foreground ">Filters</h2>
-          <button className="cursor-pointer text-foreground hover:text-primary">
-            Clear
-          </button>
+          {selectedCategory && (
+            <button
+              onClick={removeParams}
+              className="cursor-pointer text-foreground hover:text-primary"
+            >
+              Clear
+            </button>
+          )}
         </div>
 
         <FilterSection title="Proffesions" scrollable>

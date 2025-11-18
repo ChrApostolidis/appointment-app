@@ -39,11 +39,6 @@ export default function RegisterProviderClient() {
         )}
       >
         <div className="space-y-4">
-          {statusMessage && (
-            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative">
-              {statusMessage}
-            </div>
-          )}
           {error && <p className="text-red-500 mb-4">{error}</p>}
 
           <h2 className="text-lg font-semibold text-slate-200">
@@ -166,7 +161,8 @@ export default function RegisterProviderClient() {
             );
           }}
           disabled={
-            handleCompleteSignUpAsProvider.formState.isSubmitting || !providerFile
+            handleCompleteSignUpAsProvider.formState.isSubmitting ||
+            !providerFile
           }
           className="cursor-pointer w-full bg-linear-to-br from-sky-500 via-cyan-400 to-blue-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-500 hover:to-sky-500 transition-all duration-200 shadow-lg shadow-indigo-500/50 hover:shadow-xl hover:shadow-indigo-500/50 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
         >
