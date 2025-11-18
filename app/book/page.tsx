@@ -6,6 +6,7 @@ import ProfileCard from "./components/ProfileCard";
 import { getFilteredProviders, providers } from "./actions/actions";
 import { Suspense } from "react";
 import Loading from "./components/Loading";
+import PaginationControls from "./components/PaginationControls";
 
 export default async function BookPage({
   searchParams,
@@ -13,17 +14,24 @@ export default async function BookPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const currentUser = await getCurrentUser({ withFullUser: true });
-
+  // Search Params
   const sp = await searchParams;
-
   const rawServiceCategory = sp?.serviceCategory;
   const serviceCategory = Array.isArray(rawServiceCategory)
     ? rawServiceCategory[0]
     : rawServiceCategory;
 
-  const providers: providers[] = await getFilteredProviders({
-    serviceCategory: serviceCategory,
-  });
+  // Pagination
+  const page = sp["page"] ?? "1";
+  const per_page = sp["per_page"] ?? "4";
+
+  const providers: providers[] = await getFilteredProviders(
+    {
+      serviceCategory: serviceCategory,
+    },
+    page,
+    per_page
+  );
 
   if (!currentUser) {
     return "User not found";
@@ -44,6 +52,7 @@ export default async function BookPage({
           {providers && <ProfileCard providers={providers} />}
         </Suspense>
       </div>
+      <PaginationControls />
     </div>
   );
 }

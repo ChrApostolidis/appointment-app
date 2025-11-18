@@ -72,7 +72,7 @@ export type ProviderFilters = {
 }
   
 
-export async function getFilteredProviders(options?:ProviderFilters) {
+export async function getFilteredProviders(options:ProviderFilters, page: string | string[], per_page: string | string[]): Promise<providers[]> {
 
    let filteredProviders = await getProviders();
 
@@ -80,6 +80,13 @@ export async function getFilteredProviders(options?:ProviderFilters) {
     filteredProviders = filteredProviders.filter((provider) => {
       return provider.serviceCategory === options.serviceCategory;
     });
+  }
+
+  // Pagination
+  if (page && per_page) {
+    const startIndex = (Number(page) - 1) * (Number(per_page));
+    const endIndex = startIndex + Number(per_page);
+    filteredProviders = filteredProviders.slice(startIndex, endIndex);
   }
 
   return filteredProviders;
