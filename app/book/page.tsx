@@ -25,7 +25,7 @@ export default async function BookPage({
   const page = sp["page"] ?? "1";
   const per_page = sp["per_page"] ?? "4";
 
-  const providers: providers[] = await getFilteredProviders(
+  const { filteredProviders, startIndex, endIndex, totalCount }: { filteredProviders: providers[]; startIndex: number; endIndex: number; totalCount: number } = await getFilteredProviders(
     {
       serviceCategory: serviceCategory,
     },
@@ -49,10 +49,14 @@ export default async function BookPage({
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
         <Filters />
         <Suspense fallback={<Loading>Loading providers...</Loading>}>
-          {providers && <ProfileCard providers={providers} />}
+          {filteredProviders && <ProfileCard providers={filteredProviders} />}
         </Suspense>
       </div>
-      <PaginationControls />
+      <PaginationControls
+        hasNextPage={endIndex < totalCount}
+        hasPrevPage={startIndex > 0}
+        total={totalCount}
+      />
     </div>
   );
 }
