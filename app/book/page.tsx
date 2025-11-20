@@ -6,7 +6,7 @@ import ProfileCard from "./components/ProfileCard";
 import { getFilteredProviders, providers } from "./actions/actions";
 import { Suspense } from "react";
 import Loading from "./components/Loading";
-import PaginationControls from "./components/PaginationControls";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
 export default async function BookPage({
   searchParams,
@@ -25,7 +25,13 @@ export default async function BookPage({
   const page = sp["page"] ?? "1";
   const per_page = sp["per_page"] ?? "4";
 
-  const { filteredProviders, startIndex, endIndex, totalCount }: { filteredProviders: providers[]; startIndex: number; endIndex: number; totalCount: number } = await getFilteredProviders(
+  const {
+    filteredProviders,
+    totalCount,
+  }: {
+    filteredProviders: providers[];
+    totalCount: number;
+  } = await getFilteredProviders(
     {
       serviceCategory: serviceCategory,
     },
@@ -52,11 +58,13 @@ export default async function BookPage({
           {filteredProviders && <ProfileCard providers={filteredProviders} />}
         </Suspense>
       </div>
-      <PaginationControls
-        hasNextPage={endIndex < totalCount}
-        hasPrevPage={startIndex > 0}
-        total={totalCount}
-      />
+      <div className="my-10 flex items-center justify-center">
+        <PaginationWithLinks
+          page={Number(page)}
+          pageSize={Number(per_page)}
+          totalCount={totalCount}
+        />
+      </div>
     </div>
   );
 }

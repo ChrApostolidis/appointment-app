@@ -79,8 +79,6 @@ export async function getFilteredProviders(
   per_page: string | string[]
 ): Promise<{
   filteredProviders: providers[];
-  startIndex: number;
-  endIndex: number;
   totalCount: number;
 }> {
   let filteredProviders = await getProviders();
@@ -105,5 +103,5 @@ export async function getFilteredProviders(
     filteredProviders = filteredProviders.slice(startIndex, endIndex);
   }
 
-  return { filteredProviders, startIndex, endIndex, totalCount };
+  return { filteredProviders, totalCount };
 }
