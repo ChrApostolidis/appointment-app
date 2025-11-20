@@ -58,13 +58,15 @@ export default async function BookPage({
           {filteredProviders && <ProfileCard providers={filteredProviders} />}
         </Suspense>
       </div>
-      <div className="my-10 flex items-center justify-center">
-        <PaginationWithLinks
-          page={Number(page)}
-          pageSize={Number(per_page)}
-          totalCount={totalCount}
-        />
-      </div>
+      {filteredProviders.length > 0 && (
+        <div className="my-10 flex items-center justify-center">
+          <PaginationWithLinks
+            page={Number(page)}
+            pageSize={Number(per_page)}
+            totalCount={totalCount}
+          />
+        </div>
+      )}
     </div>
   );
 }
