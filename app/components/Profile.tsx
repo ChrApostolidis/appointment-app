@@ -55,7 +55,7 @@ export default function Profile({ user }: { user: userType }) {
             <p className="text-sm text-primary-foreground">{user.email}</p>
             <div className="mt-2 border-t pt-2">
               <Link
-                href="/private"
+                href="/profile"
                 className="block px-2 py-1 text-sm hover:bg-primary-hover rounded"
               >
                 My Profile
