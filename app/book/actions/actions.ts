@@ -55,6 +55,7 @@ export async function getProviderById(
       })
 
       .from(ProviderTable)
+      
       .leftJoin(logoInfoTable, eq(ProviderTable.logoId, logoInfoTable.logoId))
       .where(eq(ProviderTable.id, providerId))
       .limit(1);
