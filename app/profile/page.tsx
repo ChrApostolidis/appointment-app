@@ -3,40 +3,24 @@ import Header from "../components/Header";
 import { Calendar, Check, Edit, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import MainButton from "../components/MainButton";
+import WorkingHours from "./components/WorkingHours";
+import { FullProviderData, getFullProviderDataById } from "./actions/profileActions";
 
 export default async function ProfilePage() {
   const currentUser = await getCurrentUser({ withFullUser: true });
-
-//  Dummy profile data
-  const profileData = {
-    name: "Dr. Alex Johnson",
-    email: "alex.johnson@healthclinic.com",
-    location: "San Francisco, CA",
-    bio: "Board-certified physician specializing in family medicine with over 10 years of experience. Dedicated to providing compassionate, comprehensive healthcare to patients of all ages.",
-    specialty: "Family Medicine",
-    joinDate: "January 2023",
-    workingHours: [
-      { day: "Monday", hours: "9:00 AM - 5:00 PM", available: true },
-      { day: "Tuesday", hours: "9:00 AM - 5:00 PM", available: true },
-      { day: "Wednesday", hours: "9:00 AM - 5:00 PM", available: true },
-      { day: "Thursday", hours: "9:00 AM - 5:00 PM", available: true },
-      { day: "Friday", hours: "9:00 AM - 3:00 PM", available: true },
-      { day: "Saturday", hours: "Closed", available: false },
-      { day: "Sunday", hours: "Closed", available: false },
-    ],
-    badges: [
-      "Verified Provider",
-      "Accepting New Patients",
-      "Telehealth Available",
-    ],
-  };
 
   if (!currentUser) {
     return "User not found";
   }
 
+  const provider: FullProviderData | null = await getFullProviderDataById(currentUser.id);
+
+  if (!provider) {
+    return "User not found";
+  }
+
   return (
-    <div>
+    <>
       <Header user={currentUser} />
       <div className="min-h-screen bg-background py-8">
         <div className="container max-w-4xl mx-auto px-4 py-12 ">
@@ -48,14 +32,25 @@ export default async function ProfilePage() {
               {/* Avatar */}
 
               <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-6">
-                <div className="w-32 h-32 rounded-full mx-auto  border-2 border-slate-700/50 overflow-hidden shadow-soft lg:mx-0">
-                  <Image
-                    src={"/test_profile_picture.png"}
-                    alt={profileData.name}
-                    className="w-full h-full object-cover"
-                    width={200}
-                    height={200}
-                  />
+                <div className="w-32 h-32 rounded-full mx-auto  border-2 border-slate-700/50 overflow-hidden shadow-soft lg:mx-0 flex items-center justify-center bg-muted">
+                  {provider.logoUrl ? (
+                    <Image
+                      src={provider.logoUrl}
+                      alt={provider.businessName}
+                      className="w-full h-full object-cover"
+                      width={200}
+                      height={200}
+                    />
+                  ) : (
+                    <span className="text-xl font-semibold text-muted-foreground">
+                      {provider.businessName
+                        .split(" ")
+                        .map((w) => w[0])
+                        .slice(0, 2)
+                        .join("")
+                        .toUpperCase()}
+                    </span>
+                  )}
                 </div>
 
                 <MainButton variant="secondary" className="mt-4 lg:mt-20">
@@ -71,14 +66,14 @@ export default async function ProfilePage() {
                 <div>
                   <div className="flex flex-col justify-between items-center lg:flex-row lg:items-center">
                     <h1 className="text-3xl font-bold text-foreground mb-2">
-                      {profileData.name}
+                      {provider.businessName}
                     </h1>
                     <p className="text-2xl text-foreground font-bold mb-2">
-                      {profileData.specialty}
+                      {provider.serviceCategory}
                     </p>
                   </div>
                   <p className="text-muted-foreground leading-relaxed">
-                    {profileData.bio}
+                    {provider.description}
                   </p>
                 </div>
 
@@ -97,27 +92,28 @@ export default async function ProfilePage() {
                   <div className="p-2 rounded-lg bg-muted">
                     <Mail className="w-4 h-4 text-primary" />
                   </div>
-                  <span>{profileData.email}</span>
+                  <span>{provider.email}</span>
                 </div>
 
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <div className="p-2 rounded-lg bg-muted">
                     <MapPin className="w-4 h-4 text-primary" />
                   </div>
-                  <span>{profileData.location}</span>
+                  <span>Thessaloniki</span>
                 </div>
 
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <div className="p-2 rounded-lg bg-muted">
                     <Calendar className="w-4 h-4 text-primary" />
                   </div>
-                  <span>Since {profileData.joinDate}</span>
+                  <span>Since {new Date(provider.createdAt).getFullYear()}</span>
                 </div>
               </div>
+              <WorkingHours />
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
