@@ -61,6 +61,13 @@ export const logoInfoTable = pgTable("logo_info", {
     .$onUpdate(() => new Date()),
 });
 
+export const ProviderHoursTable = pgTable("provider_hours", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => UserTable.id, { onDelete: "cascade" }),
+  start: time("start").notNull(), // HH:MM
+  end: time("end").notNull(),
+});
+
 // Database mapping for drizzle generic
 export type Database = {
   UserTable: typeof UserTable;
