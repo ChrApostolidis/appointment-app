@@ -1,4 +1,11 @@
-import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  pgEnum,
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+  time,
+} from "drizzle-orm/pg-core";
 
 export const userRoles = ["admin", "user", "provider"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -63,7 +70,9 @@ export const logoInfoTable = pgTable("logo_info", {
 
 export const ProviderHoursTable = pgTable("provider_hours", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id").notNull().references(() => UserTable.id, { onDelete: "cascade" }),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => UserTable.id, { onDelete: "cascade" }),
   start: time("start").notNull(), // HH:MM
   end: time("end").notNull(),
 });

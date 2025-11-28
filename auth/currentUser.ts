@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm"
 import { UserTable } from "@/drizzle/schema"
 import { getUserFromSession } from "./core/session"
 
-type FullUser = Exclude<
+export type FullUser = Exclude<
   Awaited<ReturnType<typeof getUserFromDb>>,
   undefined | null
 >
