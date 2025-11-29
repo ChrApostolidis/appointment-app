@@ -17,7 +17,6 @@ export default function Toggle() {
           }`}
         ></div>
       </button>
-
     </div>
   );
 }
