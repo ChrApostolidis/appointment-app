@@ -53,7 +53,7 @@ export default async function ProfilePage() {
                   )}
                 </div>
 
-                <MainButton variant="secondary" className="mt-4 lg:mt-20">
+                <MainButton className="mt-4 lg:mt-20 hover:bg-indigo-700">
                   <div className="flex justify-center items-center gap-2">
                     Edit Profile
                     <Edit className="w-5 h-5" />
@@ -87,7 +87,7 @@ export default async function ProfilePage() {
               </div>
 
               {/* Contact Info */}
-              <div className="flex flex-col justify-between gap-6 mb-6 lg:flex-row">
+              <div className="flex flex-col justify-between gap-6 mb-6 border border-border rounded-2xl shadow-lg p-8 lg:flex-row">
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <div className="p-2 rounded-lg bg-muted">
                     <Mail className="w-4 h-4 text-primary" />

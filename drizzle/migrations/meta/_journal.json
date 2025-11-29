@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1762710905183,
-      "tag": "0000_lowly_vindicator",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1764181686804,
-      "tag": "0001_colossal_doctor_strange",
+      "when": 1764350873064,
+      "tag": "0000_small_power_man",
       "breakpoints": true
     }
   ]

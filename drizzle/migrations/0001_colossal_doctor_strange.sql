@@ -1,8 +1,0 @@
-CREATE TABLE "provider_hours" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
-	"start" time NOT NULL,
-	"end" time NOT NULL
-);
---> statement-breakpoint
-ALTER TABLE "provider_hours" ADD CONSTRAINT "provider_hours_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
