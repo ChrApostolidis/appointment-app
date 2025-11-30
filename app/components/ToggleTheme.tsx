@@ -24,7 +24,7 @@ export default function ToggleTheme() {
       >
         {mounted ? (
           <AnimatePresence mode="wait" initial={false}>
-            {theme === "dark" ? (
+            {theme === "light" ? (
               <motion.div
                 key="moon"
                 initial={{ opacity: 0, y: -10, rotate: -90 }}
