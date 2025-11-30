@@ -1,31 +1,27 @@
-import Toggle from "./Toggle";
+"use client";
 
-export const workingHoursData = [
-  { day: "Monday", hours: "9:00 AM - 5:00 PM" },
-  { day: "Tuesday", hours: "9:00 AM - 5:00 PM" },
-  { day: "Wednesday", hours: "9:00 AM - 5:00 PM" },
-  { day: "Thursday", hours: "9:00 AM - 5:00 PM" },
-  { day: "Friday", hours: "9:00 AM - 3:00 PM" },
-  { day: "Saturday", hours: "Closed" },
-  { day: "Sunday", hours: "Closed" },
-];
+import { dayNames } from "../data/hoursData";
+import { useHoursForms } from "../hooks/useHoursForms";
 
 export default function Hours() {
+  const { workingHours } = useHoursForms();
+
   return (
     <>
-      {workingHoursData.map((schedule, index) => (
+      {Object.keys(workingHours).map((day, index) => (
         <div
           key={index}
-          className="lg:p-3 mb-2 flex items-center justify-between rounded-lg bg-muted/50 border border-border border-white rounded-2xl p-1 lg:p-4"
+          className={`lg:p-3 mb-2 flex items-center justify-between rounded-lg ${
+            workingHours[day].enabled ? "border-primary" : "border-red"
+          } border rounded-2xl p-1 lg:p-4`}
         >
           <div className="flex flex-col gap-1 lg:gap-4 lg:flex-row">
             <span className="font-medium text-sm text-foreground lg:text-xl">
-              {schedule.day}
+              {dayNames[day]}
             </span>
-            <Toggle />
           </div>
           <span className="text-sm text-foreground lg:text-lg">
-            {schedule.hours}
+            {workingHours[day].start} - {workingHours[day].end}
           </span>
         </div>
       ))}
