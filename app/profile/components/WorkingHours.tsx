@@ -2,13 +2,14 @@
 
 import { Edit, Clock } from "lucide-react";
 import MainButton from "@/app/components/MainButton";
-import { useState } from "react";
 import Modal from "./Modal";
 import Hours from "./Hours";
-
+import { useHoursForms } from "../hooks/useHoursForms";
+import EditHours from "./EditHours";
 
 export default function WorkingHours() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { handleEdit, handleOpenModal, isModalOpen, handleCloseModal } =
+    useHoursForms();
   return (
     <div className="pt-6 border-t border-border bg-background">
       <div className="bg-background border border-border rounded-2xl shadow-lg p-2 pt-4 mb-6">
@@ -29,7 +30,10 @@ export default function WorkingHours() {
         </div>
         <div className="flex items-center justify-center lg:justify-end">
           <MainButton
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              handleEdit();
+              handleOpenModal();
+            }}
             className="flex items-center gap-2 hover:bg-indigo-700 text-foreground px-6 py-3 rounded-xl shadow-md hover:shadow-lg"
           >
             Edit Hours
@@ -39,8 +43,8 @@ export default function WorkingHours() {
       </div>
 
       <div className="space-y-2">
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <Hours />
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <EditHours />
         </Modal>
         <Hours />
       </div>

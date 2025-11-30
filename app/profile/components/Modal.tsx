@@ -25,9 +25,6 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
           </MainButton>
         </div>
         {children}
-        <div className="flex justify-center items-center mt-3 lg:px-10">
-          <MainButton className="w-full">Save Changes</MainButton>
-        </div>
       </div>
     </div>
   );
