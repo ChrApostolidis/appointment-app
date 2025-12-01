@@ -5,6 +5,7 @@ import {
   uuid,
   varchar,
   time,
+  boolean
 } from "drizzle-orm/pg-core";
 
 export const userRoles = ["admin", "user", "provider"] as const;
@@ -68,13 +69,20 @@ export const logoInfoTable = pgTable("logo_info", {
     .$onUpdate(() => new Date()),
 });
 
-export const ProviderHoursTable = pgTable("provider_hours", {
+export const ProviderHoursTable = pgTable("provider_working_hours", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
     .notNull()
     .references(() => UserTable.id, { onDelete: "cascade" }),
-  start: time("start").notNull(), // HH:MM
-  end: time("end").notNull(),
+  day: varchar("day", { length: 10 }).notNull(),
+  start_time: time("start_time").notNull(), // HH:MM
+  end_time: time("end_time").notNull(),
+  enabled: boolean("enabled").notNull().default(false),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp({ withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 // Database mapping for drizzle generic

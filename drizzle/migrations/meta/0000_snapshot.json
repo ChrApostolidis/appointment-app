@@ -1,5 +1,5 @@
 {
-  "id": "e39d8be9-c638-4922-8f82-19e313381b4b",
+  "id": "2c1a796a-dbf9-4038-a471-00602745e0e4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -64,8 +64,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.provider_hours": {
-      "name": "provider_hours",
+    "public.provider_working_hours": {
+      "name": "provider_working_hours",
       "schema": "",
       "columns": {
         "id": {
@@ -81,24 +81,51 @@
           "primaryKey": false,
           "notNull": true
         },
-        "start": {
-          "name": "start",
+        "day": {
+          "name": "day",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_time": {
+          "name": "start_time",
           "type": "time",
           "primaryKey": false,
           "notNull": true
         },
-        "end": {
-          "name": "end",
+        "end_time": {
+          "name": "end_time",
           "type": "time",
           "primaryKey": false,
           "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "provider_hours_user_id_users_id_fk": {
-          "name": "provider_hours_user_id_users_id_fk",
-          "tableFrom": "provider_hours",
+        "provider_working_hours_user_id_users_id_fk": {
+          "name": "provider_working_hours_user_id_users_id_fk",
+          "tableFrom": "provider_working_hours",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
