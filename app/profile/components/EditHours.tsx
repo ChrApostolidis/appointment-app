@@ -1,19 +1,44 @@
-import { dayNames} from "../data/hoursData";
-import { useHoursForms } from "../hooks/useHoursForms";
-// import Toggle from "./Toggle";
+import { dayNames, WorkingHours } from "../data/hoursData";
 import MainButton from "@/app/components/MainButton";
 
-export default function EditHours() {
-  const { handleSave, workingHours } = useHoursForms();
+type EditHoursProps = {
+  workingHours: WorkingHours;
+  setWorkingHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
+  tempHours: WorkingHours;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTempHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
+};
 
+export default function EditHours({
+  workingHours,
+  setWorkingHours,
+  tempHours,
+  setIsEditing,
+  setIsModalOpen,
+  setTempHours,
+}: EditHoursProps) {
   const timeOptions = Array.from({ length: 16 }, (_, i) => {
     const hour = (i + 6).toString().padStart(2, "0");
     return `${hour}:00`;
   });
 
+  const handleSave = () => {
+    setWorkingHours(structuredClone(tempHours));
+    setIsEditing(false);
+    setIsModalOpen(false);
+  };
+
+  //  const toggleDay = (day) => {
+  //   setTempHours({
+  //     ...tempHours,
+  //     [day]: { ...tempHours[day], enabled: !tempHours[day].enabled },
+  //   });
+  // };
+
   return (
     <>
-      {Object.keys(workingHours).map((day, index) => (
+      {Object.keys(tempHours).map((day, index) => (
         <div
           key={index}
           className="lg:p-3 mb-2 flex items-center justify-between rounded-lg bg-muted/50 border border-border border-white rounded-2xl p-1 lg:p-4"
@@ -25,14 +50,32 @@ export default function EditHours() {
             {/* <Toggle /> */}
           </div>
           <div className="flex gap-1">
-            <select className="text-sm text-gray-400 lg:text-lg">
+            <select
+              value={tempHours[day].start}
+              onChange={(e) => {
+                setTempHours((prev) => ({
+                  ...prev,
+                  [day]: { ...prev[day], start: e.target.value },
+                }));
+              }}
+              className="text-sm text-gray-400 lg:text-lg"
+            >
               {timeOptions.map((time) => (
                 <option key={time} value={time}>
                   {time}
                 </option>
               ))}
             </select>
-            <select className="text-sm text-gray-400 lg:text-lg">
+            <select
+              value={tempHours[day].end}
+              onChange={(e) => {
+                setTempHours((prev) => ({
+                  ...prev,
+                  [day]: { ...prev[day], end: e.target.value },
+                }));
+              }}
+              className="text-sm text-gray-400 lg:text-lg"
+            >
               {timeOptions.map((time) => (
                 <option key={time} value={time}>
                   {time}

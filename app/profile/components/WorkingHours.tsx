@@ -4,12 +4,33 @@ import { Edit, Clock } from "lucide-react";
 import MainButton from "@/app/components/MainButton";
 import Modal from "./Modal";
 import Hours from "./Hours";
-import { useHoursForms } from "../hooks/useHoursForms";
+// import { useHoursForms } from "../hooks/useHoursForms";
 import EditHours from "./EditHours";
+import { useState } from "react";
+import { workingHoursData } from "../data/hoursData";
 
 export default function WorkingHours() {
-  const { handleEdit, handleOpenModal, isModalOpen, handleCloseModal } =
-    useHoursForms();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [workingHours, setWorkingHours] = useState(workingHoursData);
+  // use the structuredClone to create a deep copy of workingHoursData
+  const [tempHours, setTempHours] = useState(() => structuredClone(workingHoursData));
+  const [enabled, setEnabled] = useState(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsEditing(false);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setIsEditing(true);
+  };
+
+  const handleEdit = () => {
+    setTempHours(workingHours);
+  };
+
   return (
     <div className="pt-6 border-t border-border bg-background">
       <div className="bg-background border border-border rounded-2xl shadow-lg p-2 pt-4 mb-6">
@@ -44,9 +65,16 @@ export default function WorkingHours() {
 
       <div className="space-y-2">
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <EditHours />
+          <EditHours
+            workingHours={workingHours}
+            setWorkingHours={setWorkingHours}
+            tempHours={tempHours}
+            setIsEditing={setIsEditing}
+            setIsModalOpen={setIsModalOpen}
+            setTempHours={setTempHours}
+          />
         </Modal>
-        <Hours />
+        <Hours workingHours={workingHours} />
       </div>
     </div>
   );

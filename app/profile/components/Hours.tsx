@@ -1,11 +1,8 @@
 "use client";
 
-import { dayNames } from "../data/hoursData";
-import { useHoursForms } from "../hooks/useHoursForms";
+import { dayNames, WorkingHours } from "../data/hoursData";
 
-export default function Hours() {
-  const { workingHours } = useHoursForms();
-
+export default function Hours({ workingHours }: { workingHours: WorkingHours }) {
   return (
     <>
       {Object.keys(workingHours).map((day, index) => (
