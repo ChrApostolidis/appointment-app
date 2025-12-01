@@ -1,20 +1,19 @@
+"use client";
+
 import { dayNames, WorkingHours } from "../data/hoursData";
 import MainButton from "@/app/components/MainButton";
+import Toggle from "./Toggle";
 
 type EditHoursProps = {
-  workingHours: WorkingHours;
   setWorkingHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
   tempHours: WorkingHours;
-  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setTempHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
 };
 
 export default function EditHours({
-  workingHours,
   setWorkingHours,
   tempHours,
-  setIsEditing,
   setIsModalOpen,
   setTempHours,
 }: EditHoursProps) {
@@ -25,29 +24,25 @@ export default function EditHours({
 
   const handleSave = () => {
     setWorkingHours(structuredClone(tempHours));
-    setIsEditing(false);
     setIsModalOpen(false);
   };
 
-  //  const toggleDay = (day) => {
-  //   setTempHours({
-  //     ...tempHours,
-  //     [day]: { ...tempHours[day], enabled: !tempHours[day].enabled },
-  //   });
-  // };
-
   return (
     <>
-      {Object.keys(tempHours).map((day, index) => (
+      {Object.keys(tempHours).map((day) => (
         <div
-          key={index}
+          key={day}
           className="lg:p-3 mb-2 flex items-center justify-between rounded-lg bg-muted/50 border border-border border-white rounded-2xl p-1 lg:p-4"
         >
           <div className="flex flex-col gap-1 lg:gap-4 lg:flex-row">
             <span className="font-medium text-sm text-foreground lg:text-xl">
               {dayNames[day]}
             </span>
-            {/* <Toggle /> */}
+            <Toggle
+              setTempHours={setTempHours}
+              day={day}
+              enabled={tempHours[day].enabled}
+            />
           </div>
           <div className="flex gap-1">
             <select

@@ -11,24 +11,21 @@ import { workingHoursData } from "../data/hoursData";
 
 export default function WorkingHours() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [workingHours, setWorkingHours] = useState(workingHoursData);
   // use the structuredClone to create a deep copy of workingHoursData
   const [tempHours, setTempHours] = useState(() => structuredClone(workingHoursData));
-  const [enabled, setEnabled] = useState(false);
+  
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setIsEditing(false);
   };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
-    setIsEditing(true);
   };
 
   const handleEdit = () => {
-    setTempHours(workingHours);
+    setTempHours(structuredClone(workingHours));
   };
 
   return (
@@ -66,10 +63,8 @@ export default function WorkingHours() {
       <div className="space-y-2">
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           <EditHours
-            workingHours={workingHours}
             setWorkingHours={setWorkingHours}
             tempHours={tempHours}
-            setIsEditing={setIsEditing}
             setIsModalOpen={setIsModalOpen}
             setTempHours={setTempHours}
           />

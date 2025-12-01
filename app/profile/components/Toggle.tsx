@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { WorkingHours } from "../data/hoursData";
 
-export default function Toggle() {
-  const [enabled, setEnabled] = useState(false);
+type ToggleProps = {
+  setTempHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
+  day: string;
+  enabled: boolean;
+};
+
+export default function Toggle({ setTempHours, day, enabled }: ToggleProps) {
+  const toggleDay = (day: string) => {
+    setTempHours((prev) => ({
+      ...prev,
+      [day]: { ...prev[day], enabled: !prev[day].enabled },
+    }));
+  };
 
   return (
     <div className="flex items-center gap-3">
       <button
-        onClick={() => setEnabled(!enabled)}
+        onClick={() => toggleDay(day)}
         className={`w-12 h-6 rounded-full transition-colors duration-300 ${
           enabled ? "bg-green-500" : "bg-gray-400"
         }`}
