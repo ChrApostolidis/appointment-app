@@ -4,8 +4,7 @@ import {
   timestamp,
   uuid,
   varchar,
-  time,
-  boolean
+  jsonb,
 } from "drizzle-orm/pg-core";
 
 export const userRoles = ["admin", "user", "provider"] as const;
@@ -69,15 +68,19 @@ export const logoInfoTable = pgTable("logo_info", {
     .$onUpdate(() => new Date()),
 });
 
+export type StoredDayRange = {
+  start: string;
+  end: string;
+  enabled: boolean;
+};
+
+export type StoredWeeklyHours = Record<string, StoredDayRange>;
+
 export const ProviderHoursTable = pgTable("provider_working_hours", {
-  id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
-    .notNull()
+    .primaryKey()
     .references(() => UserTable.id, { onDelete: "cascade" }),
-  day: varchar("day", { length: 10 }).notNull(),
-  start_time: time("start_time").notNull(), // HH:MM
-  end_time: time("end_time").notNull(),
-  enabled: boolean("enabled").notNull().default(false),
+  hours: jsonb("hours").$type<StoredWeeklyHours>().notNull(),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()
@@ -90,4 +93,5 @@ export type Database = {
   UserTable: typeof UserTable;
   CustomerTable: typeof CustomerTable;
   ProviderTable: typeof ProviderTable;
+  ProviderHoursTable: typeof ProviderHoursTable;
 };
