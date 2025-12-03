@@ -16,7 +16,7 @@ export default async function ProfilePage() {
   const provider: FullProviderData | null = await getFullProviderDataById(currentUser.id);
 
   if (!provider) {
-    return "User not found";
+    return "Provider not found";
   }
 
   return (
