@@ -1,17 +1,16 @@
 import { z } from "zod";
 
 const DAY_NAMES = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
 ] as const;
 
 export type DayName = (typeof DAY_NAMES)[number];
-export type NormalizedDay = Lowercase<DayName>;
 
 const CLOSED_VALUE = "Closed" as const;
 const DISABLED_RANGE = { start: "00:00", end: "23:59" } as const;
@@ -33,33 +32,36 @@ export const DayEntrySchema = z.object({
 
 export type DayEntry = z.infer<typeof DayEntrySchema>;
 
+// creating the schema for the entire week dynamically
 export const ClientHoursSchema = z.object(
-  DAY_NAMES.reduce(
-    (shape, day) => {
-      shape[day] = DayEntrySchema;
-      return shape;
-    },
-    {} as Record<DayName, typeof DayEntrySchema>
-  )
+  DAY_NAMES.reduce((shape, day) => {
+    shape[day] = DayEntrySchema;
+    return shape;
+  }, {} as Record<DayName, typeof DayEntrySchema>)
 );
 
 export type ClientHours = z.infer<typeof ClientHoursSchema>;
 
 export type NormalizedHourRow = {
-  day: NormalizedDay;
+  day: DayName;
   start: string;
   end: string;
   enabled: boolean;
 };
 
+// Validates input using Zod helper function
 export function validateAndNormalizeHours(payload: unknown): NormalizedHourRow[] {
   const safeParse = ClientHoursSchema.parse(payload);
-  return DAY_NAMES.map((day) => ({
-    day: day.toLowerCase() as NormalizedDay,
-    ...normalizeEntry(day, safeParse[day]),
-  }));
+  
+  return DAY_NAMES.map((day) => {
+    return {
+      day,
+      ...normalizeEntry(day, safeParse[day]),
+    };
+  });
 }
 
+// Handling individual day normalization to be called to validateAndNormalizeHours to become an array of NormalizedHourRow
 function normalizeEntry(day: DayName, entry: DayEntry) {
   const disabled = entry.enabled === false || entry.start === CLOSED_VALUE || entry.end === CLOSED_VALUE;
 
@@ -80,6 +82,7 @@ function normalizeEntry(day: DayName, entry: DayEntry) {
   return { start, end, enabled: true };
 }
 
+// Helper functions
 function pad(value: string) {
   const [hours, minutes] = value.split(":");
   return `${hours.padStart(2, "0")}:${minutes}`;
