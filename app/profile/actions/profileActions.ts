@@ -9,10 +9,7 @@ import {
   UserTable,
 } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
-import {
-  NormalizedHourRow,
-  validateAndNormalizeHours,
-} from "../schema";
+import { NormalizedHourRow, validateAndNormalizeHours } from "../schema";
 import { rowsToWeeklyHours } from "../utils/helper";
 
 export type FullProviderData = {
@@ -89,4 +86,12 @@ export async function updateProviderWorkingHours(payload: unknown) {
   );
 }
 
+export async function getProviderWorkingHoursById(providerId: string) {
+  const data = await db
+    .select()
+    .from(ProviderHoursTable)
+    .where(eq(ProviderHoursTable.userId, providerId))
+    .limit(1);
 
+  return data[0]?.hours || null;
+}

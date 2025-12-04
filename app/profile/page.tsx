@@ -1,3 +1,5 @@
+"use server";
+import { getProviderWorkingHoursById } from "./actions/profileActions";
 import { getCurrentUser } from "@/auth/currentUser";
 import Header from "../components/Header";
 import { Calendar, Check, Edit, Mail, MapPin } from "lucide-react";
@@ -8,11 +10,13 @@ import { FullProviderData, getFullProviderDataById } from "./actions/profileActi
 
 export default async function ProfilePage() {
   const currentUser = await getCurrentUser({ withFullUser: true });
-
+  
   if (!currentUser) {
     return "User not found";
   }
 
+  const data = await getProviderWorkingHoursById(currentUser?.id);
+  
   const provider: FullProviderData | null = await getFullProviderDataById(currentUser.id);
 
   if (!provider) {
@@ -109,7 +113,7 @@ export default async function ProfilePage() {
                   <span>Since {new Date(provider.createdAt).getFullYear()}</span>
                 </div>
               </div>
-              <WorkingHours />
+              <WorkingHours data={data} />
             </div>
           </div>
         </div>

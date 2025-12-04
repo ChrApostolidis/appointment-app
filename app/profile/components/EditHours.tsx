@@ -1,8 +1,8 @@
 "use client";
-
-import { dayNames, WorkingHours } from "../data/hoursData";
+import { dayNames, orderedDayNames, WorkingHours } from "../data/hoursData";
 import MainButton from "@/app/components/MainButton";
 import Toggle from "./Toggle";
+import { updateProviderWorkingHours } from "../actions/profileActions";
 
 type EditHoursProps = {
   setWorkingHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
@@ -22,14 +22,19 @@ export default function EditHours({
     return `${hour}:00`;
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    try {
+      await updateProviderWorkingHours(tempHours);
+    } catch (error) {
+      console.error("Failed to update working hours:", error);
+    }
     setWorkingHours(structuredClone(tempHours));
     setIsModalOpen(false);
   };
 
   return (
     <>
-      {Object.keys(tempHours).map((day) => (
+      {orderedDayNames.map((day) => (
         <div
           key={day}
           className="lg:p-3 mb-2 flex items-center justify-between rounded-lg bg-muted/50 border border-border border-white rounded-2xl p-1 lg:p-4"
