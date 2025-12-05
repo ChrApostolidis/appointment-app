@@ -7,14 +7,21 @@ import Hours from "./Hours";
 import EditHours from "./EditHours";
 import { useState } from "react";
 import { StoredWeeklyHours } from "@/drizzle/schema";
+import { workingHoursData, type WorkingHours } from "../data/hoursData";
 
-export default function WorkingHours({data} : {data: StoredWeeklyHours}) {
+type WorkingHoursProps = {
+  data: StoredWeeklyHours | null;
+};
+
+export default function WorkingHours({ data }: WorkingHoursProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [workingHours, setWorkingHours] = useState(data);
-  // use the structuredClone to create a deep copy of workingHoursData
-  const [tempHours, setTempHours] = useState(() =>
-    structuredClone(data)
+  const [workingHours, setWorkingHours] = useState<WorkingHours>(() =>
+    structuredClone(data ?? workingHoursData)
   );
+  const [tempHours, setTempHours] = useState<WorkingHours>(() =>
+    structuredClone(data ?? workingHoursData)
+  );
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -69,7 +76,7 @@ export default function WorkingHours({data} : {data: StoredWeeklyHours}) {
             setTempHours={setTempHours}
           />
         </Modal>
-        <Hours data={data} />
+        <Hours data={data ? workingHours : null} />
       </div>
     </div>
   );

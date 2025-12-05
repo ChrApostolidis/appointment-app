@@ -11,3 +11,8 @@ export function rowsToWeeklyHours(rows: NormalizedHourRow[]): StoredWeeklyHours 
     return acc;
   }, {} as StoredWeeklyHours);
 }
+
+export const timeOptions = Array.from({ length: 16 }, (_, i) => {
+    const hour = (i + 6).toString().padStart(2, "0");
+    return `${hour}:00`;
+  });

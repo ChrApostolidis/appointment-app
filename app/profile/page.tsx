@@ -15,7 +15,7 @@ export default async function ProfilePage() {
     return "User not found";
   }
 
-  const data = await getProviderWorkingHoursById(currentUser?.id);
+  const data = await getProviderWorkingHoursById(currentUser.id);
   
   const provider: FullProviderData | null = await getFullProviderDataById(currentUser.id);
 

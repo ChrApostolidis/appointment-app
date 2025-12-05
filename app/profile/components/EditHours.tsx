@@ -3,6 +3,7 @@ import { dayNames, orderedDayNames, WorkingHours } from "../data/hoursData";
 import MainButton from "@/app/components/MainButton";
 import Toggle from "./Toggle";
 import { updateProviderWorkingHours } from "../actions/profileActions";
+import { timeOptions } from "../utils/helper";
 
 type EditHoursProps = {
   setWorkingHours: React.Dispatch<React.SetStateAction<WorkingHours>>;
@@ -17,10 +18,7 @@ export default function EditHours({
   setIsModalOpen,
   setTempHours,
 }: EditHoursProps) {
-  const timeOptions = Array.from({ length: 16 }, (_, i) => {
-    const hour = (i + 6).toString().padStart(2, "0");
-    return `${hour}:00`;
-  });
+  
 
   const handleSave = async () => {
     try {
