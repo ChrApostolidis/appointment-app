@@ -30,7 +30,7 @@ export default function Hours({ data }: { data: StoredWeeklyHours | null }) {
             </span>
           </div>
           <span className="text-sm text-foreground lg:text-lg">
-            {data[day].start} - {data[day].end}
+            {data[day].enabled ? `${data[day].start} - ${data[day].end}` : "Closed"}
           </span>
         </div>
       ))}

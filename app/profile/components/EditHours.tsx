@@ -18,8 +18,6 @@ export default function EditHours({
   setIsModalOpen,
   setTempHours,
 }: EditHoursProps) {
-  
-
   const handleSave = async () => {
     try {
       await updateProviderWorkingHours(tempHours);
@@ -48,38 +46,45 @@ export default function EditHours({
             />
           </div>
           <div className="flex gap-1">
-            <select
-              value={tempHours[day].start}
-              onChange={(e) => {
-                setTempHours((prev) => ({
-                  ...prev,
-                  [day]: { ...prev[day], start: e.target.value },
-                }));
-              }}
-              className="text-sm text-gray-400 lg:text-lg"
-            >
-              {timeOptions.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
-            <select
-              value={tempHours[day].end}
-              onChange={(e) => {
-                setTempHours((prev) => ({
-                  ...prev,
-                  [day]: { ...prev[day], end: e.target.value },
-                }));
-              }}
-              className="text-sm text-gray-400 lg:text-lg"
-            >
-              {timeOptions.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
+            {tempHours[day].enabled === false ? (
+              <span className="text-sm text-foreground lg:text-lg">Closed</span>
+            ) : (
+              <>
+                <select
+                  value={tempHours[day].start}
+                  onChange={(e) => {
+                    setTempHours((prev) => ({
+                      ...prev,
+                      [day]: { ...prev[day], start: e.target.value },
+                    }));
+                  }}
+                  className="text-sm text-gray-400 lg:text-lg"
+                >
+                  {timeOptions.map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={tempHours[day].end}
+                  onChange={(e) => {
+                    setTempHours((prev) => ({
+                      ...prev,
+                      [day]: { ...prev[day], end: e.target.value },
+                    }));
+                  }}
+                  className="text-sm text-gray-400 lg:text-lg"
+                >
+                  {timeOptions.map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
           </div>
         </div>
       ))}
