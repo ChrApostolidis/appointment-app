@@ -3,6 +3,16 @@ import { NormalizedHourRow } from "../schema";
 
 export function rowsToWeeklyHours(rows: NormalizedHourRow[]): StoredWeeklyHours {
   return rows.reduce<StoredWeeklyHours>((acc, row) => {
+
+    if (row.enabled === false) {
+      acc[row.day] = {
+        start: "Closed",
+        end: "Closed",
+        enabled: false,
+      };
+      return acc;
+    }
+
     acc[row.day] = {
       start: row.start,
       end: row.end,
