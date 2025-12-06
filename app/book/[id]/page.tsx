@@ -1,7 +1,11 @@
 "use server";
 
 import Header from "@/app/components/Header";
-import { getProviderById, singleProvider } from "../actions/actions";
+import {
+  getNextAvailableSlot,
+  getProviderById,
+  singleProvider,
+} from "../actions/actions";
 import { getCurrentUser } from "@/auth/currentUser";
 import ImageRender from "../components/ImageRender";
 import RatingStars from "../components/RatingStars";
@@ -16,11 +20,14 @@ export default async function ProviderProfilePage({
 }) {
   const { id } = await params;
   const currentUser = await getCurrentUser({ withFullUser: true });
+
   const provider: singleProvider | null = await getProviderById(id);
 
   if (!currentUser) {
     return "User not found";
   }
+
+  const nextAvailableSlot = await getNextAvailableSlot(id);
 
   if (!provider?.logoUrl) {
     return "Provider not found";
@@ -89,7 +96,9 @@ export default async function ProviderProfilePage({
                           Next Available
                         </p>
                         <p className="text-xs text-green-400">
-                          10:00 AM - June 10, 2025
+                          {nextAvailableSlot
+                            ? `${nextAvailableSlot.startAt.toLocaleString()}`
+                            : "No available slots"}
                         </p>
                       </div>
                     </div>
