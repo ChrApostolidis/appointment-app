@@ -1,8 +1,21 @@
 "use server";
 
+import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
 import { db } from "@/drizzle/db";
-import { logoInfoTable, ProviderTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import {
+  appoinmentsTable,
+  logoInfoTable,
+  ProviderHoursTable,
+  ProviderTable,
+} from "@/drizzle/schema";
+import { and, eq, gte, lt } from "drizzle-orm";
+import {
+  addDays,
+  addMinutes,
+  buildDayWindow,
+  overlaps,
+  startOfDay,
+} from "../utils/helper";
 
 export interface providers {
   id: string;
@@ -55,7 +68,7 @@ export async function getProviderById(
       })
 
       .from(ProviderTable)
-      
+
       .leftJoin(logoInfoTable, eq(ProviderTable.logoId, logoInfoTable.logoId))
       .where(eq(ProviderTable.id, providerId))
       .limit(1);
@@ -98,11 +111,90 @@ export async function getFilteredProviders(
   if (page && per_page) {
     // Params might be an array checking first if the value is an array otherwise use the value directly
     const pageNum = Math.max(1, Number(Array.isArray(page) ? page[0] : page));
-    const perPageNum = Math.max(1, Number(Array.isArray(per_page) ? per_page[0] : per_page));
+    const perPageNum = Math.max(
+      1,
+      Number(Array.isArray(per_page) ? per_page[0] : per_page)
+    );
     startIndex = (pageNum - 1) * perPageNum;
     endIndex = Math.min(startIndex + perPageNum, totalCount);
     filteredProviders = filteredProviders.slice(startIndex, endIndex);
   }
 
   return { filteredProviders, totalCount };
+}
+
+export async function getProviderWorkingHours(providerId: string) {
+  const result = await db
+    .select({ userId: ProviderTable.userId })
+    .from(ProviderTable)
+    .where(eq(ProviderTable.id, providerId))
+    .limit(1);
+
+  const userId = result[0]?.userId ?? null;
+  if (!userId) {
+    return null;
+  }
+
+  const hours = await db
+    .select()
+    .from(ProviderHoursTable)
+    .where(eq(ProviderHoursTable.userId, userId))
+    .limit(1);
+
+  return hours[0]?.hours || null;
+}
+
+export async function getNextAvailableSlot(
+  providerId: string
+): Promise<{ startAt: Date; endAt: Date } | undefined> {
+  const workingHours = await getProviderWorkingHours(providerId);
+  console.log("Working hours:", workingHours);
+
+  if (!workingHours) {
+    throw new Error("No working hours available");
+  }
+
+  const now = new Date();
+  const windowEnd = addDays(now, 30);
+
+  const bookings = await db
+    .select({
+      startAt: appoinmentsTable.startAt,
+      endAt: appoinmentsTable.endAt,
+    })
+    .from(appoinmentsTable)
+    .where(
+      and(
+        eq(appoinmentsTable.providerId, providerId),
+        gte(appoinmentsTable.startAt, now),
+        lt(appoinmentsTable.startAt, windowEnd)
+      )
+    );
+
+  let cursor = startOfDay(now);
+  for (cursor < windowEnd; (cursor = addDays(cursor, 1)); ) {
+    const weekdayKey = cursor
+      .toLocaleDateString("en-US", { weekday: "long" })
+      .toLowerCase(); // return "monday", "tuesday", etc.
+    const entry = workingHours[weekdayKey];
+    if (!entry || !entry.enabled) {
+      continue; // Provider is closed on this day
+    }
+
+    const { start, end } = buildDayWindow(cursor, entry); // returns timestaps
+    const slotDuration = 60; // in minutes
+
+    for (
+      let slotStart = new Date(start);
+      addMinutes(slotStart, slotDuration) <= end;
+      slotStart = addMinutes(slotStart, slotDuration)
+    ) {
+      const slotEnd = addMinutes(slotStart, slotDuration);
+      const hasConflict = bookings.some((b) => overlaps(slotStart, slotEnd, b));
+      if (!hasConflict && slotEnd > now) {
+        return { startAt: slotStart, endAt: slotEnd };
+      }
+    }
+  }
+  return undefined;
 }
