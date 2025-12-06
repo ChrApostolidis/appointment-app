@@ -88,6 +88,25 @@ export const ProviderHoursTable = pgTable("provider_working_hours", {
     .$onUpdate(() => new Date()),
 });
 
+export const appoinmentsTable = pgTable("appointments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  providerId: uuid("provider_id")
+    .notNull()
+    .references(() => ProviderTable.id, { onDelete: "cascade" }),
+  customerId: uuid("customer_id")
+    .notNull()
+    .references(() => UserTable.id, { onDelete: "cascade" }),
+  startAt: timestamp({ withTimezone: true }).notNull(), // ex 2025-06-01T12:00:00.000Z
+  endAt: timestamp({ withTimezone: true }).notNull(),
+  notes: varchar("notes", { length: 100 }),
+  status: varchar("status", { length: 50 }).notNull().default("scheduled"),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp({ withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
 // Database mapping for drizzle generic
 export type Database = {
   UserTable: typeof UserTable;
