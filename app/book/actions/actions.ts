@@ -1,11 +1,9 @@
 "use server";
 
-import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
 import { db } from "@/drizzle/db";
 import {
   appoinmentsTable,
   logoInfoTable,
-  ProviderHoursTable,
   ProviderTable,
 } from "@/drizzle/schema";
 import { and, eq, gte, lt } from "drizzle-orm";
@@ -16,9 +14,11 @@ import {
   overlaps,
   startOfDay,
 } from "../utils/helper";
+import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
 
 export interface providers {
   id: string;
+  userId: string;
   businessName: string;
   serviceCategory: string;
   description: string | null;
@@ -32,6 +32,7 @@ export async function getProviders(): Promise<providers[]> {
     const providers = await db
       .select({
         id: ProviderTable.id,
+        userId: ProviderTable.userId,
         businessName: ProviderTable.businessName,
         serviceCategory: ProviderTable.serviceCategory,
         description: ProviderTable.description,
@@ -70,7 +71,7 @@ export async function getProviderById(
       .from(ProviderTable)
 
       .leftJoin(logoInfoTable, eq(ProviderTable.logoId, logoInfoTable.logoId))
-      .where(eq(ProviderTable.id, providerId))
+      .where(eq(ProviderTable.userId, providerId))
       .limit(1);
     return provider[0];
   } catch (error) {
@@ -123,32 +124,10 @@ export async function getFilteredProviders(
   return { filteredProviders, totalCount };
 }
 
-export async function getProviderWorkingHours(providerId: string) {
-  const result = await db
-    .select({ userId: ProviderTable.userId })
-    .from(ProviderTable)
-    .where(eq(ProviderTable.id, providerId))
-    .limit(1);
-
-  const userId = result[0]?.userId ?? null;
-  if (!userId) {
-    return null;
-  }
-
-  const hours = await db
-    .select()
-    .from(ProviderHoursTable)
-    .where(eq(ProviderHoursTable.userId, userId))
-    .limit(1);
-
-  return hours[0]?.hours || null;
-}
-
 export async function getNextAvailableSlot(
   providerId: string
 ): Promise<{ startAt: Date; endAt: Date } | undefined> {
-  const workingHours = await getProviderWorkingHours(providerId);
-  console.log("Working hours:", workingHours);
+  const workingHours = await getProviderWorkingHoursById(providerId);
 
   if (!workingHours) {
     throw new Error("No working hours available");

@@ -23,10 +23,10 @@ export default async function ProfileCard({
       {providers.map((provider) => {
         return (
           <div
-            key={provider.id}
+            key={provider.userId}
             className="bg-slate-900/50 rounded-lg border border-slate-700/50 overflow-hidden hover:border-slate-600 transition-colors"
           >
-            <Link href={`/book/${provider.id}`} key={provider.id}>
+            <Link href={`/book/${provider.userId}`} key={provider.userId}>
               <div className="flex flex-col md:flex-row">
                 <Suspense fallback={<Loading>Loading image...</Loading>}>
                   <ImageRender className="md:w-64 md:h-auto h-48" provider={provider} />
