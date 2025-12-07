@@ -28,6 +28,16 @@ export default async function ProviderProfilePage({
   }
 
   const nextAvailableSlot = await getNextAvailableSlot(id);
+  const formattedNextSlot = nextAvailableSlot
+    ? new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(nextAvailableSlot.startAt)
+    : null;
 
   if (!provider?.logoUrl) {
     return "Provider not found";
@@ -96,9 +106,7 @@ export default async function ProviderProfilePage({
                           Next Available
                         </p>
                         <p className="text-xs text-green-400">
-                          {nextAvailableSlot
-                            ? `${nextAvailableSlot.startAt.toLocaleString()}`
-                            : "No available slots"}
+                          {formattedNextSlot ?? "No available slots"}
                         </p>
                       </div>
                     </div>
