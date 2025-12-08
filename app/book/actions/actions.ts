@@ -177,3 +177,71 @@ export async function getNextAvailableSlot(
   }
   return undefined;
 }
+
+export type AppointmentSlot = {
+  startAt: Date;
+  endAt: Date;
+};
+
+export async function getAvailableAppointments(
+  selectedDate: Date | undefined,
+  providerId: string
+): Promise<AppointmentSlot[]> {
+  const workingHours = await getProviderWorkingHoursById(providerId);
+
+  if (!workingHours) {
+    throw new Error("No working hours available");
+  }
+
+  if (!selectedDate) {
+    throw new Error("No date selected");
+  }
+
+  const startOfDay = new Date(selectedDate);
+  startOfDay.setHours(6, 0, 0, 0);
+
+  const endOfDay = new Date(selectedDate);
+  endOfDay.setHours(21, 0, 0, 0);
+
+  const bookings = await db
+    .select({
+      startAt: appoinmentsTable.startAt,
+      endAt: appoinmentsTable.endAt,
+    })
+    .from(appoinmentsTable)
+    .where(
+      and(
+        eq(appoinmentsTable.providerId, providerId),
+        gte(appoinmentsTable.startAt, startOfDay),
+        lt(appoinmentsTable.startAt, endOfDay)
+      )
+    );
+
+  // find weekday (monday, tuesday, etc.)
+  const weekdayKey = startOfDay
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+
+  const entry = workingHours[weekdayKey];
+  if (!entry || !entry.enabled) {
+    return []; // Provider is not working that day
+  }
+
+  const { start, end } = buildDayWindow(startOfDay, entry); // returns timestaps
+  const slotDuration = 60; // in minutes
+
+  const slots: AppointmentSlot[] = [];
+
+  for (
+    let slotStart = new Date(start);
+    addMinutes(slotStart, slotDuration) <= end;
+    slotStart = addMinutes(slotStart, slotDuration)
+  ) {
+    const slotEnd = addMinutes(slotStart, slotDuration);
+    const hasConflict = bookings.some((b) => overlaps(slotStart, slotEnd, b));
+    if (!hasConflict) {
+      slots.push({ startAt: slotStart, endAt: slotEnd });
+    }
+  }
+  return slots;
+}
