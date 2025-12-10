@@ -29,7 +29,6 @@ export default async function ProviderProfilePage({
 
   const nextAvailableSlot = await getNextAvailableSlot(id);
 
-
   if (!provider?.logoUrl) {
     return "Provider not found";
   }
@@ -48,13 +47,17 @@ export default async function ProviderProfilePage({
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-          {provider ? (
-            <> 
-            <MainProfileSection provider={provider} nextAvailableSlot={nextAvailableSlot} />
+        {provider ? (
+          <>
+            <MainProfileSection
+              provider={provider}
+              nextAvailableSlot={nextAvailableSlot}
+              providerId={id}
+            />
             <ServiceSection provider={provider} />
           </>
         ) : (
-         <ProviderNotFound />
+          <ProviderNotFound />
         )}
       </div>
     </div>

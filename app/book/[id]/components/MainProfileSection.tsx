@@ -1,19 +1,25 @@
-import MainButton from "@/app/components/MainButton";
+"use server";
+
 import { singleProvider } from "../../actions/actions";
 import { FaLocationDot } from "react-icons/fa6";
 import RatingStars from "../../components/RatingStars";
 import ImageRender from "../../components/ImageRender";
+import ButtonSection from "./ButtonSection";
 
 type MainProfileSectionProps = {
   provider: singleProvider;
   nextAvailableSlot: { startAt: Date; endAt: Date } | undefined;
+  providerId: string;
 };
 
-export default function MainProfileSection({
+export default async function MainProfileSection({
   provider,
   nextAvailableSlot,
+  providerId
 }: MainProfileSectionProps) {
+
   
+
   const formattedNextSlot = nextAvailableSlot
     ? new Intl.DateTimeFormat("en-US", {
         weekday: "long",
@@ -74,12 +80,7 @@ export default function MainProfileSection({
               </div>
             </div>
           </div>
-
-          <div className="flex justify-end mt-8 pt-6 border-t border-slate-700/50">
-            <MainButton variant="primary" className="w-full md:w-auto md:px-8">
-              Book Appointment
-            </MainButton>
-          </div>
+          <ButtonSection providerId={providerId} />
         </div>
       </div>
     </div>
