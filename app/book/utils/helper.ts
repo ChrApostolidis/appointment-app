@@ -16,7 +16,10 @@ export function addMinutes(date: Date, minutes: number) {
   return copy;
 }
 
-export function buildDayWindow(day: Date, entry: { start: string; end: string }) {
+export function buildDayWindow(
+  day: Date,
+  entry: { start: string; end: string }
+) {
   const [startHour, startMinute] = entry.start.split(":").map(Number);
   const [endHour, endMinute] = entry.end.split(":").map(Number);
 
@@ -29,6 +32,17 @@ export function buildDayWindow(day: Date, entry: { start: string; end: string })
   return { start, end };
 }
 
-export function overlaps(slotStart: Date, slotEnd: Date, booking: { startAt: Date; endAt: Date }) {
+export function overlaps(
+  slotStart: Date,
+  slotEnd: Date,
+  booking: { startAt: Date; endAt: Date }
+) {
   return slotStart < booking.endAt && slotEnd > booking.startAt;
 }
+
+export const formatTime = (iso: Date) =>
+  new Date(iso).toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
