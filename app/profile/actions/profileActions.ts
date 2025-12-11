@@ -3,6 +3,7 @@
 import { getCurrentUser } from "@/auth/currentUser";
 import { db } from "@/drizzle/db";
 import {
+  CustomerTable,
   logoInfoTable,
   ProviderHoursTable,
   ProviderTable,
@@ -45,6 +46,26 @@ export async function getFullProviderDataById(
     return provider[0];
   } catch (error) {
     console.error("Error fetching provider by ID:", error);
+    return null;
+  }
+}
+
+export async function getCustomerDataById(customerId: string) {
+  try {
+    const customer = await db
+      .select({
+        name: UserTable.name,
+        email: UserTable.email,
+        interests: CustomerTable.interests,
+        createdAt: UserTable.createdAt,
+      })
+      .from(UserTable)
+      .innerJoin(CustomerTable, eq(CustomerTable.userId, UserTable.id))
+      .where(eq(UserTable.id, customerId))
+      .limit(1);
+    return customer[0];
+  } catch (error) {
+    console.error("Error fetching customer by ID:", error);
     return null;
   }
 }

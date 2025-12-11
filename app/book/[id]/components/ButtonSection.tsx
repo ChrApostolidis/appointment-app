@@ -6,7 +6,6 @@ import { Calendar, Clock2 } from "lucide-react";
 import { useState } from "react";
 import { formatTime } from "../../utils/helper";
 import { WorkingHours } from "@/app/profile/data/hoursData";
-import { set } from "zod";
 
 export type AppointmentSlot = {
   startAt: Date;
