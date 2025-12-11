@@ -186,7 +186,7 @@ export type AppointmentSlot = {
 export async function getAvailableAppointments(
   selectedDate: Date | undefined,
   providerId: string
-): Promise<AppointmentSlot[]> {
+): Promise<AppointmentSlot[] | "Closed"> {
   const workingHours = await getProviderWorkingHoursById(providerId);
 
   if (!workingHours) {
@@ -224,7 +224,7 @@ export async function getAvailableAppointments(
 
   const entry = workingHours[weekdayKey];
   if (!entry || !entry.enabled) {
-    return []; // Provider is not working that day
+    return "Closed"; // Provider is not working that day
   }
 
   const { start, end } = buildDayWindow(startOfDay, entry); // returns timestaps

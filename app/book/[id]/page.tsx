@@ -12,6 +12,7 @@ import Link from "next/link";
 import MainProfileSection from "./components/MainProfileSection";
 import ServiceSection from "./components/ServicesSection";
 import ProviderNotFound from "./components/ProviderNotFound";
+import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
 
 export default async function ProviderProfilePage({
   params,
@@ -28,6 +29,8 @@ export default async function ProviderProfilePage({
   }
 
   const nextAvailableSlot = await getNextAvailableSlot(id);
+
+  const workingHours = await getProviderWorkingHoursById(id)
 
   if (!provider?.logoUrl) {
     return "Provider not found";
@@ -53,6 +56,7 @@ export default async function ProviderProfilePage({
               provider={provider}
               nextAvailableSlot={nextAvailableSlot}
               providerId={id}
+              workingHours={workingHours}
             />
             <ServiceSection provider={provider} />
           </>

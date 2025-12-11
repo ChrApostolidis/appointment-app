@@ -5,17 +5,20 @@ import { FaLocationDot } from "react-icons/fa6";
 import RatingStars from "../../components/RatingStars";
 import ImageRender from "../../components/ImageRender";
 import ButtonSection from "./ButtonSection";
+import { WorkingHours } from "@/app/profile/data/hoursData";
 
 type MainProfileSectionProps = {
   provider: singleProvider;
   nextAvailableSlot: { startAt: Date; endAt: Date } | undefined;
+  workingHours: WorkingHours;
   providerId: string;
 };
 
 export default async function MainProfileSection({
   provider,
   nextAvailableSlot,
-  providerId
+  providerId,
+  workingHours,
 }: MainProfileSectionProps) {
 
   
@@ -80,7 +83,7 @@ export default async function MainProfileSection({
               </div>
             </div>
           </div>
-          <ButtonSection providerId={providerId} />
+          <ButtonSection providerId={providerId} workingHours={workingHours} />
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import ContainerCalendar from "./ContainerCalendar";
 import { Calendar, Clock2 } from "lucide-react";
 import { useState } from "react";
 import { formatTime } from "../../utils/helper";
+import { WorkingHours } from "@/app/profile/data/hoursData";
 
 export type AppointmentSlot = {
   startAt: Date;
@@ -13,8 +14,10 @@ export type AppointmentSlot = {
 
 export default function ButtonSection({
   providerId,
+  workingHours,
 }: {
   providerId: string;
+  workingHours: WorkingHours;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -22,6 +25,7 @@ export default function ButtonSection({
   const [availableAppointments, setAvailableAppointments] = useState<
     AppointmentSlot[] | null
   >(null);
+  
 
   const fetchAppoinements = async (providerId: string, date: Date) => {
     setIsLoading(true);
@@ -30,8 +34,8 @@ export default function ButtonSection({
         `/api/availability?providerId=${providerId}&date=${date.toISOString()}`
       );
       if (!res.ok) throw new Error("Request failed");
-      const data = (await res.json()) as { slots: AppointmentSlot[] };
-      setAvailableAppointments(data.slots);
+      const data = (await res.json()) as { slots: AppointmentSlot[] | "Closed" };
+      setAvailableAppointments(data.slots === "Closed" ? null : data.slots);
     } catch (err) {
       setAvailableAppointments([]);
       console.log("Error fetching available appointments:", err);
@@ -69,6 +73,7 @@ export default function ButtonSection({
             setDate={setDate}
             fetchAppoinements={fetchAppoinements}
             providerId={providerId}
+            workingHours={workingHours}
           />
           <div className="flex justify-start gap-2 pb-2 border-b border-primary">
             <Clock2 size={18} />

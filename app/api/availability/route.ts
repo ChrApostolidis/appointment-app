@@ -21,6 +21,11 @@ export async function GET(req: Request) {
 
    try {
     const slots = await getAvailableAppointments(selectedDate, providerId);
+
+    if (slots === "Closed") {
+      return NextResponse.json({ slots: "Closed" });
+    }
+
     //  add logic for closed days
     const serialized = slots.map((slot) => ({
       startAt: slot.startAt.toISOString(),
