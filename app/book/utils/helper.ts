@@ -46,3 +46,17 @@ export const formatTime = (iso: Date) =>
     minute: "2-digit",
     hour12: false,
   });
+
+const WEEKDAY_MAP: Record<string, number> = {
+  sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+};
+
+export function weekdayIndex(day: string) {
+  return WEEKDAY_MAP[day.toLowerCase()];
+}
