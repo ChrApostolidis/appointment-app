@@ -37,7 +37,7 @@ export default function ContainerCalendar({
         }}
         disabled={[{ before: today }, { dayOfWeek: disabledDays }]}
         required={false}
-        className="rounded-md border shadow-sm bg-foreground"
+        className="rounded-md border shadow-sm bg-background text-foreground"
         captionLayout="dropdown"
       />
     </div>

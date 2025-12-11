@@ -1,4 +1,3 @@
-
 type ButtonVariant = "primary" | "secondary" | "danger";
 
 interface ButtonProps {
@@ -7,6 +6,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   variant?: ButtonVariant;
   className?: string;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -15,21 +15,21 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   variant = "primary",
   className = "",
+  disabled = false,
 }) => {
   const baseStyles =
-    "cursor-pointer font-semibold py-2 px-6 rounded-lg shadow-md";
+    "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:opacity-50 cursor-pointer font-semibold py-2 px-6 rounded-lg shadow-md";
 
   const variants: Record<ButtonVariant, string> = {
-    primary:
-      "bg-primary hover:bg-[#00b8d6] text-foreground",
+    primary: "bg-primary hover:bg-[#00b8d6] text-foreground",
     secondary:
       "bg-primary border border-[#00ccee] hover:bg-[#00ccee] text-foreground",
-    danger:
-      "bg-red-500 hover:bg-red-600 text-white focus:ring-red-400",
+    danger: "bg-red-500 hover:bg-red-600 text-white focus:ring-red-400",
   };
 
   return (
     <button
+      disabled={disabled}
       type={type}
       onClick={onClick}
       className={`${baseStyles} ${variants[variant]} ${className}`}
