@@ -197,6 +197,8 @@ export async function getAvailableAppointments(
     throw new Error("No date selected");
   }
 
+  const now = new Date();
+
   const startOfDay = new Date(selectedDate);
   startOfDay.setHours(6, 0, 0, 0);
 
@@ -229,6 +231,7 @@ export async function getAvailableAppointments(
 
   const { start, end } = buildDayWindow(startOfDay, entry); // returns timestaps
   const slotDuration = 60; // in minutes
+  const isSelectedDayToday = startOfDay.toDateString() === now.toDateString();
 
   const slots: AppointmentSlot[] = [];
 
@@ -238,6 +241,9 @@ export async function getAvailableAppointments(
     slotStart = addMinutes(slotStart, slotDuration)
   ) {
     const slotEnd = addMinutes(slotStart, slotDuration);
+    if (isSelectedDayToday && slotStart <= now) {
+      continue; // Skip slots that have already started today
+    }
     const hasConflict = bookings.some((b) => overlaps(slotStart, slotEnd, b));
     if (!hasConflict) {
       slots.push({ startAt: slotStart, endAt: slotEnd });
