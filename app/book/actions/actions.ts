@@ -251,3 +251,29 @@ export async function getAvailableAppointments(
   }
   return slots;
 }
+
+export type AppointmentData = {
+  providerId: string;
+  customerId: string;
+  startAt: string;
+  endAt: string;
+};
+
+export async function bookAppointment(appointmentData: AppointmentData) {
+  const { providerId, customerId, startAt, endAt } = appointmentData;
+  const booking = await db
+    .insert(appoinmentsTable)
+    .values({
+      providerId,
+      customerId,
+      startAt: new Date(startAt),
+      endAt: new Date(endAt),
+    })
+    .returning({
+      id: appoinmentsTable.id,
+      startAt: appoinmentsTable.startAt,
+      endAt: appoinmentsTable.endAt,
+    });
+
+  return booking[0];
+}
