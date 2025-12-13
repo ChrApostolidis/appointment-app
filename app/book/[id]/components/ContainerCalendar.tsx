@@ -2,22 +2,45 @@ import { WorkingHours } from "@/app/profile/data/hoursData";
 import { Calendar } from "@/components/ui/calendar";
 import { startOfToday } from "date-fns";
 import { weekdayIndex } from "../../utils/helper";
+import { AppointmentSlot } from "./ButtonSection";
 
 type ContainerCalendarProps = {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
-  fetchAppoinements: (providerId: string, date: Date) => Promise<void>;
   providerId: string;
   workingHours: WorkingHours;
+  setIsLoading: (isLoading: boolean) => void;
+  setAvailableAppointments: (
+    slots: AppointmentSlot[] | null
+  ) => void;
 };
 
 export default function ContainerCalendar({
   date,
   setDate,
-  fetchAppoinements,
   providerId,
   workingHours,
+  setIsLoading,
+  setAvailableAppointments,
 }: ContainerCalendarProps) {
+  const fetchAppoinements = async (providerId: string, date: Date) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(
+        `/api/availability?providerId=${providerId}&date=${date.toISOString()}`
+      );
+      if (!res.ok) throw new Error("Request failed");
+      const data = (await res.json()) as {
+        slots: AppointmentSlot[] | "Closed";
+      };
+      setAvailableAppointments(data.slots === "Closed" ? null : data.slots);
+    } catch (err) {
+      setAvailableAppointments([]);
+      console.log("Error fetching available appointments:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const today = startOfToday();
 
   const disabledDays = Object.entries(workingHours)

@@ -12,6 +12,7 @@ type MainProfileSectionProps = {
   nextAvailableSlot: { startAt: Date; endAt: Date } | undefined;
   workingHours: WorkingHours;
   providerId: string;
+  userId: string;
 };
 
 export default async function MainProfileSection({
@@ -19,6 +20,7 @@ export default async function MainProfileSection({
   nextAvailableSlot,
   providerId,
   workingHours,
+  userId
 }: MainProfileSectionProps) {
 
   
@@ -83,7 +85,7 @@ export default async function MainProfileSection({
               </div>
             </div>
           </div>
-          <ButtonSection providerId={providerId} workingHours={workingHours} />
+          <ButtonSection userId={userId} providerId={providerId} workingHours={workingHours} />
         </div>
       </div>
     </div>

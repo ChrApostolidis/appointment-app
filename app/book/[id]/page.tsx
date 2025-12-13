@@ -57,6 +57,7 @@ export default async function ProviderProfilePage({
               nextAvailableSlot={nextAvailableSlot}
               providerId={id}
               workingHours={workingHours}
+              userId={currentUser.id}
             />
             <ServiceSection provider={provider} />
           </>

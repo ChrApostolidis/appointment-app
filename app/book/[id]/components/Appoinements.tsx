@@ -2,14 +2,21 @@ import { formatTime } from "../../utils/helper";
 import { AppointmentSlot } from "./ButtonSection";
 
 export type AppoinementProps = {
-    selectedTime: AppointmentSlot | undefined;
-    setSelectedTime: (slot: AppointmentSlot) => void;
-    availableAppointments: AppointmentSlot[] | null;
-    isLoading: boolean;
-    setIsDisabled: (disabled: boolean) => void;
-}
+  selectedTime: AppointmentSlot | undefined;
+  setSelectedTime: (slot: AppointmentSlot) => void;
+  availableAppointments: AppointmentSlot[] | null;
+  isLoading: boolean;
+  setIsDisabled: (disabled: boolean) => void;
+};
 
-export default function Appoinements({selectedTime, setSelectedTime, availableAppointments, isLoading, setIsDisabled}: AppoinementProps) {
+export default function Appoinements({
+  selectedTime,
+  setSelectedTime,
+  availableAppointments,
+  isLoading,
+  setIsDisabled,
+}: AppoinementProps) {
+
   return (
     <>
       {isLoading ? (

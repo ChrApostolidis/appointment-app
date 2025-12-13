@@ -15,9 +15,11 @@ export type AppointmentSlot = {
 export default function ButtonSection({
   providerId,
   workingHours,
+  userId,
 }: {
   providerId: string;
   workingHours: WorkingHours;
+  userId: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -30,22 +32,28 @@ export default function ButtonSection({
   >(null);
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const fetchAppoinements = async (providerId: string, date: Date) => {
-    setIsLoading(true);
+  const booking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsDisabled(true);
     try {
-      const res = await fetch(
-        `/api/availability?providerId=${providerId}&date=${date.toISOString()}`
-      );
+      if (!selectedTime) throw new Error("No time selected");
+
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          providerId,
+          customerId: userId,
+          startAt: selectedTime.startAt,
+          endAt: selectedTime.endAt,
+        }),
+      });
       if (!res.ok) throw new Error("Request failed");
-      const data = (await res.json()) as {
-        slots: AppointmentSlot[] | "Closed";
-      };
-      setAvailableAppointments(data.slots === "Closed" ? null : data.slots);
     } catch (err) {
-      setAvailableAppointments([]);
-      console.log("Error fetching available appointments:", err);
+      console.log("Error booking appointment:", err);
     } finally {
-      setIsLoading(false);
+      setIsDisabled(false);
+      setIsModalOpen(false);
     }
   };
 
@@ -57,7 +65,6 @@ export default function ButtonSection({
     setIsModalOpen(true);
   };
 
-
   return (
     <div className="flex justify-end mt-8 pt-6 border-t border-slate-700/50">
       <MainButton
@@ -68,7 +75,7 @@ export default function ButtonSection({
         Book Appointment
       </MainButton>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <form>
+        <form onSubmit={booking}>
           <div className="flex flex-col gap-5">
             <h3 className="text-xl lg:text-2xl text-foreground">
               Book Appoinement
@@ -80,18 +87,27 @@ export default function ButtonSection({
             <ContainerCalendar
               date={date}
               setDate={setDate}
-              fetchAppoinements={fetchAppoinements}
               providerId={providerId}
               workingHours={workingHours}
+              setIsLoading={setIsLoading}
+              setAvailableAppointments={setAvailableAppointments}
             />
             <div className="flex justify-start gap-2 pb-2 border-b border-primary">
               <Clock2 size={18} className="text-foreground" />
               <p className="text-sm text-foreground">Select Time</p>
             </div>
-            <Appoinements selectedTime={selectedTime} setSelectedTime={setSelectedTime} availableAppointments={availableAppointments} isLoading={isLoading} setIsDisabled={setIsDisabled} />
+            <Appoinements
+              isLoading={isLoading}
+              availableAppointments={availableAppointments}
+              selectedTime={selectedTime}
+              setSelectedTime={setSelectedTime}
+              setIsDisabled={setIsDisabled}
+            />
           </div>
           <div className="flex justify-center items-center mt-3 border-t border-primary pt-4">
-            <MainButton type="submit" disabled={isDisabled}>Confirm Appointment</MainButton>
+            <MainButton type="submit" disabled={isDisabled}>
+              Confirm Appointment
+            </MainButton>
           </div>
         </form>
       </Modal>
