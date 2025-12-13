@@ -15,6 +15,13 @@
       "when": 1765013511572,
       "tag": "0001_nappy_madripoor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765644833759,
+      "tag": "0002_greedy_gamma_corps",
+      "breakpoints": true
     }
   ]
 }
