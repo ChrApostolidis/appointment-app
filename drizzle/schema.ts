@@ -92,6 +92,7 @@ export const appoinmentsTable = pgTable("appointments", {
   id: uuid("id").primaryKey().defaultRandom(),
   providerId: uuid("provider_id")
     .notNull()
+    .unique()
     .references(() => ProviderTable.id, { onDelete: "cascade" }),
   customerId: uuid("customer_id")
     .notNull()

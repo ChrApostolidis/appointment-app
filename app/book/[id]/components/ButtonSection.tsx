@@ -4,8 +4,8 @@ import Modal from "@/app/profile/components/Modal";
 import ContainerCalendar from "./ContainerCalendar";
 import { Calendar, Clock2 } from "lucide-react";
 import { useState } from "react";
-import { formatTime } from "../../utils/helper";
 import { WorkingHours } from "@/app/profile/data/hoursData";
+import Appoinements from "./Appoinements";
 
 export type AppointmentSlot = {
   startAt: Date;
@@ -88,41 +88,7 @@ export default function ButtonSection({
               <Clock2 size={18} className="text-foreground" />
               <p className="text-sm text-foreground">Select Time</p>
             </div>
-            {isLoading ? (
-              <div className="flex justify-center items-center text-lg">
-                Loading available appointments...
-              </div>
-            ) : (
-              <div className="flex">
-                {availableAppointments ? (
-                  <div className="flex gap-2 flex-wrap">
-                    {availableAppointments.map((slot) => {
-                      const start = new Date(slot.startAt);
-                      const end = new Date(slot.endAt);
-                      return (
-                        <div
-                          key={slot.startAt.toString()}
-                          onClick={() => { setSelectedTime(slot); setIsDisabled(false); }}
-                          className={`${
-                            selectedTime?.startAt === slot.startAt
-                              ? "bg-primary text-black"
-                              : "bg-background text-foreground"
-                          } p-1 rounded-lg hover:bg-primary hover:text-black cursor-pointer border border-border`}
-                        >
-                          <div className="flex">
-                            <button type="button">{formatTime(start)}</button>
-                            {" - "}
-                            <button type="button">{formatTime(end)}</button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div>Please select a date to see available appointments.</div>
-                )}
-              </div>
-            )}
+            <Appoinements selectedTime={selectedTime} setSelectedTime={setSelectedTime} availableAppointments={availableAppointments} isLoading={isLoading} setIsDisabled={setIsDisabled} />
           </div>
           <div className="flex justify-center items-center mt-3 border-t border-primary pt-4">
             <MainButton type="submit" disabled={isDisabled}>Confirm Appointment</MainButton>
