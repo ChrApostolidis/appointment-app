@@ -77,7 +77,7 @@ export default function SuccessModal({
           onClick={onClose}
           className="cursor-pointer w-full rounded-lg bg-primary py-2.5 font-semibold text-background transition hover:bg-primary/90"
         >
-          Close
+          Continue
         </button>
       </div>
     </Modal>

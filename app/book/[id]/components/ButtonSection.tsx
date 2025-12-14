@@ -8,6 +8,7 @@ import { WorkingHours } from "@/app/profile/data/hoursData";
 import Appoinements from "./Appoinements";
 import SuccessModal from "./SuccessModal";
 import { singleProvider } from "../../actions/actions";
+import FailedModal from "./FailedModal";
 
 export type AppointmentSlot = {
   startAt: Date;
@@ -36,6 +37,7 @@ export default function ButtonSection({
   >(null);
   const [isDisabled, setIsDisabled] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showFailed, setShowFailed] = useState(false);
 
   const booking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +57,7 @@ export default function ButtonSection({
       });
       if (!res.ok) throw new Error("Request failed");
     } catch (err) {
+      setShowFailed(true);
       console.log("Error booking appointment:", err);
     } finally {
       setIsDisabled(false);
@@ -129,6 +132,13 @@ export default function ButtonSection({
           onClose={() => setShowSuccess(false)}
         />
       )}
+
+      {showFailed && (
+        <FailedModal
+          isOpen={showFailed}
+          onClose={() => setShowFailed(false)}
+        />
+      )} 
     </>
   );
 }
