@@ -1,7 +1,5 @@
 import { BookingSchema } from "@/app/book/[id]/schema";
 import { bookAppointment } from "@/app/book/actions/actions";
-// import { db } from "@/drizzle/db";
-// import { appoinmentsTable } from "@/drizzle/schema";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

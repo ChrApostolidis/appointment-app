@@ -1,13 +1,26 @@
 import Modal from "@/app/profile/components/Modal";
 import { CalendarDays, CheckCircle, Clock } from "lucide-react";
 import { singleProvider } from "../../actions/actions";
+import { AppointmentSlot } from "./ButtonSection";
 
 type SuccessModalProps = {
+  provider: singleProvider;
   isOpen: boolean;
   onClose: () => void;
+  date: Date | undefined;
+  selectedTime: AppointmentSlot | undefined;
 };
 
-export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
+export default function SuccessModal({
+  isOpen,
+  onClose,
+  provider,
+  date,
+  selectedTime,
+}: SuccessModalProps) {
+  if (!date || !selectedTime)
+    throw new Error("Date or selected time is undefined");
+  console.log(date, selectedTime);
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center gap-6 text-center py-6 px-4">
@@ -22,7 +35,8 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
             Your appointment is locked in
           </h4>
           <p className="text-muted-foreground max-w-sm">
-            We&apos;ve emailed the details to you. You can review or reschedule anytime from your profile page.
+            We&apos;ve emailed the details to you. You can review or reschedule
+            anytime from your profile page.
           </p>
         </div>
         <div className="w-full rounded-2xl border border-border bg-background/60 p-4 text-sm">
@@ -33,9 +47,11 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
               </div>
               <div className="text-left">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Provider
+                  Proffesion
                 </p>
-                <p className="font-medium text-foreground">Provider Name</p>
+                <p className="font-medium text-foreground">
+                  {provider.businessName}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -46,7 +62,12 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
                   Date &amp; Time
                 </p>
-                <p className="font-medium text-foreground">Jan 12, 14:00</p>
+                <p className="font-medium text-foreground">
+                  {date?.toLocaleDateString()}{" "}
+                  {selectedTime
+                    ? `${selectedTime.startAt} - ${selectedTime.endAt}`
+                    : ""}
+                </p>
               </div>
             </div>
           </div>

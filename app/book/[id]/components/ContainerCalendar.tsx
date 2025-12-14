@@ -9,10 +9,8 @@ type ContainerCalendarProps = {
   setDate: (date: Date | undefined) => void;
   providerId: string;
   workingHours: WorkingHours;
-  setIsLoading: (isLoading: boolean) => void;
-  setAvailableAppointments: (
-    slots: AppointmentSlot[] | null
-  ) => void;
+  setIsLoading: (loading: boolean) => void;
+  setAvailableAppointments: (slots: AppointmentSlot[] | null) => void;
 };
 
 export default function ContainerCalendar({
@@ -23,7 +21,8 @@ export default function ContainerCalendar({
   setIsLoading,
   setAvailableAppointments,
 }: ContainerCalendarProps) {
-  const fetchAppoinements = async (providerId: string, date: Date) => {
+  
+  const fetchAppointments = async (providerId: string, date: Date) => {
     setIsLoading(true);
     try {
       const res = await fetch(
@@ -41,6 +40,7 @@ export default function ContainerCalendar({
       setIsLoading(false);
     }
   };
+
   const today = startOfToday();
 
   const disabledDays = Object.entries(workingHours)
@@ -55,7 +55,7 @@ export default function ContainerCalendar({
         onSelect={(selectedDate) => {
           setDate(selectedDate || undefined);
           if (selectedDate) {
-            fetchAppoinements(providerId, selectedDate);
+            fetchAppointments(providerId, selectedDate);
           }
         }}
         disabled={[{ before: today }, { dayOfWeek: disabledDays }]}

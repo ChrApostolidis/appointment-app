@@ -85,7 +85,7 @@ export default async function MainProfileSection({
               </div>
             </div>
           </div>
-          <ButtonSection userId={userId} providerId={providerId} workingHours={workingHours} />
+          <ButtonSection provider={provider} userId={userId} providerId={providerId} workingHours={workingHours} />
         </div>
       </div>
     </div>
