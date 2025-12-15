@@ -3,7 +3,7 @@
 import { getCurrentUser } from "@/auth/currentUser";
 import Header from "../components/Header";
 import BookingFilter from "./components/BookingFilter";
-
+import AppointmentCard from "./components/AppointmentCard";
 
 export default async function AppointmentsPage() {
   const user = await getCurrentUser({ withFullUser: true });
@@ -20,7 +20,7 @@ export default async function AppointmentsPage() {
       </h1>
       <div className="flex flex-col justify-center items-center">
         <BookingFilter />
-        <div className="bg-foreground max-w-lg p-4 rounded-xl"></div>
+        <AppointmentCard />
       </div>
     </div>
   );
