@@ -7,7 +7,7 @@ interface NavMenuItem {
 
 export default function NavMenu() {
   const NavMenuItems: NavMenuItem[] = [
-    { name: "My Appointments", link: "/events" },
+    { name: "My Appointments", link: "/myAppointments" },
     { name: "Book", link: "/book" },
     { name: "Calendar", link: "/calendar" },
   ];
