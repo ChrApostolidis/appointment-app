@@ -2,6 +2,7 @@
 
 import { getCurrentUser } from "@/auth/currentUser";
 import Header from "../components/Header";
+import BookingFilter from "./components/BookingFilter";
 
 
 export default async function AppointmentsPage() {
@@ -18,6 +19,8 @@ export default async function AppointmentsPage() {
         My Appointments
       </h1>
       <div className="flex flex-col justify-center items-center">
+        <BookingFilter />
+        <div className="bg-foreground max-w-lg p-4 rounded-xl"></div>
       </div>
     </div>
   );
