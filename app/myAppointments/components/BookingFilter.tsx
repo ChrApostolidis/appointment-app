@@ -1,29 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { Fitlers } from "../components/MainSection";
 
-type Fitlers = "All" | "Upcoming" | "Completed" | "Cancelled";
-
-export default function BookingFilter() {
-  const [plan, setPlan] = useState<Fitlers>("All");
+export default function BookingFilter({filter,setFilter}: {filter: Fitlers, setFilter: React.Dispatch<React.SetStateAction<Fitlers>>}) {
   const tabs: Fitlers[] = ["All", "Upcoming", "Completed", "Cancelled"];
   return (
     <div className="flex lg:gap-2  border-solid border-2  border-primary rounded-2xl mb-2 lg:mb-6">
       {tabs.map((tab) => (
         <button
           key={tab}
-          onClick={() => setPlan(tab)}
+          onClick={() => setFilter(tab)}
           className={`relative z-10 px-2 sm:px-3 lg:px-4
                     py-1.5 sm:py-2
                     text-xs sm:text-sm lg:text-2xl
                     font-medium
                     transition-colors
                     cursor-pointer
-                ${plan === tab ? "text-black" : "text-primary"}
+                ${filter === tab ? "text-black" : "text-primary"}
             `}
         >
-          {plan === tab && (
+          {filter === tab && (
             <motion.span
               layoutId="active-pill"
               className="absolute inset-0 rounded-lg bg-primary"

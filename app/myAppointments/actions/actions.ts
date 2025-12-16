@@ -1,19 +1,20 @@
 "use server";
 
+import { formatTime } from "@/app/book/utils/helper";
 import { db } from "@/drizzle/db";
 import { appoinmentsTable, ProviderTable, UserTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export type Bookings = {
-    appointmentId: string;
-    startAt: Date;
-    endAt: Date;
-    status: string;
-    providerId: string;
-    businessName: string;
-    serviceCategory: string;
-    name: string;
-}
+  startAt: string;
+  endAt: string;
+  appointmentId: string;
+  status: string;
+  providerId: string;
+  businessName: string;
+  serviceCategory: string;
+  name: string;
+};
 
 export async function getBookedAppointments(userId: string) {
   if (!userId) {
@@ -40,7 +41,13 @@ export async function getBookedAppointments(userId: string) {
       .where(eq(appoinmentsTable.customerId, userId))
       .orderBy(appoinmentsTable.startAt);
 
-    return bookedAppointments as Bookings[];
+    const formattedAppointments = bookedAppointments.map((appointment) => ({
+      ...appointment,
+      startAt: formatTime(appointment.startAt),
+      endAt: formatTime(appointment.endAt),
+    }));
+
+    return formattedAppointments as Bookings[];
   } catch (err) {
     console.error("Failed to fetch appointments:", err);
     throw new Error("Could not load appointments");
