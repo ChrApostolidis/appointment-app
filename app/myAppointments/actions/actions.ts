@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/drizzle/db";
-import { appoinmentsTable, ProviderTable } from "@/drizzle/schema";
+import { appoinmentsTable, ProviderTable, UserTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export type Bookings = {
@@ -12,6 +12,7 @@ export type Bookings = {
     providerId: string;
     businessName: string;
     serviceCategory: string;
+    name: string;
 }
 
 export async function getBookedAppointments(userId: string) {
@@ -28,12 +29,14 @@ export async function getBookedAppointments(userId: string) {
         providerId: ProviderTable.userId,
         businessName: ProviderTable.businessName,
         serviceCategory: ProviderTable.serviceCategory,
+        name: UserTable.name,
       })
       .from(appoinmentsTable)
       .innerJoin(
         ProviderTable,
         eq(appoinmentsTable.providerId, ProviderTable.userId)
       )
+      .innerJoin(UserTable, eq(ProviderTable.userId, UserTable.id))
       .where(eq(appoinmentsTable.customerId, userId))
       .orderBy(appoinmentsTable.startAt);
 
