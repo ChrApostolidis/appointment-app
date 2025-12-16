@@ -1,5 +1,5 @@
 import { formatTime } from "../../utils/helper";
-import { AppointmentSlot } from "./ButtonSection";
+import { AppointmentSlot } from "./MainBookSection";
 
 export type AppoinementProps = {
   selectedTime: AppointmentSlot | undefined;

@@ -1,7 +1,8 @@
 import Modal from "@/app/profile/components/Modal";
 import { CalendarDays, CheckCircle, Clock } from "lucide-react";
 import { singleProvider } from "../../actions/actions";
-import { AppointmentSlot } from "./ButtonSection";
+import { AppointmentSlot } from "./MainBookSection";
+import { formatTime } from "../../utils/helper";
 
 type SuccessModalProps = {
   provider: singleProvider;
@@ -65,7 +66,7 @@ export default function SuccessModal({
                 <p className="font-medium text-foreground">
                   {date?.toLocaleDateString()}{" "}
                   {selectedTime
-                    ? `${selectedTime.startAt} - ${selectedTime.endAt}`
+                    ? `${formatTime(selectedTime.startAt)} - ${formatTime(selectedTime.endAt)}`
                     : ""}
                 </p>
               </div>

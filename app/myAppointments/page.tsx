@@ -14,8 +14,7 @@ export default async function AppointmentsPage() {
   }
 
   const bookings = await getBookedAppointments(user.id);
-  console.log("Bookings:", bookings);
-
+  
   return (
     <div>
       <Header user={user} />

@@ -4,7 +4,7 @@ import { singleProvider } from "../../actions/actions";
 import { FaLocationDot } from "react-icons/fa6";
 import RatingStars from "../../components/RatingStars";
 import ImageRender from "../../components/ImageRender";
-import ButtonSection from "./ButtonSection";
+import ButtonSection from "./MainBookSection";
 import { WorkingHours } from "@/app/profile/data/hoursData";
 
 type MainProfileSectionProps = {

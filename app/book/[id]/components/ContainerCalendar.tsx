@@ -2,7 +2,7 @@ import { WorkingHours } from "@/app/profile/data/hoursData";
 import { Calendar } from "@/components/ui/calendar";
 import { startOfToday } from "date-fns";
 import { weekdayIndex } from "../../utils/helper";
-import { AppointmentSlot } from "./ButtonSection";
+import { AppointmentSlot } from "./MainBookSection";
 
 type ContainerCalendarProps = {
   date: Date | undefined;

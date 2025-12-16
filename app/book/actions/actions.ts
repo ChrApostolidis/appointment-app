@@ -268,6 +268,7 @@ export async function bookAppointment(appointmentData: AppointmentData) {
       customerId,
       startAt: new Date(startAt),
       endAt: new Date(endAt),
+      status: "Upcoming",
     })
     .returning({
       id: appoinmentsTable.id,
