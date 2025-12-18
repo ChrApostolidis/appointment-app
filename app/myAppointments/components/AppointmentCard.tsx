@@ -17,7 +17,7 @@ export default function AppointmentCard({
   };
   const status = bookings.status as BookingStatus;
   return (
-    <div className="mt-4 bg-foreground w-[90%] lg:max-w-xl lg:w-full p-3 rounded-xl">
+    <div className="mt-4 bg-background w-[90%] lg:max-w-xl lg:w-full p-3 rounded-xl">
       <div className="flex justify-between">
         <p className="text-background font-bold text-lg">{bookings.name}</p>
         <p

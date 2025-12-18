@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { userType } from "../registerForms/components/LockedRegisterForm";
 import Profile from "./Profile";
-import ToggleTheme from "./ToggleTheme";
 import NavMenu from "./NavMenu";
 import BurgerButton from "./BurgerButton";
 
@@ -40,12 +39,11 @@ export default function Header({ user }: { user: userType }) {
               <p className="text-xl lg:text-2xl">Appoint<span className="text-primary">Me</span></p>
             </div>
           </div>
-          <NavMenu />
+          <NavMenu user={user} />
 
           <div className="hidden lg:flex">
             {user ? (
               <>
-                {/* <ToggleTheme /> */}
                 <Profile user={user} />
               </>
             ) : (
