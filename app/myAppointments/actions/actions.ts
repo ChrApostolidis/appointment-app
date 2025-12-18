@@ -53,3 +53,46 @@ export async function getBookedAppointments(userId: string) {
     throw new Error("Could not load appointments");
   }
 }
+
+
+export type ProviderBookings = {
+  startAt: string;
+  endAt: string;
+  appointmentId: string;
+  email: string;
+  name: string;
+  status: string;
+};
+
+
+export async function getBookedAppointmentsForProvider(userId: string) {
+  if (!userId) {
+    throw new Error("User ID is required to fetch appointments.");
+  }
+  try {
+    const bookedAppointments = await db
+      .select({
+        appointmentId: appoinmentsTable.id,
+        startAt: appoinmentsTable.startAt,
+        endAt: appoinmentsTable.endAt,
+        name: UserTable.name,
+        email: UserTable.email,
+        status: appoinmentsTable.status,
+      })
+      .from(appoinmentsTable)
+      .innerJoin(UserTable, eq(appoinmentsTable.customerId, UserTable.id))
+      .where(eq(appoinmentsTable.providerId, userId))
+      .orderBy(appoinmentsTable.startAt);
+
+    const formattedAppointments = bookedAppointments.map((appointment) => ({
+      ...appointment,
+      startAt: formatTime(appointment.startAt),
+      endAt: formatTime(appointment.endAt),
+    }));
+
+    return formattedAppointments as ProviderBookings[];
+  } catch (err) {
+    console.error("Failed to fetch appointments:", err);
+    throw new Error("Could not load appointments");
+  }
+}
