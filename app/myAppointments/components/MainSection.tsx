@@ -2,12 +2,14 @@
 
 import BookingFilter from "../components/BookingFilter";
 import AppointmentCard from "../components/AppointmentCard";
-import { Bookings } from "../actions/actions";
+import { Bookings, ProviderBookings } from "../actions/actions";
 import { useMemo, useState } from "react";
+import { userType } from "@/app/registerForms/components/LockedRegisterForm";
+import ProviderAppointmentCard from "./ProviderAppointmentCard";
 
 export type Fitlers = "All" | "Upcoming" | "Completed" | "Cancelled";
 
-export default function MainSection({ bookings }: { bookings: Bookings[] }) {
+export default function MainSection({ bookings,user }: { bookings: Bookings[] | ProviderBookings[], user: userType }) {
   const [filters, setFilters] = useState<Fitlers>("Upcoming");
 
   const filteredBookings = useMemo(() => {
@@ -34,7 +36,7 @@ export default function MainSection({ bookings }: { bookings: Bookings[] }) {
             key={booking.appointmentId}
             className="w-full flex justify-center"
           >
-            <AppointmentCard bookings={booking} />
+            {user.role === "user" ? <AppointmentCard bookings={booking as Bookings} /> : <ProviderAppointmentCard bookings={booking as ProviderBookings} />}
           </div>
         ))
       ) : (

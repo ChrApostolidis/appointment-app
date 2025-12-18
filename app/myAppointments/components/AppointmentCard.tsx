@@ -17,9 +17,9 @@ export default function AppointmentCard({
   };
   const status = bookings.status as BookingStatus;
   return (
-    <div className="mt-4 bg-background w-[90%] lg:max-w-xl lg:w-full p-3 rounded-xl">
+    <div className="mt-4 bg-background w-[90%] lg:max-w-xl lg:w-full p-3 rounded-xl border-border border">
       <div className="flex justify-between">
-        <p className="text-background font-bold text-lg">{bookings.name}</p>
+        <p className="text-foreground font-bold text-lg">{bookings.name}</p>
         <p
           className={`${
             statusColorMap[status] || "bg-gray-400"
@@ -29,25 +29,25 @@ export default function AppointmentCard({
         </p>
       </div>
       <div className="flex gap-2 mb-4">
-        <CircleUser fontSize={14} className="text-background/40" />
-        <p className="text-background/40">{bookings.businessName}</p>
+        <CircleUser fontSize={14} className="text-foreground/40" />
+        <p className="text-foreground/40">{bookings.businessName}</p>
       </div>
       <div className="my-5 flex flex-col lg:flex-row gap-2 lg:gap-4 lg:justify-between">
         <div className="flex gap-1">
-          <Clock8 fontSize={14} className="text-background" />
-          <p className="text-background">
+          <Clock8 fontSize={14} className="text-foreground" />
+          <p className="text-foreground">
             {bookings.startAt} - {bookings.endAt}
           </p>
         </div>
         <div className="flex gap-1">
-          <Calendar fontSize={14} className="text-background" />
-          <p className="text-background">
+          <Calendar fontSize={14} className="text-foreground" />
+          <p className="text-foreground">
             {bookings.startAt}
           </p>
         </div>
         <div className="flex gap-1">
-          <MapPin fontSize={14} className="text-background" />
-          <p className="text-background">Thessaloniki</p>
+          <MapPin fontSize={14} className="text-foreground" />
+          <p className="text-foreground">Thessaloniki</p>
         </div>
       </div>
       <div className="w-full">

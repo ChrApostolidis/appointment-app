@@ -3,7 +3,7 @@
 import { getCurrentUser } from "@/auth/currentUser";
 import Header from "../components/Header";
 
-import { getBookedAppointments } from "./actions/actions";
+import { getBookedAppointments, getBookedAppointmentsForProvider } from "./actions/actions";
 import MainSection from "./components/MainSection";
 
 export default async function AppointmentsPage() {
@@ -13,7 +13,7 @@ export default async function AppointmentsPage() {
     throw new Error("User not Authorized");
   }
 
-  const bookings = await getBookedAppointments(user.id);
+  const bookings =  user.role === "user" ? await getBookedAppointments(user.id) : await getBookedAppointmentsForProvider(user.id);
 
   return (
     <div>
@@ -21,7 +21,7 @@ export default async function AppointmentsPage() {
       <h1 className="text-2xl lg:text-3xl font-bold my-4 text-center">
         My Appointments
       </h1>
-      <MainSection bookings={bookings} />
+      <MainSection user={user} bookings={bookings} />
     </div>
   );
 }
