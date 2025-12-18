@@ -30,7 +30,7 @@ export default function ProviderAppointmentCard({
         <div className="flex gap-1">
           <Calendar fontSize={14} className="text-foreground" />
           <p className="text-foreground">
-            {bookings.startAt}
+            {bookings.date}
           </p>
         </div>
         <div className="flex gap-1">

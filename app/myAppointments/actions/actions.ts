@@ -62,6 +62,7 @@ export type ProviderBookings = {
   email: string;
   name: string;
   status: string;
+  date: string;
 };
 
 
@@ -88,6 +89,7 @@ export async function getBookedAppointmentsForProvider(userId: string) {
       ...appointment,
       startAt: formatTime(appointment.startAt),
       endAt: formatTime(appointment.endAt),
+      date: new Date(appointment.startAt).toLocaleDateString(),
     }));
 
     return formattedAppointments as ProviderBookings[];
