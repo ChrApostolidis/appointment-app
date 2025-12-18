@@ -5,6 +5,7 @@ import { userType } from "../registerForms/components/LockedRegisterForm";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import LogOutButton from "@/auth/components/LogOutButton";
+import ToggleTheme from "./ToggleTheme";
 
 export default function Profile({ user }: { user: userType }) {
   const [openProfile, setOpenProfile] = useState(false);
@@ -51,7 +52,10 @@ export default function Profile({ user }: { user: userType }) {
             style={{ transformOrigin: "top right" }}
             className="absolute right-3 mt-2 w-64 bg-background rounded-xl shadow-lg p-4 flex flex-col gap-2 border"
           >
-            <p className="text-primary-foreground font-semibold">{user.name}</p>
+           <div className="flex justify-between items-center">
+              <p className="text-primary-foreground font-semibold">{user.name}</p>
+              <ToggleTheme />
+           </div>
             <p className="text-sm text-primary-foreground">{user.email}</p>
             <div className="mt-2 border-t pt-2">
               <Link

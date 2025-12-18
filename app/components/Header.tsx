@@ -45,7 +45,7 @@ export default function Header({ user }: { user: userType }) {
           <div className="hidden lg:flex">
             {user ? (
               <>
-                <ToggleTheme />
+                {/* <ToggleTheme /> */}
                 <Profile user={user} />
               </>
             ) : (

@@ -15,7 +15,7 @@ export default function ToggleTheme() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center mx-5 w-15 h-12 border rounded-full bg-background">
+    <div className="flex justify-center items-center w-12 h-10 border rounded-full bg-background">
       <button
         className="cursor-pointer"
         onClick={() => {
@@ -33,7 +33,7 @@ export default function ToggleTheme() {
                 transition={{ duration: 0.3 }}
                 className="flex justify-center items-center"
               >
-                <Moon size={30} color="#90CAF9" />
+                <Moon size={25} color="#90CAF9" />
               </motion.div>
             ) : (
               <motion.div
@@ -44,7 +44,7 @@ export default function ToggleTheme() {
                 transition={{ duration: 0.3 }}
                 className="flex justify-center items-center"
               >
-                <Sun size={30} color="#FFD54F" />
+                <Sun size={25} color="#FFD54F" />
               </motion.div>
             )}
           </AnimatePresence>

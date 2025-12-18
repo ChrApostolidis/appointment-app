@@ -8,7 +8,7 @@ import { useMemo, useState } from "react";
 export type Fitlers = "All" | "Upcoming" | "Completed" | "Cancelled";
 
 export default function MainSection({ bookings }: { bookings: Bookings[] }) {
-  const [filters, setFilters] = useState<Fitlers>("All");
+  const [filters, setFilters] = useState<Fitlers>("Upcoming");
 
   const filteredBookings = useMemo(() => {
     if (filters === "All") {
