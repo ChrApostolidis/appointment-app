@@ -14,6 +14,7 @@ export type Bookings = {
   businessName: string;
   serviceCategory: string;
   name: string;
+  date: string;
 };
 
 export async function getBookedAppointments(userId: string) {
@@ -45,6 +46,7 @@ export async function getBookedAppointments(userId: string) {
       ...appointment,
       startAt: formatTime(appointment.startAt),
       endAt: formatTime(appointment.endAt),
+      date: new Date(appointment.startAt).toLocaleDateString(),
     }));
 
     return formattedAppointments as Bookings[];
@@ -53,7 +55,6 @@ export async function getBookedAppointments(userId: string) {
     throw new Error("Could not load appointments");
   }
 }
-
 
 export type ProviderBookings = {
   startAt: string;
@@ -64,7 +65,6 @@ export type ProviderBookings = {
   status: string;
   date: string;
 };
-
 
 export async function getBookedAppointmentsForProvider(userId: string) {
   if (!userId) {
@@ -96,5 +96,17 @@ export async function getBookedAppointmentsForProvider(userId: string) {
   } catch (err) {
     console.error("Failed to fetch appointments:", err);
     throw new Error("Could not load appointments");
+  }
+}
+
+export async function cancelBooking(appointmentId: string) {
+  try {
+    await db
+      .update(appoinmentsTable)
+      .set({ status: "Cancelled" })
+      .where(eq(appoinmentsTable.id, appointmentId));
+  } catch (err) {
+    console.error("Failed to cancel booking:", err);
+    throw new Error("Could not cancel booking");
   }
 }
