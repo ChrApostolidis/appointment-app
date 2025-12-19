@@ -9,8 +9,15 @@ import ProviderAppointmentCard from "./ProviderAppointmentCard";
 
 export type Fitlers = "All" | "Upcoming" | "Completed" | "Cancelled";
 
-export default function MainSection({ bookings,user }: { bookings: Bookings[] | ProviderBookings[], user: userType }) {
+export default function MainSection({
+  bookings,
+  user,
+}: {
+  bookings: Bookings[] | ProviderBookings[];
+  user: userType;
+}) {
   const [filters, setFilters] = useState<Fitlers>("Upcoming");
+  const [isOpen, setIsOpen] = useState(false); // modal use
 
   const filteredBookings = useMemo(() => {
     if (filters === "All") {
@@ -26,7 +33,6 @@ export default function MainSection({ bookings,user }: { bookings: Bookings[] | 
     }
   }, [filters, bookings]);
 
-
   return (
     <div className="flex flex-col justify-center items-center">
       <BookingFilter filter={filters} setFilter={setFilters} />
@@ -36,7 +42,19 @@ export default function MainSection({ bookings,user }: { bookings: Bookings[] | 
             key={booking.appointmentId}
             className="w-full flex justify-center"
           >
-            {user.role === "user" ? <AppointmentCard bookings={booking as Bookings} /> : <ProviderAppointmentCard bookings={booking as ProviderBookings} />}
+            {user.role === "user" ? (
+              <AppointmentCard
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                bookings={booking as Bookings}
+              />
+            ) : (
+              <ProviderAppointmentCard
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                bookings={booking as ProviderBookings}
+              />
+            )}
           </div>
         ))
       ) : (

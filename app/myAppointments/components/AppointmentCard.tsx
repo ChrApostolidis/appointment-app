@@ -5,8 +5,12 @@ import MainButton from "../../components/MainButton";
 import { Bookings } from "../actions/actions";
 
 export default function AppointmentCard({
+  isOpen,
+  setIsOpen,
   bookings,
 }: {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   bookings: Bookings;
 }) {
   type BookingStatus = "Upcoming" | "Completed" | "Cancelled";
@@ -42,7 +46,7 @@ export default function AppointmentCard({
         <div className="flex gap-1">
           <Calendar fontSize={14} className="text-foreground" />
           <p className="text-foreground">
-            {bookings.startAt}
+            {bookings.date}
           </p>
         </div>
         <div className="flex gap-1">
