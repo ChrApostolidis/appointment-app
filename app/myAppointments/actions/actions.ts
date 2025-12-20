@@ -103,7 +103,19 @@ export async function cancelBooking(appointmentId: string) {
   try {
     await db
       .update(appoinmentsTable)
-      .set({ status: "Cancelled" })
+      .set({ status: "Cancelled", updatedAt: new Date() })
+      .where(eq(appoinmentsTable.id, appointmentId));
+  } catch (err) {
+    console.error("Failed to cancel booking:", err);
+    throw new Error("Could not cancel booking");
+  }
+}
+
+export async function confirmBooking(appointmentId: string) {
+  try {
+    await db
+      .update(appoinmentsTable)
+      .set({ status: "Upcoming", updatedAt: new Date() })
       .where(eq(appoinmentsTable.id, appointmentId));
   } catch (err) {
     console.error("Failed to cancel booking:", err);
