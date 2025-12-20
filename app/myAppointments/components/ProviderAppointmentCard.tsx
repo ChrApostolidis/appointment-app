@@ -10,9 +10,13 @@ import {
   Phone,
 } from "lucide-react";
 import MainButton from "../../components/MainButton";
-import { cancelBooking, ProviderBookings } from "../actions/actions";
+import {
+  cancelBooking,
+  confirmBooking,
+  ProviderBookings,
+} from "../actions/actions";
 import Modal from "@/app/profile/components/Modal";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 
 type ProviderAppointmentCardProps = {
   bookings: ProviderBookings;
@@ -28,6 +32,25 @@ export default function ProviderAppointmentCard({
   setIsOpen,
 }: ProviderAppointmentCardProps) {
   const [isPending, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<
+    "cancel" | "confirm" | null
+  >(null);
+
+  const handleCancel = () => {
+    setPendingAction("cancel");
+    startTransition(async () => {
+      await cancelBooking(bookings.appointmentId);
+      setPendingAction(null);
+    });
+  };
+
+  const handleConfirm = () => {
+    setPendingAction("confirm");
+    startTransition(async () => {
+      await confirmBooking(bookings.appointmentId);
+      setPendingAction(null);
+    });
+  };
   const status = bookings.status as BookingStatus;
 
   const statusColorMap: Record<BookingStatus, string> = {
@@ -83,11 +106,9 @@ export default function ProviderAppointmentCard({
         <>
           <div className="w-full">
             <>
-              <div className="flex bg-yellow-400 rounded-full px-2 py-1 mx-20 text-black mb-1 justify-center items-center gap-2">
-                <OctagonAlertIcon fontSize={24}/>
-                <p>
-                  Awaiting Confirmation
-                </p>
+              <div className="flex bg-red-400 rounded-full px-2 py-1 mx-20 text-black mb-1 justify-center items-center gap-2">
+                <OctagonAlertIcon fontSize={24} />
+                <p>Awaiting Confirmation!</p>
               </div>
               <MainButton
                 onClick={() => setIsOpen(true)}
@@ -132,17 +153,21 @@ export default function ProviderAppointmentCard({
                     <MainButton
                       variant="danger"
                       disabled={isPending}
-                      onClick={() =>
-                        startTransition(async () => {
-                          await cancelBooking(bookings.appointmentId);
-                        })
-                      }
+                      onClick={handleCancel}
                       className="w-full mt-4"
                     >
-                      {isPending ? "Cancelling..." : "Cancel Booking"}
+                      {pendingAction === "cancel" && isPending
+                        ? "Cancelling..."
+                        : "Cancel Booking"}
                     </MainButton>
-                    <MainButton className="w-full mt-4">
-                      Confirm Booking
+                    <MainButton
+                      disabled={isPending}
+                      onClick={handleConfirm}
+                      className="w-full mt-4"
+                    >
+                      {pendingAction === "confirm" && isPending
+                        ? "Booking..."
+                        : "Confirm Booking"}
                     </MainButton>
                   </div>
                 </div>
