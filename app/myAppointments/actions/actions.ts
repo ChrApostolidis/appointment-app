@@ -3,7 +3,7 @@
 import { formatTime } from "@/app/book/utils/helper";
 import { db } from "@/drizzle/db";
 import { appoinmentsTable, ProviderTable, UserTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray, lte } from "drizzle-orm";
 
 export type Bookings = {
   startAt: string;
@@ -21,6 +21,7 @@ export async function getBookedAppointments(userId: string) {
   if (!userId) {
     throw new Error("User ID is required to fetch appointments.");
   }
+  updateBookingsToCompleted();
   try {
     const bookedAppointments = await db
       .select({
@@ -70,6 +71,7 @@ export async function getBookedAppointmentsForProvider(userId: string) {
   if (!userId) {
     throw new Error("User ID is required to fetch appointments.");
   }
+  await updateBookingsToCompleted();
   try {
     const bookedAppointments = await db
       .select({
@@ -121,4 +123,17 @@ export async function confirmBooking(appointmentId: string) {
     console.error("Failed to cancel booking:", err);
     throw new Error("Could not cancel booking");
   }
+}
+
+export async function updateBookingsToCompleted() {
+  const cutoff = new Date(Date.now() - 60_000);
+  await db
+    .update(appoinmentsTable)
+    .set({ status: "Completed", updatedAt: new Date() })
+    .where(
+      and(
+        lte(appoinmentsTable.startAt, cutoff),
+        inArray(appoinmentsTable.status, ["Upcoming"])
+      )
+    );
 }
