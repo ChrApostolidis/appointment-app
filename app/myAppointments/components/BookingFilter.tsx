@@ -1,10 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Fitlers } from "../components/MainSection";
+import { Filters } from "./MainSection";
 
-export default function BookingFilter({filter,setFilter}: {filter: Fitlers, setFilter: React.Dispatch<React.SetStateAction<Fitlers>>}) {
-  const tabs: Fitlers[] = ["All", "Upcoming", "Completed", "Cancelled"];
+export default function BookingFilter({
+  filter,
+  setFilter,
+}: {
+  filter: Filters;
+  setFilter: React.Dispatch<React.SetStateAction<Filters>>;
+}) {
+  const tabs: Filters[] = [
+    "All",
+    "Pending",
+    "Upcoming",
+    "Completed",
+    "Cancelled",
+  ];
   return (
     <div className="flex lg:gap-2  border-solid border-2  border-primary rounded-2xl mb-2 lg:mb-6">
       {tabs.map((tab) => (

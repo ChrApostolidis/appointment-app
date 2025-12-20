@@ -7,7 +7,12 @@ import { useMemo, useState } from "react";
 import { userType } from "@/app/registerForms/components/LockedRegisterForm";
 import ProviderAppointmentCard from "./ProviderAppointmentCard";
 
-export type Fitlers = "All" | "Upcoming" | "Completed" | "Cancelled";
+export type Filters =
+  | "All"
+  | "Pending"
+  | "Upcoming"
+  | "Completed"
+  | "Cancelled";
 
 export default function MainSection({
   bookings,
@@ -16,7 +21,7 @@ export default function MainSection({
   bookings: Bookings[] | ProviderBookings[];
   user: userType;
 }) {
-  const [filters, setFilters] = useState<Fitlers>("Upcoming");
+  const [filters, setFilters] = useState<Filters>("Upcoming");
   const [isOpen, setIsOpen] = useState(false); // modal use
 
   const filteredBookings = useMemo(() => {
@@ -28,6 +33,8 @@ export default function MainSection({
       return bookings.filter((booking) => booking.status === "Completed");
     } else if (filters === "Cancelled") {
       return bookings.filter((booking) => booking.status === "Cancelled");
+    } else if (filters === "Pending") {
+      return bookings.filter((booking) => booking.status === "Pending");
     } else {
       throw new Error("Invalid filter option");
     }
@@ -36,6 +43,7 @@ export default function MainSection({
   return (
     <div className="flex flex-col justify-center items-center">
       <BookingFilter filter={filters} setFilter={setFilters} />
+
       {filteredBookings.length > 0 ? (
         filteredBookings.map((booking) => (
           <div
