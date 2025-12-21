@@ -100,10 +100,21 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
     if (user == null) return "Error creating user null user";
 
     await createUserSession(user, await cookies());
+
+    const res = await fetch(new URL("/api/emails",process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").toString(), {
+      method: "POST",
+      body: JSON.stringify({ email: data.email, firstName: data.name }),
+    }).catch((err) => console.error("Failed to send welcome email:", err));
+
+    if (!res?.ok) {
+      console.error("Welcome email API responded with error:", res?.statusText);
+    }
+
   } catch (error) {
     console.log("Error creating user:", error);
     return `${error}`;
   }
+
   // Redirect to complete registration
   if (data.role === "provider") {
     redirect("/registerForms/provider");
