@@ -15,6 +15,7 @@ import {
   startOfDay,
 } from "../utils/helper";
 import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
+import { getCurrentUser } from "@/auth/currentUser";
 
 export interface providers {
   id: string;
@@ -49,12 +50,12 @@ export async function getProviders(): Promise<providers[]> {
   }
 }
 
-export interface singleProvider {
+export type singleProvider = {
   businessName: string;
   serviceCategory: string;
   description: string | null;
   logoUrl: string | null;
-}
+};
 
 export async function getProviderById(
   providerId: string
@@ -257,24 +258,72 @@ export type AppointmentData = {
   customerId: string;
   startAt: string;
   endAt: string;
+  businessName: string;
+  serviceCategory: string;
 };
 
 export async function bookAppointment(appointmentData: AppointmentData) {
-  const { providerId, customerId, startAt, endAt } = appointmentData;
-  const booking = await db
-    .insert(appoinmentsTable)
-    .values({
-      providerId,
-      customerId,
-      startAt: new Date(startAt),
-      endAt: new Date(endAt),
-      status: "Pending",
-    })
-    .returning({
-      id: appoinmentsTable.id,
-      startAt: appoinmentsTable.startAt,
-      endAt: appoinmentsTable.endAt,
-    });
+  const {
+    providerId,
+    customerId,
+    startAt,
+    endAt,
+    businessName,
+    serviceCategory,
+  } = appointmentData;
 
-  return booking[0];
+  try {
+    await db
+      .insert(appoinmentsTable)
+      .values({
+        providerId,
+        customerId,
+        startAt: new Date(startAt),
+        endAt: new Date(endAt),
+        status: "Pending",
+      })
+      .returning({
+        id: appoinmentsTable.id,
+        startAt: appoinmentsTable.startAt,
+        endAt: appoinmentsTable.endAt,
+      });
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+    throw new Error("Error booking appointment");
+  }
+
+  const userData = await getCurrentUser({ withFullUser: true });
+  const email = userData?.email;
+  if (!email) {
+    console.error("No user email found for booking notification");
+    return;
+  }
+
+  const name = userData?.name;
+  if (!name) {
+    console.error("No user name found for booking notification");
+    return;
+  }
+  
+  try {
+    await fetch(
+      new URL(
+        "/api/notificationBooking",
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      ).toString(),
+      {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          email,
+          startAt,
+          endAt,
+          businessName,
+          serviceCategory,
+        }),
+      }
+    );
+  } catch (error) {
+    console.error("Error sending booking notification:", error);
+  }
 }
