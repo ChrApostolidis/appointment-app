@@ -39,7 +39,7 @@ export default function ButtonSection({
   const [showSuccess, setShowSuccess] = useState(false);
   const [showFailed, setShowFailed] = useState(false);
 
-  const booking = async (e: React.FormEvent) => {
+  const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsDisabled(true);
     try {
@@ -53,16 +53,23 @@ export default function ButtonSection({
           customerId: userId,
           startAt: selectedTime.startAt,
           endAt: selectedTime.endAt,
+          businessName: provider.businessName,
+          serviceCategory: provider.serviceCategory,
         }),
       });
-      if (!res.ok) throw new Error("Request failed");
+      const data = await res.json();
+      console.log("Response data:", data);
+      
+      if (!res.ok) {
+        throw new Error(data.message || "Request failed");
+      }
+      setShowSuccess(true);
     } catch (err) {
       setShowFailed(true);
       console.log("Error booking appointment:", err);
     } finally {
       setIsDisabled(false);
       setIsModalOpen(false);
-      setShowSuccess(true);
     }
   };
 
@@ -85,7 +92,7 @@ export default function ButtonSection({
           Book Appointment
         </MainButton>
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <form onSubmit={booking}>
+          <form onSubmit={handleBooking}>
             <div className="flex flex-col gap-5">
               <h3 className="text-xl lg:text-2xl text-foreground">
                 Book Appoinement
@@ -134,11 +141,8 @@ export default function ButtonSection({
       )}
 
       {showFailed && (
-        <FailedModal
-          isOpen={showFailed}
-          onClose={() => setShowFailed(false)}
-        />
-      )} 
+        <FailedModal isOpen={showFailed} onClose={() => setShowFailed(false)} />
+      )}
     </>
   );
 }

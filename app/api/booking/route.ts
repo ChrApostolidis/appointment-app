@@ -3,11 +3,11 @@ import { bookAppointment } from "@/app/book/actions/actions";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { startAt, endAt, providerId, customerId } = await req.json();
+  const { startAt, endAt, providerId, customerId, businessName, serviceCategory } = await req.json();
 
-  if (!providerId || !customerId || !startAt || !endAt) {
+  if (!providerId || !customerId || !startAt || !endAt || !businessName || !serviceCategory) {
     return NextResponse.json(
-      { error: "providerId, customerId, slotStart and slotEnd are required" },
+      { error: "providerId, customerId,startAt,businessName, serviceCategory and endAt are required" },
       { status: 400 }
     );
   }
@@ -17,6 +17,8 @@ export async function POST(req: Request) {
     customerId,
     startAt,
     endAt,
+    businessName,
+    serviceCategory,
   });
 
   if (!parsed.success) {
