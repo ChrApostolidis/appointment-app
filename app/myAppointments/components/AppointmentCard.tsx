@@ -13,8 +13,9 @@ export default function AppointmentCard({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   bookings: Bookings;
 }) {
-  type BookingStatus = "Upcoming" | "Completed" | "Cancelled";
+  type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
   const statusColorMap: Record<BookingStatus, string> = {
+    Pending: "bg-yellow-400",
     Upcoming: "bg-orange-400",
     Completed: "bg-green-400",
     Cancelled: "bg-red-400",
@@ -45,18 +46,18 @@ export default function AppointmentCard({
         </div>
         <div className="flex gap-1">
           <Calendar fontSize={14} className="text-foreground" />
-          <p className="text-foreground">
-            {bookings.date}
-          </p>
+          <p className="text-foreground">{bookings.date}</p>
         </div>
         <div className="flex gap-1">
           <MapPin fontSize={14} className="text-foreground" />
           <p className="text-foreground">Thessaloniki</p>
         </div>
       </div>
-      <div className="w-full">
-        <MainButton className="w-full mt-4">Reschedule</MainButton>
-      </div>
+      {status === "Pending" || status === "Upcoming" ? (
+        <div className="w-full">
+          <MainButton className="w-full mt-4">Reschedule</MainButton>
+        </div>
+      ) : null}
     </div>
   );
 }
