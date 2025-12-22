@@ -103,7 +103,7 @@ export async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
 
     const res = await fetch(new URL("/api/emails",process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000").toString(), {
       method: "POST",
-      body: JSON.stringify({ email: data.email, firstName: data.name }),
+      body: JSON.stringify({ email: data.email, firstName: data.name,role: data.role  }),
     }).catch((err) => console.error("Failed to send welcome email:", err));
 
     if (!res?.ok) {
