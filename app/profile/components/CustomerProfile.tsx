@@ -1,7 +1,13 @@
+"use client";
+
+import { useState } from "react";
+
 import Header from "@/app/components/Header";
 import { Edit, Calendar, Mail, MapPin } from "lucide-react";
 import MainButton from "@/app/components/MainButton";
 import { notFound } from "next/navigation";
+import { userType } from "@/app/registerForms/components/LockedRegisterForm";
+import Modal from "./Modal";
 
 type CustomerProfileProps = {
   customer: {
@@ -9,15 +15,20 @@ type CustomerProfileProps = {
     email: string;
     interests: string | null;
     createdAt: Date;
-  }
+  };
+  currentUser: userType;
 };
 
-export default function CustomerProfile({ customer }: CustomerProfileProps) {
+export default function CustomerProfile({
+  customer,
+  currentUser,
+}: CustomerProfileProps) {
+  const [isOpen, setIsOpen] = useState(false);
   if (!customer) return notFound();
 
   return (
     <>
-      <Header user={customer} />
+      <Header user={currentUser} />
       <div className="min-h-screen bg-background py-8">
         <div className="container max-w-4xl mx-auto px-4 py-12">
           <div className="shadow-card overflow-hidden animate-fade-in border-2 border-slate-700/50 rounded-xl">
@@ -40,12 +51,77 @@ export default function CustomerProfile({ customer }: CustomerProfileProps) {
                   </span>
                 </div>
 
-                <MainButton className="mt-4 lg:mt-20 hover:bg-indigo-700">
+                <MainButton
+                  onClick={() => setIsOpen(true)}
+                  className="mt-4 lg:mt-20 hover:bg-indigo-700"
+                >
                   <div className="flex justify-center items-center gap-2">
                     Edit Profile
                     <Edit className="w-5 h-5" />
                   </div>
                 </MainButton>
+                {isOpen && (
+                  <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                    <div className="rounded-xl bg-background p-6 shadow-xl">
+                      <h3 className="mb-6 text-center text-xl font-semibold text-foreground lg:text-2xl">
+                        Edit Customer Profile
+                      </h3>
+
+                      <form className="space-y-4">
+                        <div className="flex flex-col gap-1">
+                          <label
+                            htmlFor="name"
+                            className="text-sm font-medium text-foreground"
+                          >
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            defaultValue={customer.name}
+                            className="rounded-lg border border-gray-300 px-3 py-2 text-foreground 
+                     focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                          <label
+                            htmlFor="email"
+                            className="text-sm font-medium text-foreground"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            defaultValue={customer.email}
+                            className="rounded-lg border border-gray-300 px-3 py-2 text-foreground
+                     focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                          />
+                        </div>
+
+                        {/* Actions */}
+                        <div className="mt-6 lg:flex lg:justify-end lg:gap-2 ">
+                          <MainButton
+                            type="button"
+                            onClick={() => setIsOpen(false)}
+                            variant="danger"
+                            className="mb-2 w-full lg:w-auto lg:mb-0"
+                          >
+                            Cancel
+                          </MainButton>
+
+                          <MainButton
+                            type="submit"
+                            className="w-full lg:w-auto"
+                          >
+                            Update Changes
+                          </MainButton>
+                        </div>
+                      </form>
+                    </div>
+                  </Modal>
+                )}
               </div>
               {/* Name and Bio */}
               <div className="space-y-4 mb-6 animate-fade-in-delay">
