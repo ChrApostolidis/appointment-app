@@ -70,6 +70,40 @@ export async function getCustomerDataById(customerId: string) {
   }
 }
 
+export type updateCustomerProfileProps = {
+  name: string;
+  email: string;
+  userId: string | undefined;
+};
+
+export async function updateCustomerProfile({
+  name,
+  email,
+  userId,
+}: updateCustomerProfileProps) {
+  if (!userId) {
+    throw new Response("Unauthorized", { status: 401 });
+  }
+
+  if (!name || !email) {
+    return { error: "Name and email are required" };
+  }
+  
+  try {
+    await db
+      .update(UserTable)
+      .set({
+        name: name,
+        email: email,
+      })
+      .where(eq(UserTable.id, userId));
+      return { success: true };
+  } catch (error) {
+    console.error("Error updating customer profile:", error);
+    throw new Response("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function updateProviderWorkingHours(payload: unknown) {
   let rows: NormalizedHourRow[];
   try {

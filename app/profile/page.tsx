@@ -1,11 +1,6 @@
 "use server";
 import { getCustomerDataById, getProviderWorkingHoursById } from "./actions/profileActions";
 import { getCurrentUser } from "@/auth/currentUser";
-// import Header from "../components/Header";
-// import { Calendar, Check, Edit, Mail, MapPin } from "lucide-react";
-// import Image from "next/image";
-// import MainButton from "../components/MainButton";
-// import WorkingHours from "./components/WorkingHours";
 import {
   FullProviderData,
   getFullProviderDataById,
@@ -39,7 +34,7 @@ export default async function ProfilePage() {
      if (!customer) notFound();
     return (
       <>
-      <CustomerProfile customer={customer}/>
+      <CustomerProfile customer={customer} currentUser={currentUser} />
       </>
     )
   }

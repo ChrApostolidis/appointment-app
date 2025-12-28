@@ -3,6 +3,7 @@
 import { Calendar, CircleUser, Clock8, MapPin } from "lucide-react";
 import MainButton from "../../components/MainButton";
 import { Bookings } from "../actions/actions";
+import Modal from "@/app/profile/components/Modal";
 
 export default function AppointmentCard({
   isOpen,
@@ -55,9 +56,16 @@ export default function AppointmentCard({
       </div>
       {status === "Pending" || status === "Upcoming" ? (
         <div className="w-full">
-          <MainButton className="w-full mt-4">Reschedule</MainButton>
+          <MainButton onClick={() => setIsOpen(true)} className="w-full mt-4">
+            Reschedule
+          </MainButton>
         </div>
       ) : null}
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          <h1>Rescheduling functionality coming soon!</h1>
+        </Modal>
+      )}
     </div>
   );
 }
