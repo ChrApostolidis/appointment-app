@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 import Header from "@/app/components/Header";
 import { Edit, Calendar, Mail, MapPin } from "lucide-react";
@@ -8,6 +8,7 @@ import MainButton from "@/app/components/MainButton";
 import { notFound } from "next/navigation";
 import { userType } from "@/app/registerForms/components/LockedRegisterForm";
 import Modal from "./Modal";
+import { updateCustomerProfile } from "../actions/profileActions";
 
 type CustomerProfileProps = {
   customer: {
@@ -24,7 +25,51 @@ export default function CustomerProfile({
   currentUser,
 }: CustomerProfileProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<
+    "cancel" | "confirm" | null
+  >(null);
+  const [isPending, startTransition] = useTransition();
+
   if (!customer) return notFound();
+  if (!currentUser) return notFound();
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPendingAction("confirm");
+    const formData = new FormData(e.currentTarget);
+    const rawName = (formData.get("name") as string).trim();
+    const rawEmail = (formData.get("email") as string).trim();
+    const userId = currentUser?.id;
+
+    if (!userId) {
+      setError("You must be logged in to update your profile");
+      return;
+    }
+
+    const name = rawName || customer.name;
+    const email = rawEmail || customer.email;
+
+    if (name === customer.name && email === customer.email) {
+      setError("No changes made");
+      return;
+    }
+
+    startTransition(() => {
+      updateCustomerProfile({
+        name,
+        email,
+        userId,
+      }).then((res) => {
+        if (res?.error) {
+          setError(res.error);
+        } else {
+          setIsOpen(false);
+          setError(null);
+        }
+      });
+    });
+  };
 
   return (
     <>
@@ -52,7 +97,10 @@ export default function CustomerProfile({
                 </div>
 
                 <MainButton
-                  onClick={() => setIsOpen(true)}
+                  onClick={() => {
+                    setIsOpen(true);
+                    setError(null);
+                  }}
                   className="mt-4 lg:mt-20 hover:bg-indigo-700"
                 >
                   <div className="flex justify-center items-center gap-2">
@@ -66,8 +114,13 @@ export default function CustomerProfile({
                       <h3 className="mb-6 text-center text-xl font-semibold text-foreground lg:text-2xl">
                         Edit Customer Profile
                       </h3>
+                      {error && (
+                        <div className="text-center mb-4 rounded-lg bg-red-100 p-4 text-red-700">
+                          {error}
+                        </div>
+                      )}
 
-                      <form className="space-y-4">
+                      <form className="space-y-4" onSubmit={onSubmit}>
                         <div className="flex flex-col gap-1">
                           <label
                             htmlFor="name"
@@ -77,8 +130,8 @@ export default function CustomerProfile({
                           </label>
                           <input
                             type="text"
-                            id="name"
-                            defaultValue={customer.name}
+                            name="name"
+                            placeholder={customer.name}
                             className="rounded-lg border border-gray-300 px-3 py-2 text-foreground 
                      focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
                           />
@@ -93,8 +146,8 @@ export default function CustomerProfile({
                           </label>
                           <input
                             type="email"
-                            id="email"
-                            defaultValue={customer.email}
+                            name="email"
+                            placeholder={customer.email}
                             className="rounded-lg border border-gray-300 px-3 py-2 text-foreground
                      focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
                           />
@@ -103,19 +156,29 @@ export default function CustomerProfile({
                         {/* Actions */}
                         <div className="mt-6 lg:flex lg:justify-end lg:gap-2 ">
                           <MainButton
+                            disabled={isPending}
                             type="button"
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => {
+                              setIsOpen(false);
+                              setError(null);
+                              setPendingAction("cancel");
+                            }}
                             variant="danger"
                             className="mb-2 w-full lg:w-auto lg:mb-0"
                           >
-                            Cancel
+                            {isPending && pendingAction === "cancel"
+                              ? "Closing..."
+                              : "Cancel"}
                           </MainButton>
 
                           <MainButton
+                            disabled={isPending}
                             type="submit"
                             className="w-full lg:w-auto"
                           >
-                            Update Changes
+                            {isPending && pendingAction === "confirm"
+                              ? "Updating..."
+                              : "Update Changes"}
                           </MainButton>
                         </div>
                       </form>
