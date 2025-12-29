@@ -10,8 +10,13 @@ import {
   UserTable,
 } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
-import { NormalizedHourRow, validateAndNormalizeHours } from "../schema";
+import {
+  NormalizedHourRow,
+  updateCustomerProfileSchema,
+  validateAndNormalizeHours,
+} from "../schema";
 import { rowsToWeeklyHours } from "../utils/helper";
+import z from "zod";
 
 export type FullProviderData = {
   businessName: string;
@@ -70,25 +75,34 @@ export async function getCustomerDataById(customerId: string) {
   }
 }
 
-export type updateCustomerProfileProps = {
-  name: string;
-  email: string;
-  userId: string | undefined;
-};
+export async function updateCustomerProfile(
+  unsafeData: z.infer<typeof updateCustomerProfileSchema>
+) {
+  const { success, data } = updateCustomerProfileSchema.safeParse(unsafeData);
 
-export async function updateCustomerProfile({
-  name,
-  email,
-  userId,
-}: updateCustomerProfileProps) {
+  if (!success) return { error: "Unable to update user account" };
+
+  const { name, email, userId } = data;
+
   if (!userId) {
     throw new Response("Unauthorized", { status: 401 });
   }
 
-  if (!name || !email) {
-    return { error: "Name and email are required" };
+  let existingUser;
+
+  try {
+    existingUser = await db.query.UserTable.findFirst({
+      where: eq(UserTable.email, data.email),
+    });
+  } catch (err) {
+    console.error("DB query failed:", err);
+    return { error: "Database unavailable. Try again later." };
   }
-  
+
+  if (existingUser && existingUser.id !== userId) {
+    return { error: "Email already in use" };
+  }
+
   try {
     await db
       .update(UserTable)
@@ -97,7 +111,7 @@ export async function updateCustomerProfile({
         email: email,
       })
       .where(eq(UserTable.id, userId));
-      return { success: true };
+    return { success: true };
   } catch (error) {
     console.error("Error updating customer profile:", error);
     throw new Response("Internal Server Error", { status: 500 });
