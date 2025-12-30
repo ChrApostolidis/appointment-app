@@ -55,10 +55,10 @@ export default function AppointmentBooked({
               {/* Appointment Details */}
               <Section className="bg-gray-50 rounded-md px-6 py-4 mb-6">
                 <Text className="text-gray-700 mb-1">
-                  <strong>Business:</strong> {businessName}
+                  <strong>Company Name:</strong> {businessName}
                 </Text>
                 <Text className="text-gray-700 mb-1">
-                  <strong>Service Category:</strong> {serviceCategory}
+                  <strong>Service:</strong> {serviceCategory}
                 </Text>
                 <Text className="text-gray-700 mb-1">
                   <strong>Date:</strong>{" "}

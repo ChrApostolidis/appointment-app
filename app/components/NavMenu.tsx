@@ -14,7 +14,7 @@ export default function NavMenu({ user }: { user: userType }) {
     NavMenuItems = [
       { name: "My Appointments", link: "/myAppointments" },
       { name: "Book", link: "/book" },
-      { name: "Calendar", link: "/" },
+      { name: "Calendar", link: "/calendar" },
     ];
   } else if (user.role === "provider") {
     NavMenuItems = [

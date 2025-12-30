@@ -31,8 +31,9 @@ export default async function MainProfileSection({
         day: "numeric",
         month: "short",
         year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
       }).format(nextAvailableSlot.startAt)
     : null;
 

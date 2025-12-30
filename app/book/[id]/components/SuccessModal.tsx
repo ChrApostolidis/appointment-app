@@ -1,5 +1,5 @@
 import Modal from "@/app/profile/components/Modal";
-import { CalendarDays, CheckCircle, Clock } from "lucide-react";
+import { Briefcase, CalendarDays, CheckCircle, Clock } from "lucide-react";
 import { singleProvider } from "../../actions/actions";
 import { AppointmentSlot } from "./MainBookSection";
 import { formatTime } from "../../utils/helper";
@@ -43,16 +43,33 @@ export default function SuccessModal({
         <div className="w-full rounded-2xl border border-border bg-background/60 p-4 text-sm">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <div className="rounded-full bg-primary/10 p-2 text-primary">
-                <CalendarDays size={18} />
+              <div className="flex gap-2">
+                <div className="rounded-full bg-primary/10 p-2 text-primary">
+                  <CalendarDays size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Company Name
+                  </p>
+                  <p className="font-medium text-foreground">
+                    {provider.businessName}
+                  </p>
+                </div>
               </div>
-              <div className="text-left">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Proffesion
-                </p>
-                <p className="font-medium text-foreground">
-                  {provider.businessName}
-                </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-2">
+                <div className="rounded-full bg-primary/10 p-2 text-primary">
+                  <Briefcase size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    Service
+                  </p>
+                  <p className="font-medium text-foreground">
+                    {provider.serviceCategory}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -63,12 +80,16 @@ export default function SuccessModal({
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">
                   Date &amp; Time
                 </p>
-                <p className="font-medium text-foreground">
-                  {date?.toLocaleDateString()}{" "}
-                  {selectedTime
-                    ? `${formatTime(selectedTime.startAt)} - ${formatTime(selectedTime.endAt)}`
-                    : ""}
-                </p>
+                <div className="space-y-1 lg:flex lg:gap-4 lg:space-y-0">
+                  <p className="font-medium text-foreground">
+                    {date?.toLocaleDateString("en-GB")}
+                  </p>
+                  <p className="font-medium text-foreground">
+                    {selectedTime
+                      ? `${formatTime(selectedTime.startAt)} - ${formatTime(selectedTime.endAt)}`
+                      : ""}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
