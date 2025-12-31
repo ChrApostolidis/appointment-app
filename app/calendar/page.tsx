@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import Header from "../components/Header";
 import CalendarComponent from "./components/CalendarComponent";
 import { getCurrentUser } from "@/auth/currentUser";
+import { getUserAppointmentsById } from "./actions/actions";
+import type { EventInput } from "@fullcalendar/core";
 
 export default async function CalendarPage() {
   const currentUser = await getCurrentUser({ withFullUser: true });
@@ -10,6 +12,24 @@ export default async function CalendarPage() {
   if (!currentUser) {
     redirect("/authPage")
   }
+
+  const appointments = await getUserAppointmentsById(currentUser.id);
+  // converting it to an ISO string or sending it as string directly
+  const toIsoString = (value: Date | string | null) => {
+    if (!value) return undefined;
+    return value instanceof Date ? value.toISOString() : value;
+  };
+  // making sure the events are in the correct format for FullCalendar
+  const events: EventInput[] = appointments.map((appointment) => ({
+    id: appointment.id,
+    title: appointment.title ?? "Appointment",
+    start: toIsoString(appointment.startAt),
+    end: toIsoString(appointment.endAt) ?? undefined,
+    allDay: false,
+    extendedProps: {
+      status: appointment.status,
+    },
+  }));
 
   return (
     <div className="bg-gradient-to-b from-background via-background/95 to-muted pt-8 lg:pt-12">
@@ -21,7 +41,7 @@ export default async function CalendarPage() {
             <p className="mt-2 text-base text-muted-foreground">View upcoming appointments and keep your schedule organized.</p>
           </header>
           <div className="mt-6 rounded-2xl border border-dashed border-border bg-background p-4 lg:p-6">
-            <CalendarComponent />
+            <CalendarComponent events={events} />
           </div>
         </section>
       </div>
