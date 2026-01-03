@@ -1,10 +1,10 @@
 import { FaLock } from "react-icons/fa";
 
 export interface userType {
-  name?: string;
-  email?: string;
-  role?: "user" | "provider" | "admin";
-  id?: string;
+  name: string;
+  email: string;
+  role: "user" | "provider" | "admin";
+  id: string;
 }
 
 export default function LockedRegisterForm({user}: {user: userType}) {

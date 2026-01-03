@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { userType } from "../registerForms/components/LockedRegisterForm";
 
-export default function HeroSection({ user }: { user: userType }) {
+export default function HeroSection({ user }: { user: userType | null }) {
   const [move, setMove] = useState(false);
   return (
     <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 bg-background">
