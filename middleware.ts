@@ -6,7 +6,6 @@ import {
 
 const privateRoutes = ["/private"];
 const adminRoutes = ["/admin"];
-const homeRoutes = ["/"];
 const registerRoutesProvider = ["/registerForms", "/registerForms/provider"];
 const registerRoutesCustomer = ["/registerForms", "/registerForms/customer"];
 
@@ -24,13 +23,6 @@ export async function middleware(request: NextRequest) {
 }
 
 async function middlewareAuth(request: NextRequest) {
-  // home page
-  if (homeRoutes.includes(request.nextUrl.pathname)) {
-    const user = await getUserFromSession(request.cookies);
-    if (user == null) {
-      return NextResponse.redirect(new URL("/authPage", request.url));
-    }
-  }
   // private page
   if (privateRoutes.includes(request.nextUrl.pathname)) {
     const user = await getUserFromSession(request.cookies);

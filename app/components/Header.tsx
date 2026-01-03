@@ -8,7 +8,7 @@ import NavMenu from "./NavMenu";
 import BurgerButton from "./BurgerButton";
 import Link from "next/link";
 
-export default function Header({ user }: { user: userType }) {
+export default function Header({ user }: { user: userType | null }) {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -53,9 +53,12 @@ export default function Header({ user }: { user: userType }) {
               </>
             ) : (
               <div>
-                <button className="mr-0.5 cursor-pointer bg-secondary-foreground text-white font-medium px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 hover:bg-[#256078] hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:shadow-sm">
-                  Login/Register
-                </button>
+                <Link
+                  href="/authPage"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                >
+                  Login / Register
+                </Link>
               </div>
             )}
           </div>

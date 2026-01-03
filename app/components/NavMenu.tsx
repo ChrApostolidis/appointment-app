@@ -7,16 +7,16 @@ interface NavMenuItem {
   link: string;
 }
 
-export default function NavMenu({ user }: { user: userType }) {
+export default function NavMenu({ user }: { user: userType | null }) {
   let NavMenuItems: NavMenuItem[] = [];
 
-  if (user.role === "user") {
+  if (user?.role === "user") {
     NavMenuItems = [
       { name: "My Appointments", link: "/myAppointments" },
       { name: "Book", link: "/book" },
       { name: "Calendar", link: "/calendar" },
     ];
-  } else if (user.role === "provider") {
+  } else if (user?.role === "provider") {
     NavMenuItems = [
       { name: "My Appointments", link: "/myAppointments" },
       { name: "Services", link: "/profile" },
