@@ -13,7 +13,7 @@ export default async function Home() {
   return (
     <div className="">
       <Header user={currentUser} />
-      <HeroSection />
+      <HeroSection user={currentUser}/>
       <BookAppoinmentSearchBar />
     </div>
   );

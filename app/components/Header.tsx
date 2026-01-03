@@ -6,6 +6,7 @@ import { userType } from "../registerForms/components/LockedRegisterForm";
 import Profile from "./Profile";
 import NavMenu from "./NavMenu";
 import BurgerButton from "./BurgerButton";
+import Link from "next/link";
 
 export default function Header({ user }: { user: userType }) {
   const [isSticky, setIsSticky] = useState(false);
@@ -29,15 +30,19 @@ export default function Header({ user }: { user: userType }) {
       >
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center ">
-            <div className="flex items-center justify-center">
-              <Image
-                src="/app-logo.png"
-                alt="App Logo"
-                width={64}
-                height={64}
-              />
-              <p className="text-xl lg:text-2xl">Appoint<span className="text-primary">Me</span></p>
-            </div>
+            <Link href="/" className="ml-2">
+              <div className="flex items-center justify-center">
+                <Image
+                  src="/app-logo.png"
+                  alt="App Logo"
+                  width={64}
+                  height={64}
+                />
+                <p className="text-xl lg:text-2xl">
+                  Appoint<span className="text-primary">Me</span>
+                </p>
+              </div>
+            </Link>
           </div>
           <NavMenu user={user} />
 

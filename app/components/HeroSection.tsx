@@ -4,8 +4,9 @@ import { ArrowRight, Zap, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { userType } from "../registerForms/components/LockedRegisterForm";
 
-export default function HeroSection() {
+export default function HeroSection({ user }: { user: userType }) {
   const [move, setMove] = useState(false);
   return (
     <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 bg-background">
@@ -57,29 +58,38 @@ export default function HeroSection() {
           appointments that fit your time — all in one place.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Link
-            onClick={() => setMove(!move)}
-            href="/authPage"
-            className="bg-primary cursor-pointer hover:bg-secondary text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-cyan-500/30"
+        {user ? (
+          <div
+            className="inline-flex items-center gap-2 px-6 py-4 rounded-full bg-cyan-500/10 text-cyan-500 mb-4"
           >
-            Get Started Free
-            <motion.div
-              animate={{ x: move ? 200 : 0, opacity: move ? 0 : 1 }}
-              transition={{ type: "spring", stiffness: 80 }}
-            >
-              <ArrowRight className="w-5 h-5" />
-            </motion.div>
-          </Link>
-          <button className="cursor-pointer px-8 py-4 rounded-xl font-semibold text-lg transition-all bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
-            Watch Demo
-          </button>
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-2 text-muted">
-          <CreditCard className="w-5 h-5" />
-          <p className="text-sm text-gray-500">No credit card required</p>
-        </div>
+           <p>Welcome back {user.name}!</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                onClick={() => setMove(!move)}
+                href="/authPage"
+                className="bg-primary cursor-pointer hover:bg-secondary text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-cyan-500/30"
+              >
+                Get Started Free
+                <motion.div
+                  animate={{ x: move ? 200 : 0, opacity: move ? 0 : 1 }}
+                  transition={{ type: "spring", stiffness: 80 }}
+                >
+                  <ArrowRight className="w-5 h-5" />
+                </motion.div>
+              </Link>
+              <button className="cursor-pointer px-8 py-4 rounded-xl font-semibold text-lg transition-all bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
+                Watch Demo
+              </button>
+            </div>
+            <div className="mt-6 flex items-center justify-center gap-2 text-muted">
+              <CreditCard className="w-5 h-5" />
+              <p className="text-sm text-gray-500">No credit card required</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
