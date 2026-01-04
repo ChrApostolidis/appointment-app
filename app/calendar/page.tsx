@@ -1,9 +1,10 @@
 "use server";
+
 import { redirect } from "next/navigation"
 import Header from "../components/Header";
 import CalendarComponent from "./components/CalendarComponent";
 import { getCurrentUser } from "@/auth/currentUser";
-import { getUserAppointmentsById } from "./actions/actions";
+import { getAppoinmentsByIdAndRole } from "./actions/actions";
 import type { EventInput } from "@fullcalendar/core";
 
 export default async function CalendarPage() {
@@ -13,13 +14,17 @@ export default async function CalendarPage() {
     redirect("/authPage")
   }
 
-  const appointments = await getUserAppointmentsById(currentUser.id);
+  const appointments = await getAppoinmentsByIdAndRole(
+    currentUser.id,
+    currentUser.role
+  );
   // converting it to an ISO string or sending it as string directly
   const toIsoString = (value: Date | string | null) => {
     if (!value) return undefined;
     return value instanceof Date ? value.toISOString() : value;
   };
-  // making sure the events are in the correct format for FullCalendar
+
+  // making sure the events are in the correct format for FullCalendar library
   const events: EventInput[] = appointments.map((appointment) => ({
     id: appointment.id,
     title: appointment.title ?? "Appointment",

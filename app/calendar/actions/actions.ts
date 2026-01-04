@@ -1,22 +1,47 @@
 "use server";
 
 import { db } from "@/drizzle/db";
-import { appoinmentsTable, ProviderTable } from "@/drizzle/schema";
+import {
+  appoinmentsTable,
+  ProviderTable,
+  UserRole,
+  UserTable,
+} from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
-export async function getUserAppointmentsById(userId: string) {
+export async function getAppoinmentsByIdAndRole(
+  userId: string,
+  role: UserRole
+) {
   if (!userId) {
     return [];
   }
 
   try {
-    const providers = await db
+    const baseSelection = {
+      id: appoinmentsTable.id,
+      startAt: appoinmentsTable.startAt,
+      endAt: appoinmentsTable.endAt,
+      status: appoinmentsTable.status,
+    };
+
+    if (role === "provider") {
+      const providerAppointments = await db
+        .select({
+          ...baseSelection,
+          title: UserTable.name,
+        })
+        .from(appoinmentsTable)
+        .innerJoin(UserTable, eq(appoinmentsTable.customerId, UserTable.id))
+        .where(eq(appoinmentsTable.providerId, userId));
+
+      return providerAppointments;
+    }
+
+    const customerAppointments = await db
       .select({
-        id: appoinmentsTable.id,
+        ...baseSelection,
         title: ProviderTable.businessName,
-        startAt: appoinmentsTable.startAt,
-        endAt: appoinmentsTable.endAt,
-        status: appoinmentsTable.status,
       })
       .from(appoinmentsTable)
       .where(eq(appoinmentsTable.customerId, userId))
@@ -25,7 +50,7 @@ export async function getUserAppointmentsById(userId: string) {
         eq(appoinmentsTable.providerId, ProviderTable.userId)
       );
 
-    return providers;
+    return customerAppointments;
   } catch (error) {
     console.error("Error fetching appointments:", error);
     return [];

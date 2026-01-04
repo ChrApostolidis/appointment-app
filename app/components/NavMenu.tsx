@@ -20,7 +20,7 @@ export default function NavMenu({ user }: { user: userType | null }) {
     NavMenuItems = [
       { name: "My Appointments", link: "/myAppointments" },
       { name: "Services", link: "/profile" },
-      { name: "Calendar", link: "/" },
+      { name: "Calendar", link: "/calendar" },
     ];
   }
 
