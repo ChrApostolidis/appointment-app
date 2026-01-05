@@ -69,6 +69,7 @@ export default function WorkingHours({ data }: WorkingHoursProps) {
 
       <div className="space-y-2">
         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+          <h3 className="font-bold text-xl text-center lg:text-2xl">Edit Working Hours</h3>
           <EditHours
             setWorkingHours={setWorkingHours}
             tempHours={tempHours}
