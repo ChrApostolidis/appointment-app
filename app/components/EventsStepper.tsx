@@ -9,24 +9,28 @@ export const steps = [
   {
     id: 0,
     title: "Built in Calendar",
+    text: "Easily view and manage your appointments with our integrated calendar feature.",
     icon: <CalendarDays />,
     image: "/AppCalendar.png",
   },
   {
     id: 1,
     title: "Check your Appointments real time",
+    text: "Stay updated with real-time notifications for all your upcoming appointments.",
     icon: <Settings2 />,
     image: "/MyAppointments.png",
   },
   {
     id: 2,
     title: "Add your Availability",
+    text: "Set and manage your working hours to let clients know when you're available.",
     icon: <Clock8 />,
     image: "/WorkingHours.png",
   },
   {
     id: 3,
     title: "Discover Providers",
+    text: "Find and connect with providers that match your needs and preferences.",
     icon: <Link2 />,
     image: "/Providers.png",
   },
@@ -74,10 +78,12 @@ export default function EventsStepper() {
       </p>
 
       <div className="flex flex-row lg:flex gap-10">
-        <div className="">
+        <div
+        >
           {steps.map((step) => (
             <StepperButton
               key={step.id}
+              text={step.text}
               onClick={() => handleStepClick(step.id)}
               isActive={activeIndex === step.id}
               icon={step.icon}
