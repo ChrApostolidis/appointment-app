@@ -2,13 +2,65 @@
 
 import { CalendarDays, Clock8, Link2, Settings2 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StepperButton from "./StepperButton";
 
-export type Step = "Calendar" | "Appointments" | "Availability" | "Services";
+export const steps = [
+  {
+    id: 0,
+    title: "Built in Calendar",
+    icon: <CalendarDays />,
+    image: "/AppCalendar.png",
+  },
+  {
+    id: 1,
+    title: "Check your Appointments real time",
+    icon: <Settings2 />,
+    image: "/MyAppointments.png",
+  },
+  {
+    id: 2,
+    title: "Add your Availability",
+    icon: <Clock8 />,
+    image: "/WorkingHours.png",
+  },
+  {
+    id: 3,
+    title: "Discover Providers",
+    icon: <Link2 />,
+    image: "/Providers.png",
+  },
+] as const;
 
 export default function EventsStepper() {
-  const [step, setStep] = useState<Step>("Calendar");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  // Progress timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) return 0;
+        return prev + 1;
+      });
+    }, 70);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Step change when progress completes
+  useEffect(() => {
+    if (progress === 100) {
+      setActiveIndex((prev) => (prev + 1) % steps.length);
+    }
+  }, [progress]);
+
+  //  Manual click resets progress
+  const handleStepClick = (index: number) => {
+    setActiveIndex(index);
+    setProgress(0);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center px-5 py-5 gap-4 text-center">
       <h2 className="font-bold text-2xl lg:text-3xl text-primary">
@@ -23,66 +75,25 @@ export default function EventsStepper() {
 
       <div className="flex flex-row lg:flex gap-10">
         <div className="">
-          <StepperButton
-            onClick={() => {
-              setStep("Calendar");
-            }}
-            icon={<CalendarDays />}
-            title="Built in Calendar"
-          />
-          <StepperButton
-            onClick={() => {
-              setStep("Appointments");
-            }}
-            icon={<Settings2 />}
-            title="Check your Appointments real time"
-          />
-          <StepperButton
-            onClick={() => {
-              setStep("Availability");
-            }}
-            icon={<Clock8 />}
-            title="Add your Availability"
-          />
-          <StepperButton
-            onClick={() => {
-                setStep("Services");
-              }}
-            icon={<Link2 />}
-            title="Discover Services"
-          />
+          {steps.map((step) => (
+            <StepperButton
+              key={step.id}
+              onClick={() => handleStepClick(step.id)}
+              isActive={activeIndex === step.id}
+              icon={step.icon}
+              title={step.title}
+              progress={progress}
+            />
+          ))}
         </div>
         <div className="bg-background border-border border rounded-lg p-10">
           <div className="bg-background border-border rounded-lg border p-10">
-            {step === "Calendar" ? (
-              <Image
-                src="/AppCalendar.png"
-                alt="App Calendar App Image"
-                width={600}
-                height={600}
-              />
-            ) : step === "Appointments" ? (
-              <Image
-                src="/WorkingHours.png"
-                alt="Working Hours App Image"
-                width={600}
-                height={600}
-              />
-            ) : step === "Availability" ? (
-              <Image
-                src="/MyAppointments.png"
-                alt="My Appointments App Image"
-                width={600}
-                height={600}
-              />
-            ) : step === "Services" ? (
-              <Image
-                src="/Providers.png"
-                alt="Providers App Image"
-                width={600}
-                height={600}
-              />
-            ) : null}
+            <Image
+              src={steps[activeIndex].image}
+              alt={steps[activeIndex].title}
+              width={600}
+              height={600}
+            />
           </div>
         </div>
       </div>
