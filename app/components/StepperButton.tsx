@@ -30,7 +30,7 @@ export default function StepperButton({
           className={`flex items-center gap-2 cursor-pointer ${isActive ? "text-primary" : "text-gray-400"}`}
         >
           {icon}
-          <h3 className={`text-2xl ${isActive ? "text-foreground font-bold" : "text-gray-400"}`}>{title}</h3>
+          <h3 className={`text-lg text-left lg:text-2xl ${isActive ? "text-foreground font-bold" : "text-gray-400"}`}>{title}</h3>
         </button>
         <AnimatePresence>
           {isActive && (
@@ -48,7 +48,7 @@ export default function StepperButton({
                 transition={{ duration: 0.3 }}
                 className="mt-4"
               >
-                <div className="w-[40rem] text-left">
+                <div className="w-full lg:w-[40rem] text-left">
                   <p>{text}</p>
                 </div>
 

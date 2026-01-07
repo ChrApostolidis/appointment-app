@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarDays, Clock8, Link2, Settings2 } from "lucide-react";
-import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import StepperButton from "./StepperButton";
 
@@ -10,28 +10,28 @@ export const steps = [
     id: 0,
     title: "Built in Calendar",
     text: "Easily view and manage your appointments with our integrated calendar feature.",
-    icon: <CalendarDays />,
-    image: "/AppCalendar.png",
+    icon: <CalendarDays size={25} />,
+    image: "/BuiltInCalendar.png",
   },
   {
     id: 1,
-    title: "Check your Appointments real time",
+    title: "Check your Appointments",
     text: "Stay updated with real-time notifications for all your upcoming appointments.",
-    icon: <Settings2 />,
-    image: "/MyAppointments.png",
+    icon: <Settings2 size={25} />,
+    image: "/CheckAppointments.png",
   },
   {
     id: 2,
     title: "Add your Availability",
     text: "Set and manage your working hours to let clients know when you're available.",
-    icon: <Clock8 />,
+    icon: <Clock8 size={25} />,
     image: "/WorkingHours.png",
   },
   {
     id: 3,
     title: "Discover Providers",
     text: "Find and connect with providers that match your needs and preferences.",
-    icon: <Link2 />,
+    icon: <Link2 size={25} />,
     image: "/Providers.png",
   },
 ] as const;
@@ -77,9 +77,8 @@ export default function EventsStepper() {
         Easily schedule and manage all your appointments in one place.
       </p>
 
-      <div className="flex flex-row lg:flex gap-10">
-        <div
-        >
+      <div className="flex flex-col lg:flex-row gap-10">
+        <div>
           {steps.map((step) => (
             <StepperButton
               key={step.id}
@@ -92,14 +91,20 @@ export default function EventsStepper() {
             />
           ))}
         </div>
-        <div className="bg-background border-border border rounded-lg p-10">
-          <div className="bg-background border-border rounded-lg border p-10">
-            <Image
-              src={steps[activeIndex].image}
-              alt={steps[activeIndex].title}
-              width={600}
-              height={600}
-            />
+        <div className="hidden lg:block bg-background border-border border rounded-lg p-10">
+          <div className="bg-background border-border rounded-lg border p-10 overflow-hidden relative lg:h-124 lg:w-164">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={steps[activeIndex].image}
+                src={steps[activeIndex].image}
+                alt={steps[activeIndex].title}
+                className="absolute inset-0 w-full h-full object-contain"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.45, ease: "easeInOut" }}
+              />
+            </AnimatePresence>
           </div>
         </div>
       </div>
