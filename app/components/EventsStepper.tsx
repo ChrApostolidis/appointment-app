@@ -78,7 +78,12 @@ export default function EventsStepper() {
       </p>
 
       <div className="flex flex-col lg:flex-row gap-10">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
           {steps.map((step) => (
             <StepperButton
               key={step.id}
@@ -90,8 +95,14 @@ export default function EventsStepper() {
               progress={progress}
             />
           ))}
-        </div>
-        <div className="hidden lg:block bg-background border-border border rounded-lg p-10">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="hidden lg:block bg-background border-border border rounded-lg p-10"
+        >
           <div className="bg-background border-border rounded-lg border p-10 overflow-hidden relative lg:h-124 lg:w-164">
             <AnimatePresence mode="wait">
               <motion.img
@@ -106,7 +117,7 @@ export default function EventsStepper() {
               />
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
