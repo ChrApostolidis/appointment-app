@@ -5,6 +5,7 @@ import BookAppoinmentSearchBar from "./components/BookAppoinmentSearchBar";
 import IconSlider from "./components/IconSlider";
 import EventsStepper from "./components/EventsStepper";
 import Reminders from "./components/Reminders";
+import BookingMarketingComponent from "./components/BookingMarketingComponent";
 
 export default async function Home() {
   const currentUser = await getCurrentUser({ withFullUser: true });
@@ -17,6 +18,7 @@ export default async function Home() {
       <IconSlider />
       <EventsStepper />
       <Reminders />
+      <BookingMarketingComponent />
     </div>
   );
 }
