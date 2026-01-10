@@ -32,8 +32,9 @@ export default function Reminders() {
             Automatic reminders for you and your clients
           </h3>
           <p className="text-base text-muted-foreground lg:text-lg">
-            We handle notifications so you never miss an appointment. Clients receive instant booking confirmations
-            plus timed reminders that match their time zone.
+            We handle notifications so you never miss an appointment. Clients
+            receive instant booking confirmations plus timed reminders that
+            match their time zone.
           </p>
           <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
             {highlights.map((item, idx) => (
@@ -51,20 +52,29 @@ export default function Reminders() {
           </div>
         </motion.div>
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          className="flex justify-center"
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative mx-auto h-80 w-48 p-3 sm:h-[30rem] sm:w-60"
         >
-          <div className="relative h-full w-full rounded-[2rem] overflow-hidden">
+          <div className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[520px]">
             <Image
-              src="/ReminderImage.png"
-              alt="Phone with Notification"
-              fill
-              sizes="(min-width: 1024px) 15rem, (min-width: 640px) 14rem, 12rem"
-              className="object-cover"
+              src="/ReminderImageBase.png"
+              alt="Reminder Preview"
+              width={500}
+              height={700}
+              className="h-auto w-full select-none"
+              draggable={false}
               priority
+            />
+            <Image
+              src="/ReminderImageScreen.png"
+              alt="Reminder Screen"
+              width={400}
+              height={600}
+              className="absolute left-1/2 top-[0%] h-auto w-[100%] -translate-x-1/2 rounded-2xl shadow-2xl"
+              draggable={false}
             />
           </div>
         </motion.div>

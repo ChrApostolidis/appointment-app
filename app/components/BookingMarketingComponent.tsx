@@ -14,17 +14,32 @@ export default function BookingMarketingComponent() {
       <div className="relative justify-center flex flex-col items-center gap-10 lg:flex-row lg:items-center">
         <motion.div
           className="flex justify-center"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <Image
-            src="/BookingImage.png"
-            alt="Booking Marketing"
-            width={600}
-            height={900}
-          />
+          <div className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[520px]">
+            <Image
+              src="/ProviderImageBase.png"
+              alt="Booking Marketing"
+              width={500}
+              height={700}
+              className="h-auto w-full select-none"
+              draggable={false}
+              priority
+            />
+            <motion.div>
+              <Image
+                src="/ProviderImageScreen.png"
+                alt="Booking Marketing Phone"
+                width={400}
+                height={600}
+                className="absolute left-1/2 top-[0%] h-auto w-[100%] -translate-x-1/2"
+                draggable={false}
+              />
+            </motion.div>
+          </div>
         </motion.div>
         <div className="relative justify-center flex flex-col items-center gap-10 lg:flex-row lg:items-center">
           <motion.div
