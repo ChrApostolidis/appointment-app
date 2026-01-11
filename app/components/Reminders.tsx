@@ -59,23 +59,39 @@ export default function Reminders() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <div className="relative w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[520px]">
-            <Image
-              src="/ReminderImageBase.png"
-              alt="Reminder Preview"
-              width={500}
-              height={700}
-              className="h-auto w-full select-none"
-              draggable={false}
-              priority
-            />
-            <Image
-              src="/ReminderImageScreen.png"
-              alt="Reminder Screen"
-              width={400}
-              height={600}
-              className="absolute left-1/2 top-[0%] h-auto w-[100%] -translate-x-1/2 rounded-2xl shadow-2xl"
-              draggable={false}
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <Image
+                src="/ReminderImageBase.png"
+                alt="Reminder Preview"
+                width={500}
+                height={700}
+                className="h-auto w-full select-none"
+                draggable={false}
+                priority
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, filter: "brightness(0.4)" }}
+              whileInView={{ opacity: 1, scale: 1, filter: "brightness(1)" }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ delay: 0.35, duration: 0.6, ease: "easeOut" }}
+              className="absolute left-1/2 top-0 w-full -translate-x-1/2"
+            >
+              <Image
+                src="/ReminderImageScreen.png"
+                alt="Reminder Screen"
+                width={400}
+                height={600}
+                className="h-auto w-full"
+                draggable={false}
+                priority
+              />
+            </motion.div>
           </div>
         </motion.div>
       </div>
