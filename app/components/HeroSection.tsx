@@ -9,7 +9,7 @@ import { userType } from "../registerForms/components/LockedRegisterForm";
 export default function HeroSection({ user }: { user: userType | null }) {
   const [move, setMove] = useState(false);
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 bg-background">
+    <div className="max-w-7xl mx-auto px-6 pt-20 pb-20 bg-barkground">
       <div className="text-center max-w-4xl mx-auto">
         <motion.div
           animate={{
