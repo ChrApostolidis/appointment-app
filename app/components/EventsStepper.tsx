@@ -101,9 +101,9 @@ export default function EventsStepper() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="hidden lg:block bg-background border-border border rounded-lg p-10"
+          className="hidden lg:block bg-background border-primary/50 border rounded-lg p-10 bg-gradient-to-t from-background via-background to-primary/40"
         >
-          <div className="bg-background border-border rounded-lg border p-10 overflow-hidden relative lg:h-124 lg:w-164">
+          <div className="bg-background border-primary/20 rounded-lg border p-10 overflow-hidden relative lg:h-124 lg:w-164">
             <AnimatePresence mode="wait">
               <motion.img
                 key={steps[activeIndex].image}

@@ -2,21 +2,35 @@
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-// import timeGridPlugin from "@fullcalendar/timegrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
 import { EventInput } from "@fullcalendar/core";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   events: EventInput[];
 };
 
 export default function CalendarComponent({ events }: Props) {
+  const fullCalendarRef = useRef<FullCalendar | null>(null);
+  const [view, setView] = useState<
+    "dayGridMonth" | "timeGridWeek" | "timeGridDay"
+  >("dayGridMonth");
+
   type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
+
   const statusColorMap: Record<BookingStatus, string> = {
     Pending: "bg-yellow-400",
     Upcoming: "bg-orange-400",
     Completed: "bg-green-400",
     Cancelled: "bg-red-400",
   };
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setView("timeGridDay");
+    }
+  }, []);
+
   const formatTime = (date: Date | null) => {
     if (!date) return "";
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -24,13 +38,28 @@ export default function CalendarComponent({ events }: Props) {
 
   return (
     <FullCalendar
-      plugins={[dayGridPlugin]}
-      initialView="dayGridMonth"
+      ref={fullCalendarRef}
+      plugins={[dayGridPlugin, timeGridPlugin]}
+      initialView={view}
       events={events}
+      windowResize={() => {
+        if (!fullCalendarRef.current) return;
+        
+        const calendarApi = fullCalendarRef.current.getApi();
+
+        if (window.innerWidth < 768) {
+          calendarApi.changeView("timeGridDay");
+          setView("timeGridDay");
+        } else {
+          calendarApi.changeView("dayGridMonth");
+          setView("dayGridMonth");
+        }
+      }}
       headerToolbar={{
         left: "prev,next today",
         center: "title",
-        right: "",
+        right:
+          view === "timeGridDay" ? "" : "dayGridMonth,timeGridWeek,timeGridDay",
       }}
       editable={false}
       selectable={false}

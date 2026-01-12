@@ -12,7 +12,7 @@ const highlights = [
 
 export default function Reminders() {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-primary/10 bg-gradient-to-br from-background via-background to-primary/5 px-6 py-12 shadow-2xl">
+    <div className="relative overflow-hidden rounded-3xl border border-primary/10 bg-gradient-to-br from-background via-background to-primary/40 px-6 py-12 shadow-2xl">
       <div
         aria-hidden
         className="absolute inset-y-0 right-6 hidden w-40 rounded-full bg-primary/20 blur-[120px] lg:block"
