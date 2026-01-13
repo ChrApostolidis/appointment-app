@@ -1,0 +1,30 @@
+export const footerData = {
+  Resources: [
+    "API documentation",
+    "Booking page templates",
+    "Booking page inspiration",
+    "Library",
+    "Product updates",
+    "Referral program",
+    "Security",
+    "Service status",
+    "Webinar",
+  ],
+  Product: [
+    "Chrome extension",
+    "Contact sales",
+    "Features",
+    "Integrations",
+    "Meeting polls",
+    "Pricing",
+    "Take a tour",
+    "Time Zones",
+  ],
+  Company: ["About us", "Blog", "Brand assets", "Jobs", "Testimonials"],
+  Support: [
+    "Community forum",
+    "Find your meeting",
+    "Get support",
+    "Request a demo",
+  ],
+};
