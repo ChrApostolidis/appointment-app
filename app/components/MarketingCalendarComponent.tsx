@@ -29,20 +29,6 @@ export default function MarketingCalendarComponent() {
             rely on external tools. Manage appointments and bookings
             seamlessly—all in one place.
           </p>
-          {/* <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-            {highlights.map((item, idx) => (
-              <motion.div
-                key={item}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ delay: 0.1 * idx, duration: 0.4 }}
-                className="rounded-2xl border border-primary/10 bg-background/70 px-4 py-3 text-sm font-medium text-foreground shadow-sm"
-              >
-                {item}
-              </motion.div>
-            ))}
-          </div> */}
         </motion.div>
         <motion.div
           className="flex justify-center bg-gradient-to-bl from-background via-background to-primary/40 p-10 rounded-lg border border-primary/20"
