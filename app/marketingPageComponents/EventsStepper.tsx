@@ -3,7 +3,7 @@
 import { CalendarDays, Clock8, Link2, Settings2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import StepperButton from "./StepperButton";
+import StepperButton from "../components/StepperButton";
 
 export const steps = [
   {

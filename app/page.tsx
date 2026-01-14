@@ -1,12 +1,13 @@
 import Header from "./components/Header";
 import { getCurrentUser } from "@/auth/currentUser";
-import HeroSection from "./components/HeroSection";
+import HeroSection from "./marketingPageComponents/HeroSection";
 import BookAppoinmentSearchBar from "./components/BookAppoinmentSearchBar";
-import EventsStepper from "./components/EventsStepper";
-import Reminders from "./components/Reminders";
-import BookingMarketingComponent from "./components/BookingMarketingComponent";
-import MarketingCalendarComponent from "./components/MarketingCalendarComponent";
+import EventsStepper from "./marketingPageComponents/EventsStepper";
+import Reminders from "./marketingPageComponents/Reminders";
+import BookingMarketingComponent from "./marketingPageComponents/BookingMarketingComponent";
+import MarketingCalendarComponent from "./marketingPageComponents/MarketingCalendarComponent";
 import Footer from "./components/Footer";
+import AutomateEverythingMarketingComponent from "./marketingPageComponents/AutomateEverythingMarketing";
 
 export default async function Home() {
   const currentUser = await getCurrentUser({ withFullUser: true });
@@ -20,6 +21,7 @@ export default async function Home() {
       <Reminders />
       <BookingMarketingComponent />
       <MarketingCalendarComponent />
+      <AutomateEverythingMarketingComponent />
       <Footer />
     </div>
   );
