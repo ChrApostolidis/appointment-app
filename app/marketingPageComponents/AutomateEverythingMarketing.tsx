@@ -67,7 +67,7 @@ export default function AutomateEverythingMarketingComponent() {
               transition={{ duration: 0.5, ease: "easeOut" }}
             >
               <Image
-                src="/ReminderImageBase.png"
+                src="/automateImageCase.png"
                 alt="Reminder Preview"
                 width={500}
                 height={700}
@@ -83,15 +83,15 @@ export default function AutomateEverythingMarketingComponent() {
               transition={{ delay: 0.35, duration: 0.6, ease: "easeOut" }}
               className="absolute left-1/2 top-0 w-full -translate-x-1/2"
             >
-              {/* <Image
-                src="/ReminderImageScreen.png"
+              <Image
+                src="/automateImageScreen.png"
                 alt="Reminder Screen"
                 width={400}
                 height={600}
                 className="h-auto w-full"
                 draggable={false}
                 priority
-              /> */}
+              />
             </motion.div>
           </div>
         </motion.div>
