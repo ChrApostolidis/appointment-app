@@ -8,6 +8,7 @@ import BookingMarketingComponent from "./marketingPageComponents/BookingMarketin
 import MarketingCalendarComponent from "./marketingPageComponents/MarketingCalendarComponent";
 import Footer from "./components/Footer";
 import AutomateEverythingMarketingComponent from "./marketingPageComponents/AutomateEverythingMarketing";
+import UsersTestimonials from "./marketingPageComponents/UsersTestimonials";
 
 export default async function Home() {
   const currentUser = await getCurrentUser({ withFullUser: true });
@@ -21,6 +22,7 @@ export default async function Home() {
       <Reminders />
       <BookingMarketingComponent />
       <MarketingCalendarComponent />
+      <UsersTestimonials />
       <AutomateEverythingMarketingComponent />
       <Footer />
     </div>
