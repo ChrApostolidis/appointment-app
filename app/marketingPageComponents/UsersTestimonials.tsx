@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import testimonials from "../data/Testimonials";
 import MainButton from "../components/MainButton";
@@ -50,43 +50,52 @@ export default function UsersTestimonials() {
         </div>
       </div>
       <div className="bg-background text-white text-center my-5">
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 px-6 lg:px-20">
-          {displayedTestimonials.map((testimonial) => (
-            <motion.div
-              key={testimonial.id}
-              className="mb-4 p-4 border-[1px] rounded-2xl border-gray-400 break-inside-avoid"
-              initial={{ opacity: 0, y: 50, scale: 0.8 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-            >
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-4">
-                  <div>
-                    <Image
-                      src={`/${testimonial.image}`}
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full"
-                      width={48}
-                      height={48}
-                    />
+        <motion.div
+          layout
+          className="columns-1 sm:columns-2 lg:columns-3 gap-6 px-6 lg:px-20"
+          transition={{ type: "spring", bounce: 0.18, duration: 0.8 }}
+        >
+          <AnimatePresence mode="popLayout">
+            {displayedTestimonials.map((testimonial) => (
+              <motion.div
+                layout
+                key={testimonial.id}
+                className="mb-4 p-4 border-[1px] rounded-2xl border-gray-400 break-inside-avoid"
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -50, scale: 0.95 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-4">
+                    <motion.div layout className="shrink-0">
+                      <Image
+                        src={`/${testimonial.image}`}
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full"
+                        width={48}
+                        height={48}
+                      />
+                    </motion.div>
+                    <div>
+                      <p className="text-foreground text-lg font-bold">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-gray-500 text-left">
+                        {testimonial.role}
+                      </p>
+                    </div>
                   </div>
                   <div>
-                    <p className="text-foreground text-lg font-bold">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-gray-500 text-left">
-                      {testimonial.role}
+                    <p className="text-foreground text-left">
+                      {testimonial.review}
                     </p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-foreground text-left">{testimonial.review}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
         {!showAll && testimonials.length > initialCount && (
           <MainButton
             className="my-6 cursor-pointer"
