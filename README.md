@@ -1,4 +1,4 @@
-# AppointMe
+# 🗓️AppointMe
 
 > Providers join AppointMe so we can handle their availability, bookings, and client updates, and customers trust us to match them with the right verified provider for whatever service they need.
 
