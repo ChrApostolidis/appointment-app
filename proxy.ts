@@ -9,7 +9,7 @@ const adminRoutes = ["/admin"];
 const registerRoutesProvider = ["/registerForms", "/registerForms/provider"];
 const registerRoutesCustomer = ["/registerForms", "/registerForms/customer"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = (await middlewareAuth(request)) ?? NextResponse.next();
 
   await updateUserSessionExpiration({
