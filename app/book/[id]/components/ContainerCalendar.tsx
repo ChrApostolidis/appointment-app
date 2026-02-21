@@ -2,13 +2,13 @@ import { WorkingHours } from "@/app/profile/data/hoursData";
 import { Calendar } from "@/components/ui/calendar";
 import { startOfToday } from "date-fns";
 import { weekdayIndex } from "../../utils/helper";
-import { AppointmentSlot } from "./MainBookSection";
+import { AppointmentSlot } from "./ConfirmBookingSection";
 
 type ContainerCalendarProps = {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
   providerId: string;
-  workingHours: WorkingHours;
+  workingHours: WorkingHours | undefined;
   setIsLoading: (loading: boolean) => void;
   setAvailableAppointments: (slots: AppointmentSlot[] | null) => void;
 };
@@ -21,12 +21,11 @@ export default function ContainerCalendar({
   setIsLoading,
   setAvailableAppointments,
 }: ContainerCalendarProps) {
-  
   const fetchAppointments = async (providerId: string, date: Date) => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `/api/availability?providerId=${providerId}&date=${date.toISOString()}`
+        `/api/availability?providerId=${providerId}&date=${date.toISOString()}`,
       );
       if (!res.ok) throw new Error("Request failed");
       const data = (await res.json()) as {
@@ -42,6 +41,11 @@ export default function ContainerCalendar({
   };
 
   const today = startOfToday();
+
+  if (!workingHours) {
+   console.error("Working hours data is missing");  
+    return null;
+  }
 
   const disabledDays = Object.entries(workingHours)
     .filter(([, entry]) => entry.enabled === false)

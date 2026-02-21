@@ -21,13 +21,18 @@ export default async function AppointmentsPage() {
       ? await getBookedAppointments(user.id)
       : await getBookedAppointmentsForProvider(user.id);
 
+
+
   return (
     <div>
       <Header user={user} />
       <h1 className="text-2xl lg:text-3xl font-bold my-4 text-center">
         My Appointments
       </h1>
-      <MainSection user={user} bookings={bookings} />
+      <MainSection
+        user={user}
+        bookings={bookings}
+      />
     </div>
   );
 }

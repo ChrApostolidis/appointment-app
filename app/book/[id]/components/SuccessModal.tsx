@@ -1,7 +1,7 @@
 import Modal from "@/app/profile/components/Modal";
 import { Briefcase, CalendarDays, CheckCircle, Clock } from "lucide-react";
 import { singleProvider } from "../../actions/actions";
-import { AppointmentSlot } from "./MainBookSection";
+import { AppointmentSlot } from "./ConfirmBookingSection";
 import { formatTime } from "../../utils/helper";
 
 type SuccessModalProps = {

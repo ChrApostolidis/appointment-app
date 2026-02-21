@@ -126,7 +126,7 @@ export async function confirmBooking(appointmentId: string) {
 }
 
 export async function updateBookingsToCompleted() {
-  const cutoff = new Date(Date.now() - 60_000);
+  const cutoff = new Date(Date.now() - 60_000); // current time minus 1 minute to account for any slight delays
   await db
     .update(appoinmentsTable)
     .set({ status: "Completed", updatedAt: new Date() })

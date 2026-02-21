@@ -15,7 +15,7 @@ export type AppointmentSlot = {
   endAt: Date;
 };
 
-export default function ButtonSection({
+export default function ConfirmBookingSection({
   provider,
   providerId,
   workingHours,
