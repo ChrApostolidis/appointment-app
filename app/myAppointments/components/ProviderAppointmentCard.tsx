@@ -20,17 +20,14 @@ import { useState, useTransition } from "react";
 
 type ProviderAppointmentCardProps = {
   bookings: ProviderBookings;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
 
 export default function ProviderAppointmentCard({
   bookings,
-  isOpen,
-  setIsOpen,
 }: ProviderAppointmentCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [pendingAction, setPendingAction] = useState<
     "cancel" | "confirm" | null

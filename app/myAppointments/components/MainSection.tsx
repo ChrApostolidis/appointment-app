@@ -22,7 +22,6 @@ export default function MainSection({
   user: userType;
 }) {
   const [filters, setFilters] = useState<Filters>("Upcoming");
-  const [isOpen, setIsOpen] = useState(false); // modal use
 
   const filteredBookings = useMemo(() => {
     if (filters === "All") {
@@ -52,14 +51,10 @@ export default function MainSection({
           >
             {user.role === "user" ? (
               <AppointmentCard
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
                 bookings={booking as Bookings}
               />
             ) : (
               <ProviderAppointmentCard
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
                 bookings={booking as ProviderBookings}
               />
             )}
