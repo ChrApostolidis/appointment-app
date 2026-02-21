@@ -13,14 +13,17 @@ import SuccessModal from "@/app/book/[id]/components/SuccessModal";
 import { WorkingHours } from "@/app/profile/data/hoursData";
 import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
 import { getProviderById, singleProvider } from "@/app/book/actions/actions";
+import { useRouter } from "next/navigation";
 
 type AppointmentCardProps = {
   bookings: Bookings;
 };
 
+type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
+
 export default function AppointmentCard({ bookings }: AppointmentCardProps) {
   const [isOpen, setIsOpen] = useState(false);
-  type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
+  const router = useRouter();
   const statusColorMap: Record<BookingStatus, string> = {
     Pending: "bg-yellow-400",
     Upcoming: "bg-orange-400",
@@ -44,7 +47,7 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
   );
   const [provider, setProvider] = useState<singleProvider | null>(null);
 
-  const handleBooking = async (e: React.FormEvent) => {
+  const handleReschedule = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsDisabled(true);
     try {
@@ -67,14 +70,14 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
       setShowSuccess(true);
     } catch (err) {
       setShowFailed(true);
-      console.error("Error booking appointment:", err);
+      console.error("Error rescheduling appointment:", err);
     } finally {
       setIsDisabled(false);
       setIsOpen(false);
     }
   };
 
-  const handleReschedule = async () => {
+  const handleRescheduleClick = async () => {
     const hours = await getProviderWorkingHoursById(bookings.providerId);
     const providerData = await getProviderById(bookings.providerId);
 
@@ -122,14 +125,14 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
       </div>
       {status === "Pending" || status === "Upcoming" ? (
         <div className="w-full">
-          <MainButton onClick={handleReschedule} className="w-full mt-4">
+          <MainButton onClick={handleRescheduleClick} className="w-full mt-4">
             Reschedule
           </MainButton>
         </div>
       ) : null}
       {isOpen && (
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <form onSubmit={handleBooking}>
+          <form onSubmit={handleReschedule}>
             <div className="flex flex-col gap-5">
               <h3 className="text-xl lg:text-2xl text-foreground">
                 Reschedule Appointment
@@ -173,7 +176,7 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
           selectedTime={selectedTime}
           provider={provider}
           isOpen={showSuccess}
-          onClose={() => setShowSuccess(false)}
+          onClose={() => { setShowSuccess(false); router.refresh(); }}
         />
       )}
 
