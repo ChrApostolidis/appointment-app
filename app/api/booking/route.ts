@@ -3,7 +3,7 @@ import { bookAppointment } from "@/app/book/actions/actions";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { startAt, endAt, providerId, customerId, businessName, serviceCategory } = await req.json();
+  const { startAt, endAt, providerId, customerId, businessName, serviceCategory, serviceId, serviceName } = await req.json();
 
   if (!providerId || !customerId || !startAt || !endAt || !businessName || !serviceCategory) {
     return NextResponse.json(
@@ -19,6 +19,8 @@ export async function POST(req: Request) {
     endAt,
     businessName,
     serviceCategory,
+    serviceId,
+    serviceName,
   });
 
   if (!parsed.success) {
