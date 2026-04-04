@@ -1,4 +1,6 @@
 import {
+  boolean,
+  integer,
   pgEnum,
   pgTable,
   timestamp,
@@ -43,6 +45,7 @@ export const ProviderTable = pgTable("providers", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
     .notNull()
+    .unique()
     .references(() => UserTable.id, { onDelete: "cascade" }),
   businessName: varchar("business_name", { length: 100 }).notNull(),
   serviceCategory: varchar("service_category", { length: 100 }).notNull(),
@@ -88,12 +91,29 @@ export const ProviderHoursTable = pgTable("provider_working_hours", {
     .$onUpdate(() => new Date()),
 });
 
+export const servicesTable = pgTable("services", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  providerId: uuid("provider_id")
+    .notNull()
+    .references(() => ProviderTable.userId, { onDelete: "cascade" }),
+  name: varchar("name", { length: 100 }).notNull(),
+  description: varchar("description", { length: 255 }),
+  price: integer("price").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp({ withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export type Service = typeof servicesTable.$inferSelect;
+
 export const appoinmentsTable = pgTable("appointments", {
   id: uuid("id").primaryKey().defaultRandom(),
   providerId: uuid("provider_id")
     .notNull()
-    .unique()
-    .references(() => ProviderTable.id, { onDelete: "cascade" }),
+    .references(() => ProviderTable.userId, { onDelete: "cascade" }),
   customerId: uuid("customer_id")
     .notNull()
     .references(() => UserTable.id, { onDelete: "cascade" }),
@@ -101,6 +121,8 @@ export const appoinmentsTable = pgTable("appointments", {
   endAt: timestamp({ withTimezone: true }).notNull(),
   notes: varchar("notes", { length: 100 }),
   status: varchar("status", { length: 50 }).notNull().default("scheduled"),
+  serviceId: uuid("service_id").references(() => servicesTable.id),
+  serviceName: varchar("service_name", { length: 100 }),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()
@@ -114,4 +136,5 @@ export type Database = {
   CustomerTable: typeof CustomerTable;
   ProviderTable: typeof ProviderTable;
   ProviderHoursTable: typeof ProviderHoursTable;
+  servicesTable: typeof servicesTable;
 };

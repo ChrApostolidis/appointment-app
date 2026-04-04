@@ -7,6 +7,8 @@ export const BookingSchema = z.object({
   endAt: z.string().min(1, "End time is required"),
   businessName: z.string().min(1, "Business name is required"),
   serviceCategory: z.string().min(1, "Service category is required"),
+  serviceId: z.string().optional(),
+  serviceName: z.string().optional(),
 });
 
 export const ReschedulingSchema = z.object({
