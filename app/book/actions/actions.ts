@@ -260,6 +260,8 @@ export type AppointmentData = {
   endAt: string;
   businessName: string;
   serviceCategory: string;
+  serviceId?: string;
+  serviceName?: string;
 };
 
 export async function bookAppointment(appointmentData: AppointmentData) {
@@ -270,6 +272,8 @@ export async function bookAppointment(appointmentData: AppointmentData) {
     endAt,
     businessName,
     serviceCategory,
+    serviceId,
+    serviceName,
   } = appointmentData;
 
   try {
@@ -281,6 +285,8 @@ export async function bookAppointment(appointmentData: AppointmentData) {
         startAt: new Date(startAt),
         endAt: new Date(endAt),
         status: "Pending",
+        serviceId: serviceId ?? null,
+        serviceName: serviceName ?? null,
       })
       .returning({
         id: appoinmentsTable.id,
@@ -320,6 +326,7 @@ export async function bookAppointment(appointmentData: AppointmentData) {
           endAt,
           businessName,
           serviceCategory,
+          ...(serviceName ? { serviceName } : {}),
         }),
       }
     );
