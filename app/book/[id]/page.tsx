@@ -13,6 +13,7 @@ import MainProfileSection from "./components/MainProfileSection";
 import ServiceSection from "./components/ServicesSection";
 import ProviderNotFound from "./components/ProviderNotFound";
 import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
+import { getProviderServices } from "@/app/providerServices/actions/serviceActions";
 
 export default async function ProviderProfilePage({
   params,
@@ -30,7 +31,9 @@ export default async function ProviderProfilePage({
 
   const nextAvailableSlot = await getNextAvailableSlot(id);
 
-  const workingHours = await getProviderWorkingHoursById(id)
+  const workingHours = await getProviderWorkingHoursById(id);
+
+  const services = await getProviderServices(id, true);
 
   if (!provider?.logoUrl) {
     return "Provider not found";
@@ -58,6 +61,7 @@ export default async function ProviderProfilePage({
               providerId={id}
               workingHours={workingHours}
               userId={currentUser.id}
+              services={services}
             />
             <ServiceSection provider={provider} />
           </>
