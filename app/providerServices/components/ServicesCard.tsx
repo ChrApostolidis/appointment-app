@@ -1,9 +1,31 @@
 "use client";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Service } from "@/drizzle/schema";
+import { deleteService, toggleService } from "../actions/serviceActions";
 
-export default function ServicesCard() {
-  const [enabled, setEnabled] = useState(true);
+type ServicesCardProps = {
+  service: Service;
+  onEdit: (service: Service) => void;
+};
+
+export default function ServicesCard({ service, onEdit }: ServicesCardProps) {
+  const [enabled, setEnabled] = useState(service.isActive);
+  const router = useRouter();
+
+  const handleToggle = async () => {
+    const next = !enabled;
+    setEnabled(next);
+    await toggleService(service.id, next);
+    router.refresh();
+  };
+
+  const handleDelete = async () => {
+    await deleteService(service.id);
+    router.refresh();
+  };
+
   return (
     <div className="flex justify-center items-center my-4">
       <div className="relative bg-background rounded-lg border border-muted shadow-md w-full max-w-4xl p-4">
@@ -15,16 +37,18 @@ export default function ServicesCard() {
             <Pencil
               size={18}
               className="cursor-pointer text-foreground hover:text-primary"
+              onClick={() => onEdit(service)}
             />
             <Trash2
               size={18}
               className="cursor-pointer text-foreground hover:text-red-500"
+              onClick={handleDelete}
             />
             {!enabled && <p className="text-sm text-foreground">Inactive</p>}
           </div>
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setEnabled((prev) => !prev)}
+              onClick={handleToggle}
               className={`z-11 w-12 h-6 rounded-full transition-colors duration-300 ${
                 enabled ? "bg-primary" : "bg-gray-400"
               }`}
@@ -37,14 +61,11 @@ export default function ServicesCard() {
             </button>
           </div>
         </div>
-        <h2 className="text-xl font-semibold mb-1">Service Name</h2>
+        <h2 className="text-xl font-semibold mb-1">{service.name}</h2>
         <div className="flex justify-between">
-          <p className="text-gray-600">
-            This is a service description placeholder.
-          </p>
+          <p className="text-gray-600">{service.description}</p>
           <div className="flex items-end gap-2">
-            <p>1hr</p>
-            <p>$30</p>
+            <p>${service.price}</p>
           </div>
         </div>
       </div>
