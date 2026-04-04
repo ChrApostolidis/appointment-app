@@ -17,6 +17,7 @@ type AppointmentBookedProps = {
   startAt: string;
   serviceCategory: string;
   endAt: string;
+  serviceName?: string;
 };
 
 export default function AppointmentBooked({
@@ -25,6 +26,7 @@ export default function AppointmentBooked({
   startAt,
   endAt,
   serviceCategory,
+  serviceName,
 }: AppointmentBookedProps) {
   return (
     <Html lang="en">
@@ -60,6 +62,11 @@ export default function AppointmentBooked({
                 <Text className="text-gray-700 mb-1">
                   <strong>Service:</strong> {serviceCategory}
                 </Text>
+                {serviceName && (
+                  <Text className="text-gray-700 mb-1">
+                    <strong>Booked Service:</strong> {serviceName}
+                  </Text>
+                )}
                 <Text className="text-gray-700 mb-1">
                   <strong>Date:</strong>{" "}
                   {new Date(startAt).toLocaleDateString()}

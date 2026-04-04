@@ -6,6 +6,7 @@ import RatingStars from "../../components/RatingStars";
 import ImageRender from "../../components/ImageRender";
 import ButtonSection from "./ConfirmBookingSection";
 import { WorkingHours } from "@/app/profile/data/hoursData";
+import { Service } from "@/drizzle/schema";
 
 type MainProfileSectionProps = {
   provider: singleProvider;
@@ -13,6 +14,7 @@ type MainProfileSectionProps = {
   workingHours: WorkingHours;
   providerId: string;
   userId: string;
+  services: Service[];
 };
 
 export default async function MainProfileSection({
@@ -20,11 +22,9 @@ export default async function MainProfileSection({
   nextAvailableSlot,
   providerId,
   workingHours,
-  userId
+  userId,
+  services,
 }: MainProfileSectionProps) {
-
-  
-
   const formattedNextSlot = nextAvailableSlot
     ? new Intl.DateTimeFormat("en-US", {
         weekday: "long",
@@ -86,7 +86,13 @@ export default async function MainProfileSection({
               </div>
             </div>
           </div>
-          <ButtonSection provider={provider} userId={userId} providerId={providerId} workingHours={workingHours} />
+          <ButtonSection
+            provider={provider}
+            userId={userId}
+            providerId={providerId}
+            workingHours={workingHours}
+            services={services}
+          />
         </div>
       </div>
     </div>

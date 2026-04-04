@@ -2,13 +2,14 @@
 import MainButton from "@/app/components/MainButton";
 import Modal from "@/app/profile/components/Modal";
 import ContainerCalendar from "./ContainerCalendar";
-import { Calendar, Clock2 } from "lucide-react";
+import { Briefcase, Calendar, Clock2 } from "lucide-react";
 import { useState } from "react";
 import { WorkingHours } from "@/app/profile/data/hoursData";
 import Appoinements from "./Appoinements";
 import SuccessModal from "./SuccessModal";
 import { singleProvider } from "../../actions/actions";
 import FailedModal from "./FailedModal";
+import { Service } from "@/drizzle/schema";
 
 export type AppointmentSlot = {
   startAt: Date;
@@ -20,11 +21,13 @@ export default function ConfirmBookingSection({
   providerId,
   workingHours,
   userId,
+  services,
 }: {
   provider: singleProvider;
   providerId: string;
   workingHours: WorkingHours;
   userId: string;
+  services: Service[];
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -38,6 +41,7 @@ export default function ConfirmBookingSection({
   const [isDisabled, setIsDisabled] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showFailed, setShowFailed] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,11 +59,13 @@ export default function ConfirmBookingSection({
           endAt: selectedTime.endAt,
           businessName: provider.businessName,
           serviceCategory: provider.serviceCategory,
+          serviceId: selectedService?.id ?? null,
+          serviceName: selectedService?.name ?? null,
         }),
       });
       const data = await res.json();
       console.log("Response data:", data);
-      
+
       if (!res.ok) {
         throw new Error(data.message || "Request failed");
       }
@@ -97,6 +103,26 @@ export default function ConfirmBookingSection({
               <h3 className="text-xl lg:text-2xl text-foreground">
                 Book Appoinement
               </h3>
+              <div className="flex justify-start gap-2 pb-2 border-b border-primary">
+                <Briefcase size={18} className="text-foreground" />
+                <p className="text-sm text-foreground">Select Service</p>
+              </div>
+              <select
+                value={selectedService?.id ?? ""}
+                onChange={(e) => {
+                  const found =
+                    services.find((s) => s.id === e.target.value) ?? null;
+                  setSelectedService(found);
+                }}
+                className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground"
+              >
+                <option value="">Basic Appointment</option>
+                {services.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} — ${s.price}
+                  </option>
+                ))}
+              </select>
               <div className="flex justify-start gap-2 pb-2 border-b border-primary">
                 <Calendar size={18} className="text-foreground" />
                 <p className="text-sm text-foreground">Select Date</p>
