@@ -9,42 +9,68 @@ body {
 }
 
 :root {
-  --background: #ffff;
-  --second-background: #e5e7eb;
-  --foreground: #1a1f2b;
-  --primary: #00ccee;
-  --primary-foreground: #0b1220;
-  --secondary: #03b7ce;
-  --secondary-foreground: #cceef1;
-  --muted: #d1d5db;
-  --border: #6a7282 ;
-  --primary-hover: #00bcd4;
+  /* Surfaces */
+  --background: #f8fafc;        /* slate-50: warm off-white, avoids clinical stark white */
+  --second-background: #f1f5f9; /* slate-100: subtle surface separation */
+  --card: #ffffff;              /* cards pop slightly above background */
+
+  /* Text */
+  --foreground: #0f172a;        /* slate-900: rich, readable */
+  --muted-foreground: #64748b;  /* slate-500: secondary text */
+
+  /* Brand */
+  --primary: #0891b2;           /* cyan-600: more saturated and professional */
+  --primary-foreground: #ffffff;
+  --primary-hover: #0e7490;     /* cyan-700: clear darker hover */
+  --secondary: #06b6d4;         /* cyan-500 */
+  --secondary-foreground: #164e63; /* cyan-900 */
+
+  /* UI */
+  --muted: #e2e8f0;             /* slate-200 */
+  --border: #cbd5e1;            /* slate-300 */
+  --ring: #0891b2;
 }
 
 .dark {
-  --background: #121212;
-  --second-background: #12203b;
-  --foreground: #e6eef5;
-  --primary: #00ccee;
-  --primary-foreground: #ffffff;
-  --secondary: #03b7ce;
-  --secondary-foreground: #0b535a;
-  --muted: #2a2a2a ;
-  --border: #334155;
-  --primary-hover: #314158;
+  /* Surfaces */
+  --background: #09090b;        /* zinc-950: industry-standard "black" (shadcn, Vercel) */
+  --second-background: #1e293b; /* slate-800: kept as-is */
+  --card: #111113;              /* just above black so cards have subtle separation */
+
+  /* Text */
+  --foreground: #f1f5f9;        /* slate-100: soft, not harsh pure white */
+  --muted-foreground: #94a3b8;  /* slate-400: visible secondary text */
+
+  /* Brand */
+  --primary: #22d3ee;           /* cyan-400: brighter for dark mode contrast */
+  --primary-foreground: #0c4a6e;
+  --primary-hover: #06b6d4;     /* cyan-500: darker hover on dark bg */
+  --secondary: #06b6d4;         /* cyan-500 */
+  --secondary-foreground: #cffafe; /* cyan-50 */
+
+  /* UI */
+  --muted: #334155;             /* slate-700 */
+  --border: #475569;            /* slate-600 */
+  --ring: #22d3ee;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-second-background: var(--second-background);
+  --color-card: var(--card);
   --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
-  --color-border-c: var(--border-c);
-  --color-primary-hover: var(--primary-hover);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --radius: var(--radius);
 }
 
 @layer utilities {

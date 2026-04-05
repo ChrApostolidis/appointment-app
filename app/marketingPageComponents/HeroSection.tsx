@@ -51,7 +51,7 @@ export default function HeroSection({ user }: { user: userType | null }) {
         </h1>
 
         <p
-          className="text-xl md:text-2xl mb-12 text-gray-400 dark:text-gray-600 
+          className="text-xl md:text-2xl mb-12 text-slate-500 dark:text-slate-400
                      max-w-3xl mx-auto"
         >
           Discover trusted professionals, from doctors to developers. Schedule
