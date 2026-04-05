@@ -11,7 +11,7 @@ export default function BookingMarketingComponent() {
         aria-hidden
         className="absolute inset-y-0 left-6 hidden w-40 rounded-full bg-primary/20 blur-[120px] lg:block"
       />
-      <div className="relative justify-center flex flex-col items-center gap-35 lg:flex-row lg:items-center">
+      <div className="relative justify-center flex flex-col items-center gap-10 lg:flex-row lg:items-center">
         <motion.div
           className="flex justify-center"
           initial={{ opacity: 0, y: 24, scale: 0.95 }}

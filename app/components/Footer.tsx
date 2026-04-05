@@ -17,7 +17,7 @@ export default function Footer() {
   const d = new Date();
   const year = d.getFullYear();
   return (
-    <div className="bg-gradient-to-bl from-background via-background to-primary/40 mt-10 w-full">
+    <div className="bg-gradient-to-bl from-background via-background to-primary/40 w-full">
       <div className=" flex flex-col justify-center gap-5 items-center lg:flex-row lg:justify-around pb-10 border-b border-muted lg:mx-7">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -25,7 +25,7 @@ export default function Footer() {
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h2 className="p text-4xl font-bold text-center lg:text-6xl">
+          <h2 className="p-4 text-4xl font-bold text-center lg:text-6xl">
             Power up your <span className="block">scheduling</span>
           </h2>
         </motion.div>
@@ -36,7 +36,7 @@ export default function Footer() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col gap-5"
         >
-          <div className="lg:my-7 text-lg">
+          <div className="lg:my-2 text-lg">
             <p>Get started in seconds - for free</p>
           </div>
           <div className="flex flex-col lg:flex-row gap-7">

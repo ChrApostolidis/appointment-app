@@ -18,7 +18,7 @@ export default function UsersTestimonials() {
 
   return (
     <div>
-      <div className="flex flex-col gap-4 mb-12 text-center bg-gradient-to-tl from-background via-background to-primary/40">
+      <div className="flex flex-col  text-center bg-gradient-to-tl from-background via-background to-primary/40">
         <div className="text-left p-8">
           <span className="flex justify-end text-sm font-semibold uppercase tracking-[0.3em] text-primary/80">
             Testimonials
@@ -33,7 +33,7 @@ export default function UsersTestimonials() {
             booked without the hassle.
           </p>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center p-5">
           <Link
             onClick={() => setMove(!move)}
             href="/"
@@ -49,7 +49,7 @@ export default function UsersTestimonials() {
           </Link>
         </div>
       </div>
-      <div className="bg-background text-white text-center my-5">
+      <div className="bg-background text-white text-center">
         <motion.div
           layout
           className="columns-1 sm:columns-2 lg:columns-3 gap-6 px-6 lg:px-20"
@@ -60,7 +60,7 @@ export default function UsersTestimonials() {
               <motion.div
                 layout
                 key={testimonial.id}
-                className="mb-4 p-4 border-[1px] rounded-2xl border-gray-400 break-inside-avoid"
+                className="mb-4 p-4 border rounded-2xl border-gray-400 break-inside-avoid"
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -50, scale: 0.95 }}

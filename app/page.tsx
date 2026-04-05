@@ -14,7 +14,7 @@ export default async function Home() {
   const currentUser = await getCurrentUser({ withFullUser: true });
 
   return (
-    <div className="">
+    <div className="bg-background">
       <Header user={currentUser} />
       <HeroSection user={currentUser}/>
       <BookAppoinmentSearchBar />
