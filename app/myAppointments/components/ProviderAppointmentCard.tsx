@@ -1,13 +1,13 @@
 "use client";
 
 import {
+  Briefcase,
   Calendar,
-  CircleUser,
+  CheckCircle,
   Clock8,
   Mail,
   MapPin,
-  OctagonAlertIcon,
-  Phone,
+  XCircle,
 } from "lucide-react";
 import MainButton from "../../components/MainButton";
 import {
@@ -23,6 +23,20 @@ type ProviderAppointmentCardProps = {
 };
 
 type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
+
+const statusAccentMap: Record<BookingStatus, string> = {
+  Pending: "bg-yellow-400",
+  Upcoming: "bg-orange-400",
+  Completed: "bg-green-400",
+  Cancelled: "bg-red-400",
+};
+
+const statusPillMap: Record<BookingStatus, string> = {
+  Pending: "bg-yellow-400/15 text-yellow-600 dark:text-yellow-400",
+  Upcoming: "bg-orange-400/15 text-orange-600 dark:text-orange-400",
+  Completed: "bg-green-400/15 text-green-600 dark:text-green-400",
+  Cancelled: "bg-red-400/15 text-red-500 dark:text-red-400",
+};
 
 export default function ProviderAppointmentCard({
   bookings,
@@ -48,130 +62,155 @@ export default function ProviderAppointmentCard({
       setPendingAction(null);
     });
   };
+
   const status = bookings.status as BookingStatus;
 
-  const statusColorMap: Record<BookingStatus, string> = {
-    Pending: "bg-yellow-400",
-    Upcoming: "bg-orange-400",
-    Completed: "bg-green-400",
-    Cancelled: "bg-red-400",
-  };
+  const initials = bookings.name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
-    <div className="mt-4 bg-background w-[90%] lg:max-w-xl lg:w-full p-3 rounded-xl border-border border">
-      <div className="flex gap-2 mb-4 justify-between">
-        <div className="flex items-center gap-2">
-          <CircleUser fontSize={24} className="text-foreground" />
-          <p className="text-foreground text-lg">{bookings.name}</p>
-        </div>
-        <div className="flex">
-          <p
-            className={`${
-              statusColorMap[status] || "bg-gray-400"
-            } rounded-full px-2 py-1 text-black text-xs font-bold`}
+    <div className="w-[90%] lg:max-w-xl lg:w-full mt-4 bg-card rounded-2xl border border-border shadow-sm overflow-hidden flex">
+      {/* Status accent stripe */}
+      <div className={`w-1 shrink-0 ${statusAccentMap[status] ?? "bg-gray-400"}`} />
+
+      <div className="flex-1 p-5">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <span className="text-primary text-sm font-bold">{initials}</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-foreground font-semibold text-base leading-snug truncate">
+                {bookings.name}
+              </p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <Mail size={12} className="text-muted-foreground shrink-0" />
+                <p className="text-muted-foreground text-sm truncate">
+                  {bookings.email}
+                </p>
+              </div>
+            </div>
+          </div>
+          <span
+            className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${
+              statusPillMap[status] ?? "bg-gray-400/15 text-gray-600"
+            }`}
           >
             {bookings.status}
-          </p>
+          </span>
         </div>
-      </div>
-      <div className="flex gap-2 mb-4 justify-between">
-        <div className="flex items-center gap-2">
-          <Mail fontSize={24} className="text-foreground" />
-          <p className="text-foreground text-lg">{bookings.email}</p>
+
+        {/* Service badge */}
+        <div className="inline-flex items-center gap-1.5 bg-second-background border border-border px-3 py-1 rounded-full mb-4">
+          <Briefcase size={12} className="text-primary shrink-0" />
+          <span className="text-foreground text-xs font-medium">
+            {bookings.serviceName ?? "Basic Appointment"}
+          </span>
         </div>
-        <div className="flex items-center gap-2">
-          <Phone fontSize={24} className="text-foreground" />
-          <p className="text-foreground text-lg">2310-555-222</p>
-        </div>
-      </div>
-      <div className="my-5 flex flex-col lg:flex-row gap-2 lg:gap-4 lg:justify-between">
-        <div className="flex gap-1">
-          <Clock8 fontSize={14} className="text-foreground" />
-          <p className="text-foreground">
-            {bookings.startAt} - {bookings.endAt}
-          </p>
-        </div>
-        <div className="flex gap-1">
-          <Calendar fontSize={14} className="text-foreground" />
-          <p className="text-foreground">{bookings.date}</p>
-        </div>
-        <div className="flex gap-1">
-          <MapPin fontSize={14} className="text-foreground" />
-          <p className="text-foreground">Thessaloniki</p>
-        </div>
-      </div>
-      {bookings.status === "Pending" && (
-        <>
-          <div className="w-full">
-            <>
-              <div className="flex bg-red-400 rounded-full px-2 py-1 mx-20 text-black mb-1 justify-center items-center gap-2">
-                <OctagonAlertIcon fontSize={24} />
-                <p>Awaiting Confirmation!</p>
-              </div>
-              <MainButton
-                onClick={() => setIsOpen(true)}
-                className="w-full mt-4"
-              >
-                Manage Booking
-              </MainButton>
-            </>
+
+        {/* Divider */}
+        <div className="border-t border-border mb-4" />
+
+        {/* Info grid */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-second-background flex items-center justify-center">
+              <Clock8 size={15} className="text-primary" />
+            </div>
+            <p className="text-foreground text-xs text-center leading-tight">
+              {bookings.startAt}-{bookings.endAt}
+            </p>
           </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-second-background flex items-center justify-center">
+              <Calendar size={15} className="text-primary" />
+            </div>
+            <p className="text-foreground text-xs text-center leading-tight">
+              {bookings.date}
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-second-background flex items-center justify-center">
+              <MapPin size={15} className="text-primary" />
+            </div>
+            <p className="text-foreground text-xs text-center leading-tight">
+              Thessaloniki
+            </p>
+          </div>
+        </div>
+
+        {/* Manage button for pending */}
+        {status === "Pending" && (
+          <div className="mt-5 pt-4 border-t border-border">
+            <MainButton onClick={() => setIsOpen(true)} className="w-full">
+              Manage Booking
+            </MainButton>
+          </div>
+        )}
+      </div>
+
+      {/* Manage modal */}
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <div>
-            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-              <div>
-                <p className="text-foreground text-xl text-center lg:text-2xl">
-                  Manage Booking
-                </p>
-                <div className="flex flex-col gap-4 mt-4">
-                  <div className="flex justify-between">
-                    <div className="flex gap-1">
-                      <p className="text-xl">Name:</p>
-                      <p className="text-foreground text-lg">{bookings.name}</p>
-                    </div>
-                    <div className="flex gap-1">
-                      <p className="text-xl">Email:</p>
-                      <p className="text-foreground text-lg">
-                        {bookings.email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex gap-1">
-                      <p className="text-xl">Time:</p>
-                      <p className="text-xl text-foreground">
-                        {bookings.startAt} - {bookings.endAt}
-                      </p>
-                    </div>
-                    <div className="flex gap-1">
-                      <p className="text-xl">Date:</p>
-                      <p className="text-xl text-foreground">{bookings.date}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <MainButton
-                      variant="danger"
-                      disabled={isPending}
-                      onClick={handleCancel}
-                      className="w-full mt-4"
-                    >
-                      {pendingAction === "cancel" && isPending
-                        ? "Cancelling..."
-                        : "Cancel Booking"}
-                    </MainButton>
-                    <MainButton
-                      disabled={isPending}
-                      onClick={handleConfirm}
-                      className="w-full mt-4"
-                    >
-                      {pendingAction === "confirm" && isPending
-                        ? "Booking..."
-                        : "Confirm Booking"}
-                    </MainButton>
-                  </div>
-                </div>
+            <p className="text-foreground text-xl font-semibold text-center lg:text-2xl mb-6">
+              Manage Booking
+            </p>
+
+            {/* Client info */}
+            <div className="bg-second-background rounded-xl p-4 mb-5 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Client</span>
+                <span className="text-foreground font-medium">{bookings.name}</span>
               </div>
-            </Modal>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Email</span>
+                <span className="text-foreground font-medium">{bookings.email}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Date</span>
+                <span className="text-foreground font-medium">{bookings.date}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Time</span>
+                <span className="text-foreground font-medium">
+                  {bookings.startAt} – {bookings.endAt}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Service</span>
+                <span className="text-foreground font-medium">
+                  {bookings.serviceName ?? "Basic Appointment"}
+                </span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3">
+              <button
+                disabled={isPending}
+                onClick={handleCancel}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-red-400 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <XCircle size={16} />
+                {pendingAction === "cancel" && isPending ? "Cancelling..." : "Cancel"}
+              </button>
+              <button
+                disabled={isPending}
+                onClick={handleConfirm}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-primary hover:bg-primary-hover text-primary-foreground font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <CheckCircle size={16} />
+                {pendingAction === "confirm" && isPending ? "Confirming..." : "Confirm"}
+              </button>
+            </div>
           </div>
-        </>
+        </Modal>
       )}
     </div>
   );

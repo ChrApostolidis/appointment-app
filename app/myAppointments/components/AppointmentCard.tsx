@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, CircleUser, Clock2, Clock8, MapPin } from "lucide-react";
+import { Briefcase, Calendar, Clock2, Clock8, MapPin, Store } from "lucide-react";
 import MainButton from "../../components/MainButton";
 import { Bookings } from "../actions/actions";
 import Modal from "@/app/profile/components/Modal";
@@ -21,15 +21,23 @@ type AppointmentCardProps = {
 
 type BookingStatus = "Pending" | "Upcoming" | "Completed" | "Cancelled";
 
+const statusAccentMap: Record<BookingStatus, string> = {
+  Pending: "bg-yellow-400",
+  Upcoming: "bg-orange-400",
+  Completed: "bg-green-400",
+  Cancelled: "bg-red-400",
+};
+
+const statusPillMap: Record<BookingStatus, string> = {
+  Pending: "bg-yellow-400/15 text-yellow-600 dark:text-yellow-400",
+  Upcoming: "bg-orange-400/15 text-orange-600 dark:text-orange-400",
+  Completed: "bg-green-400/15 text-green-600 dark:text-green-400",
+  Cancelled: "bg-red-400/15 text-red-500 dark:text-red-400",
+};
+
 export default function AppointmentCard({ bookings }: AppointmentCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const statusColorMap: Record<BookingStatus, string> = {
-    Pending: "bg-yellow-400",
-    Upcoming: "bg-orange-400",
-    Completed: "bg-green-400",
-    Cancelled: "bg-red-400",
-  };
   const status = bookings.status as BookingStatus;
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -92,44 +100,85 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
   };
 
   return (
-    <div className="mt-4 bg-background w-[90%] lg:max-w-xl lg:w-full p-3 rounded-xl border-border border">
-      <div className="flex justify-between">
-        <p className="text-foreground font-bold text-lg">{bookings.name}</p>
-        <p
-          className={`${
-            statusColorMap[status] || "bg-gray-400"
-          } rounded-full px-2 py-1 text-black text-xs`}
-        >
-          {bookings.status}
-        </p>
+    <div className="w-[90%] lg:max-w-xl lg:w-full mt-4 bg-card rounded-2xl border border-border shadow-sm overflow-hidden flex">
+      {/* Status accent stripe */}
+      <div className={`w-1 shrink-0 ${statusAccentMap[status] ?? "bg-gray-400"}`} />
+
+      <div className="flex-1 p-5">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="min-w-0">
+            <p className="text-foreground font-semibold text-base leading-snug truncate">
+              {bookings.name}
+            </p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <Store size={12} className="text-muted-foreground shrink-0" />
+              <p className="text-muted-foreground text-sm truncate">
+                {bookings.businessName}
+              </p>
+            </div>
+          </div>
+          <span
+            className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${
+              statusPillMap[status] ?? "bg-gray-400/15 text-gray-600"
+            }`}
+          >
+            {bookings.status}
+          </span>
+        </div>
+
+        {/* Service badge */}
+        <div className="inline-flex items-center gap-1.5 bg-second-background border border-border px-3 py-1 rounded-full mb-4">
+          <Briefcase size={12} className="text-primary shrink-0" />
+          <span className="text-foreground text-xs font-medium">
+            {bookings.serviceName ?? "Basic Appointment"}
+          </span>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-border mb-4" />
+
+        {/* Info grid */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-second-background flex items-center justify-center">
+              <Clock8 size={15} className="text-primary" />
+            </div>
+            <p className="text-foreground text-xs text-center leading-tight">
+              {bookings.startAt}
+              <br />
+              {bookings.endAt}
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-second-background flex items-center justify-center">
+              <Calendar size={15} className="text-primary" />
+            </div>
+            <p className="text-foreground text-xs text-center leading-tight">
+              {bookings.date}
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <div className="w-8 h-8 rounded-full bg-second-background flex items-center justify-center">
+              <MapPin size={15} className="text-primary" />
+            </div>
+            <p className="text-foreground text-xs text-center leading-tight">
+              Thessaloniki
+            </p>
+          </div>
+        </div>
+
+        {/* Reschedule button */}
+        {(status === "Pending" || status === "Upcoming") && (
+          <div className="mt-5 pt-4 border-t border-border">
+            <MainButton onClick={handleRescheduleClick} className="w-full">
+              Reschedule
+            </MainButton>
+          </div>
+        )}
       </div>
-      <div className="flex gap-2 mb-4">
-        <CircleUser fontSize={14} className="text-foreground/40" />
-        <p className="text-foreground/40">{bookings.businessName}</p>
-      </div>
-      <div className="my-5 flex flex-col lg:flex-row gap-2 lg:gap-4 lg:justify-between">
-        <div className="flex gap-1">
-          <Clock8 fontSize={14} className="text-foreground" />
-          <p className="text-foreground">
-            {bookings.startAt} - {bookings.endAt}
-          </p>
-        </div>
-        <div className="flex gap-1">
-          <Calendar fontSize={14} className="text-foreground" />
-          <p className="text-foreground">{bookings.date}</p>
-        </div>
-        <div className="flex gap-1">
-          <MapPin fontSize={14} className="text-foreground" />
-          <p className="text-foreground">Thessaloniki</p>
-        </div>
-      </div>
-      {status === "Pending" || status === "Upcoming" ? (
-        <div className="w-full">
-          <MainButton onClick={handleRescheduleClick} className="w-full mt-4">
-            Reschedule
-          </MainButton>
-        </div>
-      ) : null}
+
+      {/* Reschedule modal */}
       {isOpen && (
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <form onSubmit={handleReschedule}>
@@ -176,7 +225,10 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
           selectedTime={selectedTime}
           provider={provider}
           isOpen={showSuccess}
-          onClose={() => { setShowSuccess(false); router.refresh(); }}
+          onClose={() => {
+            setShowSuccess(false);
+            router.refresh();
+          }}
         />
       )}
 
