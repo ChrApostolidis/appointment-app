@@ -13,6 +13,7 @@ export type Bookings = {
   providerId: string;
   businessName: string;
   serviceCategory: string;
+  serviceName: string | null;
   name: string;
   date: string;
 };
@@ -32,6 +33,7 @@ export async function getBookedAppointments(userId: string) {
         providerId: ProviderTable.userId,
         businessName: ProviderTable.businessName,
         serviceCategory: ProviderTable.serviceCategory,
+        serviceName: appoinmentsTable.serviceName,
         name: UserTable.name,
       })
       .from(appoinmentsTable)
@@ -64,6 +66,7 @@ export type ProviderBookings = {
   email: string;
   name: string;
   status: string;
+  serviceName: string | null;
   date: string;
 };
 
@@ -81,6 +84,7 @@ export async function getBookedAppointmentsForProvider(userId: string) {
         name: UserTable.name,
         email: UserTable.email,
         status: appoinmentsTable.status,
+        serviceName: appoinmentsTable.serviceName,
       })
       .from(appoinmentsTable)
       .innerJoin(UserTable, eq(appoinmentsTable.customerId, UserTable.id))
