@@ -23,6 +23,7 @@ export async function getBookedAppointments(userId: string) {
     throw new Error("User ID is required to fetch appointments.");
   }
   updateBookingsToCompleted();
+  updateExpiredPendingBookingsToCanceled();
   try {
     const bookedAppointments = await db
       .select({
@@ -75,6 +76,7 @@ export async function getBookedAppointmentsForProvider(userId: string) {
     throw new Error("User ID is required to fetch appointments.");
   }
   await updateBookingsToCompleted();
+  await updateExpiredPendingBookingsToCanceled();
   try {
     const bookedAppointments = await db
       .select({
@@ -140,4 +142,59 @@ export async function updateBookingsToCompleted() {
         inArray(appoinmentsTable.status, ["Upcoming"])
       )
     );
+}
+
+export async function updateExpiredPendingBookingsToCanceled() {
+  const cutoff = new Date(Date.now() - 60_000);
+
+  const expired = await db
+    .select({
+      startAt: appoinmentsTable.startAt,
+      endAt: appoinmentsTable.endAt,
+      email: UserTable.email,
+      name: UserTable.name,
+      businessName: ProviderTable.businessName,
+      serviceCategory: ProviderTable.serviceCategory,
+      serviceName: appoinmentsTable.serviceName,
+    })
+    .from(appoinmentsTable)
+    .innerJoin(UserTable, eq(appoinmentsTable.customerId, UserTable.id))
+    .innerJoin(ProviderTable, eq(appoinmentsTable.providerId, ProviderTable.userId))
+    .where(
+      and(
+        lte(appoinmentsTable.startAt, cutoff),
+        eq(appoinmentsTable.status, "Pending")
+      )
+    );
+
+  if (expired.length === 0) return;
+
+  await db
+    .update(appoinmentsTable)
+    .set({ status: "Cancelled", updatedAt: new Date() })
+    .where(
+      and(
+        lte(appoinmentsTable.startAt, cutoff),
+        eq(appoinmentsTable.status, "Pending")
+      )
+    );
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  await Promise.all(
+    expired.map((appt) =>
+      fetch(new URL("/api/notificationCancelled", baseUrl).toString(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: appt.name,
+          email: appt.email,
+          startAt: appt.startAt.toISOString(),
+          endAt: appt.endAt.toISOString(),
+          businessName: appt.businessName,
+          serviceCategory: appt.serviceCategory,
+          ...(appt.serviceName ? { serviceName: appt.serviceName } : {}),
+        }),
+      }).catch((err) => console.error("Failed to send cancellation email:", err))
+    )
+  );
 }
