@@ -44,12 +44,12 @@ export default async function BookPage({
   }
 
   return (
-    <div>
+    <div className="bg-background">
       <Header user={currentUser} />
       <div className="text-center mt-10">
         <h2 className="text-3xl">Book Appointment</h2>
       </div>
-      <div className="mt-20">
+      <div className="mt-20 mb-4">
         <BookAppoinmentSearchBar />
       </div>
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
