@@ -17,10 +17,15 @@ import { getProviderServices } from "@/app/providerServices/actions/serviceActio
 
 export default async function ProviderProfilePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { id } = await params;
+  const sp = await searchParams;
+  const rawDate = sp?.date;
+  const initialDate = Array.isArray(rawDate) ? rawDate[0] : rawDate;
   const currentUser = await getCurrentUser({ withFullUser: true });
 
   const provider: singleProvider | null = await getProviderById(id);
@@ -62,6 +67,7 @@ export default async function ProviderProfilePage({
               workingHours={workingHours}
               userId={currentUser.id}
               services={services}
+              initialDate={initialDate}
             />
             <ServiceSection provider={provider} />
           </>
