@@ -21,6 +21,9 @@ export default async function BookPage({
     ? rawServiceCategory[0]
     : rawServiceCategory;
 
+  const rawDate = sp?.date;
+  const date = Array.isArray(rawDate) ? rawDate[0] : rawDate;
+
   // Pagination
   const page = sp["page"] ?? "1";
   const per_page = sp["per_page"] ?? "4";
@@ -50,12 +53,16 @@ export default async function BookPage({
         <h2 className="text-3xl">Book Appointment</h2>
       </div>
       <div className="mt-20 mb-4">
-        <BookAppoinmentSearchBar />
+        <BookAppoinmentSearchBar
+            user={currentUser}
+            initialCategory={serviceCategory}
+            initialDate={date}
+          />
       </div>
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
         <Filters />
         <Suspense fallback={<Loading>Loading providers...</Loading>}>
-          {filteredProviders && <ProfileCard providers={filteredProviders} />}
+          {filteredProviders && <ProfileCard providers={filteredProviders} date={date} />}
         </Suspense>
       </div>
       {filteredProviders.length > 0 && (
