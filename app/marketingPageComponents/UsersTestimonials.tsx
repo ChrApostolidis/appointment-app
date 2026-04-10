@@ -50,25 +50,25 @@ export default function UsersTestimonials() {
         </div>
       </div>
       <div className="bg-background text-white text-center">
-        <motion.div
-          layout
-          className="columns-1 sm:columns-2 lg:columns-3 gap-6 px-6 lg:px-20"
-          transition={{ type: "spring", bounce: 0.18, duration: 0.8 }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-6 lg:px-20">
           <AnimatePresence mode="popLayout">
-            {displayedTestimonials.map((testimonial) => (
+            {displayedTestimonials.map((testimonial, index) => (
               <motion.div
-                layout
                 key={testimonial.id}
-                className="mb-4 p-4 border rounded-2xl border-gray-400 break-inside-avoid"
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -50, scale: 0.95 }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="p-4 border rounded-2xl border-gray-400"
+                initial={index >= initialCount ? { opacity: 0, scale: 0.75 } : false}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.75 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 280,
+                  damping: 22,
+                  delay: index >= initialCount ? (index - initialCount) * 0.07 : 0,
+                }}
               >
                 <div className="flex flex-col gap-4">
                   <div className="flex gap-4">
-                    <motion.div layout className="shrink-0">
+                    <div className="shrink-0">
                       <Image
                         src={`/${testimonial.image}`}
                         alt={testimonial.name}
@@ -76,7 +76,7 @@ export default function UsersTestimonials() {
                         width={48}
                         height={48}
                       />
-                    </motion.div>
+                    </div>
                     <div>
                       <p className="text-foreground text-lg font-bold">
                         {testimonial.name}
@@ -95,7 +95,7 @@ export default function UsersTestimonials() {
               </motion.div>
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
         {!showAll && testimonials.length > initialCount && (
           <MainButton
             className="my-6 cursor-pointer"
