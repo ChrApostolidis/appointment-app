@@ -17,7 +17,7 @@ export default async function Home() {
     <div className="bg-background">
       <Header user={currentUser} />
       <HeroSection user={currentUser}/>
-      <BookAppoinmentSearchBar />
+      <BookAppoinmentSearchBar user={currentUser} />
       <EventsStepper />
       <Reminders />
       <BookingMarketingComponent />
