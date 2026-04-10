@@ -28,6 +28,22 @@ export interface providers {
 }
 
 // The getProviders joins the tables 'providers' and 'logo_info' to fetch provider details along with their logo URLs.
+export async function getProvidersByCategory(
+  category: string
+): Promise<{ userId: string; businessName: string }[]> {
+  try {
+    return await db
+      .select({
+        userId: ProviderTable.userId,
+        businessName: ProviderTable.businessName,
+      })
+      .from(ProviderTable)
+      .where(eq(ProviderTable.serviceCategory, category));
+  } catch {
+    return [];
+  }
+}
+
 export async function getProviders(): Promise<providers[]> {
   try {
     const providers = await db
