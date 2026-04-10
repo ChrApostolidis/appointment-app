@@ -6,7 +6,7 @@ export default function LogOutButton() {
   const [loggingOut, setLoggingOut] = useState(false);
   return (
     <button
-      className="cursor-pointer w-full text-left px-2 py-1 text-sm hover:bg-primary-hover text-red-500 rounded"
+      className="cursor-pointer w-full text-left px-2 py-1 text-sm text-red-500 hover:text-red-400 transition-colors rounded"
       onClick={async () => {
         setLoggingOut(true);
         await logOut();

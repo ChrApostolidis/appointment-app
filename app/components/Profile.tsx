@@ -53,23 +53,25 @@ export default function Profile({ user }: { user: userType }) {
             className="absolute right-3 mt-2 w-64 bg-background rounded-xl shadow-lg p-4 flex flex-col gap-2 border"
           >
            <div className="flex justify-between items-center">
-              <p className="text-primary-foreground font-semibold">{user.name}</p>
+              <p className="text-foreground font-semibold">{user.name}</p>
               <ToggleTheme />
            </div>
-            <p className="text-sm text-primary-foreground">{user.email}</p>
+            <p className="text-sm text-muted-foreground">{user.email}</p>
             <div className="mt-2 border-t pt-2">
               <Link
                 href="/profile"
-                className="block px-2 py-1 text-sm hover:bg-primary-hover rounded"
+                className="block px-2 py-1 text-sm text-foreground hover:text-primary transition-colors rounded"
               >
                 My Profile
               </Link>
-              <Link
-                href="/"
-                className="block px-2 py-1 text-sm hover:bg-primary-hover rounded"
-              >
-                Dashboard
-              </Link>
+              {user.role === "provider" && (
+                <Link
+                  href="/dashboard"
+                  className="block px-2 py-1 text-sm text-foreground hover:text-primary transition-colors rounded"
+                >
+                  Dashboard
+                </Link>
+              )}
               <LogOutButton />
             </div>
           </motion.div>
