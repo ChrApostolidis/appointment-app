@@ -1,8 +1,11 @@
+"use client";
+
 import { WorkingHours } from "@/app/profile/data/hoursData";
 import { Calendar } from "@/components/ui/calendar";
 import { startOfToday } from "date-fns";
 import { weekdayIndex } from "../../utils/helper";
 import { AppointmentSlot } from "./ConfirmBookingSection";
+import { useEffect } from "react";
 
 type ContainerCalendarProps = {
   date: Date | undefined;
@@ -39,6 +42,12 @@ export default function ContainerCalendar({
       setIsLoading(false);
     }
   };
+
+  // Auto-fetch slots when a date is pre-selected (e.g. from search bar)
+  useEffect(() => {
+    if (date) fetchAppointments(providerId, date);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const today = startOfToday();
 

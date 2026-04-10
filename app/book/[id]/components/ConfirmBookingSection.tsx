@@ -16,21 +16,30 @@ export type AppointmentSlot = {
   endAt: Date;
 };
 
+function parseInitialDate(dateStr: string): Date {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export default function ConfirmBookingSection({
   provider,
   providerId,
   workingHours,
   userId,
   services,
+  initialDate,
 }: {
   provider: singleProvider;
   providerId: string;
   workingHours: WorkingHours;
   userId: string;
   services: Service[];
+  initialDate?: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(
+    initialDate ? parseInitialDate(initialDate) : undefined
+  );
   const [selectedTime, setSelectedTime] = useState<AppointmentSlot | undefined>(
     undefined
   );

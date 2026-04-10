@@ -7,8 +7,10 @@ import Loading from "./Loading";
 
 export default async function ProfileCard({
   providers,
+  date,
 }: {
   providers: providers[];
+  date?: string;
 }) {
   if (providers.length === 0) {
     return (
@@ -26,7 +28,7 @@ export default async function ProfileCard({
             key={provider.userId}
             className="bg-card rounded-lg border border-border overflow-hidden hover:border-primary/40 hover:shadow-md transition-all duration-200"
           >
-            <Link href={`/book/${provider.userId}`} key={provider.userId}>
+            <Link href={`/book/${provider.userId}${date ? `?date=${date}` : ""}`} key={provider.userId}>
               <div className="flex flex-col md:flex-row">
                 <Suspense fallback={<Loading>Loading image...</Loading>}>
                   <ImageRender className="md:w-64 md:h-auto h-48" provider={provider} />
