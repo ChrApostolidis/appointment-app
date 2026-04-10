@@ -3,7 +3,7 @@ import MainButton from "@/app/components/MainButton";
 import Modal from "@/app/profile/components/Modal";
 import ContainerCalendar from "./ContainerCalendar";
 import { Briefcase, Calendar, Clock2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { WorkingHours } from "@/app/profile/data/hoursData";
 import Appoinements from "./Appoinements";
 import SuccessModal from "./SuccessModal";
@@ -28,6 +28,7 @@ export default function ConfirmBookingSection({
   userId,
   services,
   initialDate,
+  autoOpen,
 }: {
   provider: singleProvider;
   providerId: string;
@@ -35,8 +36,13 @@ export default function ConfirmBookingSection({
   userId: string;
   services: Service[];
   initialDate?: string;
+  autoOpen?: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (autoOpen && initialDate) setIsModalOpen(true);
+  }, []);
   const [date, setDate] = useState<Date | undefined>(
     initialDate ? parseInitialDate(initialDate) : undefined
   );

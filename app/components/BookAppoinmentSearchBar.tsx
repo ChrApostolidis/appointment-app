@@ -58,7 +58,7 @@ export default function BookAppointmentSearchBar({
     if (selectedProviderId) {
       router.push(
         date
-          ? `/book/${selectedProviderId}?date=${date}`
+          ? `/book/${selectedProviderId}?date=${date}&autoOpen=true`
           : `/book/${selectedProviderId}`
       );
       return;

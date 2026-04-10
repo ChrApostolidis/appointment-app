@@ -16,6 +16,7 @@ type MainProfileSectionProps = {
   userId: string;
   services: Service[];
   initialDate?: string;
+  autoOpen?: boolean;
 };
 
 export default async function MainProfileSection({
@@ -26,6 +27,7 @@ export default async function MainProfileSection({
   userId,
   services,
   initialDate,
+  autoOpen,
 }: MainProfileSectionProps) {
   const formattedNextSlot = nextAvailableSlot
     ? new Intl.DateTimeFormat("en-US", {
@@ -95,6 +97,7 @@ export default async function MainProfileSection({
             workingHours={workingHours}
             services={services}
             initialDate={initialDate}
+            autoOpen={autoOpen}
           />
         </div>
       </div>

@@ -26,6 +26,7 @@ export default async function ProviderProfilePage({
   const sp = await searchParams;
   const rawDate = sp?.date;
   const initialDate = Array.isArray(rawDate) ? rawDate[0] : rawDate;
+  const autoOpen = sp?.autoOpen === "true";
   const currentUser = await getCurrentUser({ withFullUser: true });
 
   const provider: singleProvider | null = await getProviderById(id);
@@ -68,6 +69,7 @@ export default async function ProviderProfilePage({
               userId={currentUser.id}
               services={services}
               initialDate={initialDate}
+              autoOpen={autoOpen}
             />
             <ServiceSection provider={provider} />
           </>
