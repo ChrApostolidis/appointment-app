@@ -30,7 +30,11 @@ export async function POST(req: Request) {
     );
   }
 
-  const booking = await bookAppointment(parsed.data);
-
-  return NextResponse.json({ booking }, { status: 201 });
+  try {
+    const booking = await bookAppointment(parsed.data);
+    return NextResponse.json({ booking }, { status: 201 });
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
+  }
 }

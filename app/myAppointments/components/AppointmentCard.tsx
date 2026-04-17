@@ -73,7 +73,7 @@ export default function AppointmentCard({ bookings }: AppointmentCardProps) {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Request failed");
+        throw new Error(data.error || "Request failed");
       }
       setShowSuccess(true);
     } catch (err) {
