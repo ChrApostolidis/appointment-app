@@ -33,6 +33,7 @@ export default function AddServiceModal({
   });
 
   useEffect(() => {
+    if (!isOpen) return;
     if (editingService) {
       reset({
         name: editingService.name,
@@ -42,7 +43,7 @@ export default function AddServiceModal({
     } else {
       reset({ name: "", description: "", price: 0 });
     }
-  }, [editingService, reset]);
+  }, [editingService, isOpen, reset]);
 
   const onSubmit = async (data: ServiceFormValues) => {
     if (editingService) {
@@ -91,7 +92,7 @@ export default function AddServiceModal({
             Price ($) <span className="text-red-500">*</span>
           </label>
           <input
-            {...register("price")}
+            {...register("price", { valueAsNumber: true })}
             type="number"
             min={1}
             placeholder="e.g. 30"
