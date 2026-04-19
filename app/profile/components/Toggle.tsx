@@ -8,10 +8,19 @@ type ToggleProps = {
 
 export default function Toggle({ setTempHours, day, enabled }: ToggleProps) {
   const toggleDay = (day: string) => {
-    setTempHours((prev) => ({
-      ...prev,
-      [day]: { ...prev[day], enabled: !prev[day].enabled },
-    }));
+    setTempHours((prev) => {
+      const current = prev[day];
+      const turningOn = !current.enabled;
+      return {
+        ...prev,
+        [day]: {
+          ...current,
+          enabled: turningOn,
+          start: turningOn && current.start === "Closed" ? "09:00" : current.start,
+          end: turningOn && current.end === "Closed" ? "17:00" : current.end,
+        },
+      };
+    });
   };
 
   return (

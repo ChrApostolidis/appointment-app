@@ -4,6 +4,7 @@ import { db } from "@/drizzle/db";
 import {
   appoinmentsTable,
   logoInfoTable,
+  ProviderHoursTable,
   ProviderTable,
 } from "@/drizzle/schema";
 import { and, eq, gte, lt } from "drizzle-orm";
