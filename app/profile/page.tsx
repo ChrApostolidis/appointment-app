@@ -1,5 +1,9 @@
 "use server";
-import { getCustomerDataById, getProviderWorkingHoursById } from "./actions/profileActions";
+import {
+  getCustomerDataById,
+  getProviderClosedDates,
+  getProviderWorkingHoursById,
+} from "./actions/profileActions";
 import { getCurrentUser } from "@/auth/currentUser";
 import {
   FullProviderData,
@@ -15,10 +19,11 @@ export default async function ProfilePage() {
   if (!currentUser) notFound();
 
   if (currentUser.role == "provider") {
-    const data = await getProviderWorkingHoursById(currentUser.id);
-    const provider: FullProviderData | null = await getFullProviderDataById(
-      currentUser.id
-    );
+    const [data, closedDates, provider] = await Promise.all([
+      getProviderWorkingHoursById(currentUser.id),
+      getProviderClosedDates(currentUser.id),
+      getFullProviderDataById(currentUser.id),
+    ]);
     if (!provider) notFound();
     return (
       <>
@@ -26,6 +31,7 @@ export default async function ProfilePage() {
           currentUser={currentUser}
           provider={provider}
           data={data}
+          closedDates={closedDates}
         />
       </>
     );
