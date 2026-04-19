@@ -1,0 +1,1 @@
+ALTER TABLE "provider_working_hours" ADD COLUMN "closed_dates" jsonb DEFAULT '[]'::jsonb NOT NULL;
