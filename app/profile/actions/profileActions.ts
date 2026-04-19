@@ -164,3 +164,33 @@ export async function getProviderWorkingHoursById(providerId: string) {
 
   return data[0]?.hours || null;
 }
+
+export async function getProviderClosedDates(providerId: string): Promise<string[]> {
+  const data = await db
+    .select({ closedDates: ProviderHoursTable.closedDates })
+    .from(ProviderHoursTable)
+    .where(eq(ProviderHoursTable.userId, providerId))
+    .limit(1);
+
+  return data[0]?.closedDates ?? [];
+}
+
+export async function updateProviderClosedDates(dates: string[]) {
+  const user = await getCurrentUser();
+  if (!user) throw new Response("Unauthorized", { status: 401 });
+
+  const now = new Date();
+
+  await db
+    .insert(ProviderHoursTable)
+    .values({
+      userId: user.id,
+      hours: {},
+      closedDates: dates,
+      updatedAt: now,
+    })
+    .onConflictDoUpdate({
+      target: ProviderHoursTable.userId,
+      set: { closedDates: dates, updatedAt: now },
+    });
+}
