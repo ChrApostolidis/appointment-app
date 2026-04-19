@@ -74,8 +74,9 @@ export default function ConfirmBookingSection({
           endAt: selectedTime.endAt,
           businessName: provider.businessName,
           serviceCategory: provider.serviceCategory,
-          serviceId: selectedService?.id ?? null,
-          serviceName: selectedService?.name ?? null,
+          ...(selectedService
+            ? { serviceId: selectedService.id, serviceName: selectedService.name }
+            : {}),
         }),
       });
       const data = await res.json();
