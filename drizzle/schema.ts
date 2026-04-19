@@ -84,6 +84,7 @@ export const ProviderHoursTable = pgTable("provider_working_hours", {
     .primaryKey()
     .references(() => UserTable.id, { onDelete: "cascade" }),
   hours: jsonb("hours").$type<StoredWeeklyHours>().notNull(),
+  closedDates: jsonb("closed_dates").$type<string[]>().notNull().default([]),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp({ withTimezone: true })
     .notNull()

@@ -14,7 +14,10 @@ import {
   overlaps,
   startOfDay,
 } from "../utils/helper";
-import { getProviderWorkingHoursById } from "@/app/profile/actions/profileActions";
+import {
+  getProviderClosedDates,
+  getProviderWorkingHoursById,
+} from "@/app/profile/actions/profileActions";
 import { getCurrentUser } from "@/auth/currentUser";
 
 export interface providers {
@@ -153,19 +156,22 @@ export async function getNextAvailableSlot(
   const now = new Date();
   const windowEnd = addDays(now, 30);
 
-  const bookings = await db
-    .select({
-      startAt: appoinmentsTable.startAt,
-      endAt: appoinmentsTable.endAt,
-    })
-    .from(appoinmentsTable)
-    .where(
-      and(
-        eq(appoinmentsTable.providerId, providerId),
-        gte(appoinmentsTable.startAt, now),
-        lt(appoinmentsTable.startAt, windowEnd)
-      )
-    );
+  const [bookings, closedDates] = await Promise.all([
+    db
+      .select({
+        startAt: appoinmentsTable.startAt,
+        endAt: appoinmentsTable.endAt,
+      })
+      .from(appoinmentsTable)
+      .where(
+        and(
+          eq(appoinmentsTable.providerId, providerId),
+          gte(appoinmentsTable.startAt, now),
+          lt(appoinmentsTable.startAt, windowEnd)
+        )
+      ),
+    getProviderClosedDates(providerId),
+  ]);
 
   let cursor = startOfDay(now);
   for (cursor < windowEnd; (cursor = addDays(cursor, 1)); ) {
@@ -175,6 +181,11 @@ export async function getNextAvailableSlot(
     const entry = workingHours[weekdayKey];
     if (!entry || !entry.enabled) {
       continue; // Provider is closed on this day
+    }
+
+    const dateStr = cursor.toISOString().slice(0, 10);
+    if (closedDates.includes(dateStr)) {
+      continue; // Provider has a specific closure on this date
     }
 
     const { start, end } = buildDayWindow(cursor, entry); // returns timestaps
@@ -244,6 +255,12 @@ export async function getAvailableAppointments(
   const entry = workingHours[weekdayKey];
   if (!entry || !entry.enabled) {
     return "Closed"; // Provider is not working that day
+  }
+
+  const closedDates = await getProviderClosedDates(providerId);
+  const dateStr = startOfDay.toISOString().slice(0, 10);
+  if (closedDates.includes(dateStr)) {
+    return "Closed";
   }
 
   const { start, end } = buildDayWindow(startOfDay, entry); // returns timestaps

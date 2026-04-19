@@ -3,6 +3,7 @@ import { Calendar, Check, Edit, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import MainButton from "../../components/MainButton";
 import WorkingHours from "../components/WorkingHours";
+import ClosedDates from "../components/ClosedDates";
 import { FullProviderData } from "../actions/profileActions";
 import { StoredWeeklyHours } from "@/drizzle/schema";
 import { userType } from "@/app/registerForms/components/LockedRegisterForm";
@@ -12,12 +13,14 @@ type ProviderProfileProps = {
   currentUser: userType;
   provider: FullProviderData;
   data: StoredWeeklyHours | null;
+  closedDates: string[];
 };
 
 export default function ProviderProfile({
   currentUser,
   provider,
   data,
+  closedDates,
 }: ProviderProfileProps) {
   return (
     <>
@@ -112,6 +115,7 @@ export default function ProviderProfile({
                 </div>
               </div>
               <WorkingHours data={data} />
+              <ClosedDates initialDates={closedDates} />
             </div>
           </div>
         </div>

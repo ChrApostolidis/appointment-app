@@ -26,7 +26,6 @@ export async function GET(req: Request) {
       return NextResponse.json({ slots: "Closed" });
     }
 
-    //  add logic for closed days
     const serialized = slots.map((slot) => ({
       startAt: slot.startAt.toISOString(),
       endAt: slot.endAt.toISOString(),

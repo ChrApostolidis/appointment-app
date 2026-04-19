@@ -5,8 +5,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { startOfToday } from "date-fns";
 import { weekdayIndex } from "../../utils/helper";
 import { AppointmentSlot } from "./ConfirmBookingSection";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getNextAvailableSlot } from "../../actions/actions";
+import { getProviderClosedDates } from "@/app/profile/actions/profileActions";
 
 type ContainerCalendarProps = {
   date: Date | undefined;
@@ -25,6 +26,14 @@ export default function ContainerCalendar({
   setIsLoading,
   setAvailableAppointments,
 }: ContainerCalendarProps) {
+  const [closedDateObjects, setClosedDateObjects] = useState<Date[]>([]);
+
+  useEffect(() => {
+    getProviderClosedDates(providerId).then((dates) => {
+      setClosedDateObjects(dates.map((d) => new Date(d + "T00:00:00")));
+    });
+  }, [providerId]);
+
   const fetchAppointments = async (providerId: string, date: Date) => {
     setIsLoading(true);
     try {
@@ -111,7 +120,7 @@ export default function ContainerCalendar({
             fetchAppointments(providerId, selectedDate);
           }
         }}
-        disabled={[{ before: today }, { dayOfWeek: disabledDays }]}
+        disabled={[{ before: today }, { dayOfWeek: disabledDays }, ...closedDateObjects]}
         required={false}
         className="rounded-md border shadow-sm bg-background text-foreground"
         captionLayout="dropdown"
