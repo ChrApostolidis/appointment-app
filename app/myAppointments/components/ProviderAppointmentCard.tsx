@@ -52,6 +52,7 @@ export default function ProviderAppointmentCard({
     startTransition(async () => {
       await cancelBooking(bookings.appointmentId);
       setPendingAction(null);
+      setIsOpen(false);
     });
   };
 
@@ -60,6 +61,7 @@ export default function ProviderAppointmentCard({
     startTransition(async () => {
       await confirmBooking(bookings.appointmentId);
       setPendingAction(null);
+      setIsOpen(false);
     });
   };
 

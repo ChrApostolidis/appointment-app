@@ -4,6 +4,7 @@ import { formatTime } from "@/app/book/utils/helper";
 import { db } from "@/drizzle/db";
 import { appoinmentsTable, ProviderTable, UserTable } from "@/drizzle/schema";
 import { and, eq, inArray, lte } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export type Bookings = {
   startAt: string;
@@ -113,6 +114,7 @@ export async function cancelBooking(appointmentId: string) {
       .update(appoinmentsTable)
       .set({ status: "Cancelled", updatedAt: new Date() })
       .where(eq(appoinmentsTable.id, appointmentId));
+    revalidatePath("/myAppointments");
   } catch (err) {
     console.error("Failed to cancel booking:", err);
     throw new Error("Could not cancel booking");
@@ -125,9 +127,10 @@ export async function confirmBooking(appointmentId: string) {
       .update(appoinmentsTable)
       .set({ status: "Upcoming", updatedAt: new Date() })
       .where(eq(appoinmentsTable.id, appointmentId));
+    revalidatePath("/myAppointments");
   } catch (err) {
-    console.error("Failed to cancel booking:", err);
-    throw new Error("Could not cancel booking");
+    console.error("Failed to confirm booking:", err);
+    throw new Error("Could not confirm booking");
   }
 }
 
