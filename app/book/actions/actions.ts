@@ -104,7 +104,7 @@ export async function getProviderById(
 export type trueFalse = "true" | "false";
 
 export type ProviderFilters = {
-  serviceCategory?: string;
+  serviceCategory?: string | string[];
   gender?: string;
   availability?: trueFalse;
 };
@@ -122,9 +122,13 @@ export async function getFilteredProviders(
   let endIndex = 0;
 
   if (options?.serviceCategory) {
-    filteredProviders = filteredProviders.filter((provider) => {
-      return provider.serviceCategory === options.serviceCategory;
-    });
+    const wanted = Array.isArray(options.serviceCategory)
+      ? options.serviceCategory
+      : [options.serviceCategory];
+    const wantedSet = new Set(wanted);
+    filteredProviders = filteredProviders.filter((provider) =>
+      wantedSet.has(provider.serviceCategory)
+    );
   }
 
   // Pagination
