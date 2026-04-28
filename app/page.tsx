@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import { getCurrentUser } from "@/auth/currentUser";
 import HeroSection from "./marketingPageComponents/HeroSection";
 import BookAppoinmentSearchBar from "./components/BookAppoinmentSearchBar";
+import SpecialistFinderBanner from "./components/SpecialistFinderBanner";
 import EventsStepper from "./marketingPageComponents/EventsStepper";
 import Reminders from "./marketingPageComponents/Reminders";
 import BookingMarketingComponent from "./marketingPageComponents/BookingMarketingComponent";
@@ -18,6 +19,9 @@ export default async function Home() {
       <Header user={currentUser} />
       <HeroSection user={currentUser}/>
       <BookAppoinmentSearchBar user={currentUser} />
+      <div className="mt-6">
+        <SpecialistFinderBanner />
+      </div>
       <EventsStepper />
       <Reminders />
       <BookingMarketingComponent />

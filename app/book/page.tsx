@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/auth/currentUser";
 import BookAppoinmentSearchBar from "../components/BookAppoinmentSearchBar";
 import Header from "../components/Header";
+import SpecialistFinderBanner from "../components/SpecialistFinderBanner";
 import Filters from "./components/Filters";
 import ProfileCard from "./components/ProfileCard";
 import { getFilteredProviders, providers } from "./actions/actions";
@@ -17,7 +18,8 @@ export default async function BookPage({
   // Search Params
   const sp = await searchParams;
   const rawServiceCategory = sp?.serviceCategory;
-  const serviceCategory = Array.isArray(rawServiceCategory)
+  const serviceCategory = rawServiceCategory;
+  const firstServiceCategory = Array.isArray(rawServiceCategory)
     ? rawServiceCategory[0]
     : rawServiceCategory;
 
@@ -55,9 +57,12 @@ export default async function BookPage({
       <div className="mt-20 mb-4">
         <BookAppoinmentSearchBar
             user={currentUser}
-            initialCategory={serviceCategory}
+            initialCategory={firstServiceCategory}
             initialDate={date}
           />
+      </div>
+      <div className="mb-6">
+        <SpecialistFinderBanner />
       </div>
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">
         <Filters />
