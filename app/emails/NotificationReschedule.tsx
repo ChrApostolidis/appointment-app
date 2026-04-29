@@ -72,8 +72,17 @@ export default function AppointmentRescheduled({
                 </Text>
                 <Text className="text-gray-700">
                   <strong>New Time: </strong>
-                  {new Date(startAt).toLocaleTimeString()} -{" "}
-                  {new Date(endAt).toLocaleTimeString()}
+                  {new Date(startAt).toLocaleTimeString("en-GB", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })}{" "}
+                  -{" "}
+                  {new Date(endAt).toLocaleTimeString("en-GB", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })}
                 </Text>
               </Section>
 

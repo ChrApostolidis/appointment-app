@@ -22,7 +22,7 @@ function formatDate(date: Date): string {
 }
 
 function formatTime(date: Date): string {
-  return new Date(date).toLocaleTimeString("en-US", {
+  return new Date(date).toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,

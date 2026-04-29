@@ -56,7 +56,7 @@ export default async function ProfileCard({
 
                   <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                     <span>Thessaloniki</span>
-                    <span> 9:00 AM - 6:00 PM</span>
+                    <span> 09:00 - 18:00</span>
                   </div>
 
                   <div className="mt-auto flex justify-end">

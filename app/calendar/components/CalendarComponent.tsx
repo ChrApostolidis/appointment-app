@@ -33,7 +33,11 @@ export default function CalendarComponent({ events }: Props) {
 
   const formatTime = (date: Date | null) => {
     if (!date) return "";
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
   };
 
   return (
@@ -42,6 +46,16 @@ export default function CalendarComponent({ events }: Props) {
       plugins={[dayGridPlugin, timeGridPlugin]}
       initialView={view}
       events={events}
+      slotLabelFormat={{
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }}
+      eventTimeFormat={{
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }}
       windowResize={() => {
         if (!fullCalendarRef.current) return;
         
