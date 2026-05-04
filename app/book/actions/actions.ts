@@ -323,8 +323,8 @@ export async function bookAppointment(appointmentData: AppointmentData) {
         startAt: new Date(startAt),
         endAt: new Date(endAt),
         status: "Pending",
-        serviceId: serviceId ?? null,
-        serviceName: serviceName ?? null,
+        ...(serviceId ? { serviceId } : {}),
+        ...(serviceName ? { serviceName } : {}),
       })
       .returning({
         id: appoinmentsTable.id,
