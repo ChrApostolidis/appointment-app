@@ -1,5 +1,4 @@
 import { getCurrentUser } from "@/auth/currentUser";
-import BookAppoinmentSearchBar from "../components/BookAppoinmentSearchBar";
 import Header from "../components/Header";
 import SpecialistFinderBanner from "../components/SpecialistFinderBanner";
 import Filters from "./components/Filters";
@@ -19,10 +18,6 @@ export default async function BookPage({
   const sp = await searchParams;
   const rawServiceCategory = sp?.serviceCategory;
   const serviceCategory = rawServiceCategory;
-  const firstServiceCategory = Array.isArray(rawServiceCategory)
-    ? rawServiceCategory[0]
-    : rawServiceCategory;
-
   const rawDate = sp?.date;
   const date = Array.isArray(rawDate) ? rawDate[0] : rawDate;
 
@@ -54,14 +49,7 @@ export default async function BookPage({
       <div className="text-center mt-10">
         <h2 className="text-3xl">Book Appointment</h2>
       </div>
-      <div className="mt-20 mb-4">
-        <BookAppoinmentSearchBar
-            user={currentUser}
-            initialCategory={firstServiceCategory}
-            initialDate={date}
-          />
-      </div>
-      <div className="mb-6">
+      <div className="m-6">
         <SpecialistFinderBanner />
       </div>
       <div className="flex flex-col gap-10 lg:flex-row lg:mx-12">

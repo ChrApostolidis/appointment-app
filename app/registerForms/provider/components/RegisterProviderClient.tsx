@@ -152,14 +152,6 @@ export default function RegisterProviderClient() {
 
         <button
           type="submit"
-          onClick={() => {
-            console.log("🔴 BUTTON CLICKED!");
-            console.log("File exists:", !!providerFile);
-            console.log(
-              "Form errors:",
-              handleCompleteSignUpAsProvider.formState.errors
-            );
-          }}
           disabled={
             handleCompleteSignUpAsProvider.formState.isSubmitting ||
             !providerFile
