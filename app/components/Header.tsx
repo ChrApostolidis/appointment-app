@@ -6,10 +6,12 @@ import { userType } from "../registerForms/components/LockedRegisterForm";
 import Profile from "./Profile";
 import NavMenu from "./NavMenu";
 import BurgerButton from "./BurgerButton";
+import MobileDrawer from "./MobileDrawer";
 import Link from "next/link";
 
 export default function Header({ user }: { user: userType | null }) {
   const [isSticky, setIsSticky] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,9 +64,17 @@ export default function Header({ user }: { user: userType | null }) {
               </div>
             )}
           </div>
-          <BurgerButton />
+          <BurgerButton
+            isOpen={menuOpen}
+            onToggle={() => setMenuOpen((s) => !s)}
+          />
         </div>
       </header>
+      <MobileDrawer
+        user={user}
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
     </>
   );
 }
