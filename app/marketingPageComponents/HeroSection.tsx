@@ -31,7 +31,7 @@ export default function HeroSection({ user }: { user: userType | null }) {
           </span>
         </motion.div>
 
-        <h1 className="text-6xl md:text-7xl font-bold mb-6 text-gray-900 dark:text-white">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-900 dark:text-white">
           Connect.
           <motion.span
             animate={{
