@@ -17,9 +17,7 @@ export default async function Home() {
     <div className="bg-background">
       <Header user={currentUser} />
       <HeroSection user={currentUser}/>
-      <div className="mt-6">
-        <SpecialistFinderBanner />
-      </div>
+      {currentUser && <SpecialistFinderBanner />}
       <EventsStepper />
       <Reminders />
       <BookingMarketingComponent />
