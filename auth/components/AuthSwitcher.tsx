@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { RolePick } from "@/app/authPage/components/RolePick";
 import MobileLayout from "./MobileLayout";
 import { useAuthForms } from "../hooks/useAuthForms";
+import Link from "next/link";
+import Image from "next/image";
 
 export type Role = "user" | "provider";
 
@@ -53,9 +55,23 @@ const AuthSwitcher: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-black p-4">
       {/* Mobile Layout */}
       <MobileLayout />
+      <div className="hidden sm:flex absolute top-2 left-0 w-full  items-center justify-center">
+        <Link href="/" className="ml-2">
+          <div className="flex items-center justify-center">
+            <Image
+              src="/app-logo.png"
+              alt="App Logo"
+              width={64}
+              height={64}
+            />
+            <p className="text-xl lg:text-2xl">
+              Appoint<span className="text-primary">Me</span>
+            </p>
+          </div>
+        </Link>
+      </div>
       <div className="hidden md:block relative w-3xl h-[500px] bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl shadow-2xl overflow-hidden">
         {/* Sign In */}
-
         <form
           onSubmit={handleSignIn.handleSubmit(signInHandler)}
           className="absolute top-0 left-0 w-1/2 h-full flex flex-col items-center justify-center p-8 text-gray-100"
