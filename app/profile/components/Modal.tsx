@@ -5,10 +5,16 @@ import { X } from "lucide-react";
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  size?: "md" | "lg";
   children: React.ReactNode;
 };
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+const sizeClasses: Record<NonNullable<ModalProps["size"]>, string> = {
+  md: "max-w-md lg:max-w-xl",
+  lg: "max-w-md md:max-w-2xl lg:max-w-4xl",
+};
+
+export default function Modal({ isOpen, onClose, size = "md", children }: ModalProps) {
   if (!isOpen) return null;
   return (
     <div
@@ -16,7 +22,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-background text-white p-6 rounded-xl shadow-xl w-[90%] max-w-md lg:max-w-xl lg:space-y-4"
+        className={`bg-background text-white p-6 rounded-xl shadow-xl w-[90%] ${sizeClasses[size]} max-h-[90vh] overflow-y-auto lg:space-y-4`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-end mb-2">

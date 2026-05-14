@@ -113,55 +113,68 @@ export default function ConfirmBookingSection({
         >
           Book Appointment
         </MainButton>
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <Modal isOpen={isModalOpen} onClose={handleCloseModal} size="lg">
           <form onSubmit={handleBooking}>
             <div className="flex flex-col gap-5">
               <h3 className="text-xl lg:text-2xl text-foreground">
                 Book Appoinement
               </h3>
-              <div className="flex justify-start gap-2 pb-2 border-b border-primary">
-                <Briefcase size={18} className="text-foreground" />
-                <p className="text-sm text-foreground">Select Service</p>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="flex flex-col gap-3">
+                  <div className="flex justify-start gap-2 pb-2 border-b border-primary">
+                    <Calendar size={18} className="text-foreground" />
+                    <p className="text-sm text-foreground">Select Date</p>
+                  </div>
+                  <ContainerCalendar
+                    setIsLoading={setIsLoading}
+                    setAvailableAppointments={setAvailableAppointments}
+                    date={date}
+                    setDate={setDate}
+                    providerId={providerId}
+                    workingHours={workingHours}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex justify-start gap-2 pb-2 border-b border-primary">
+                      <Briefcase size={18} className="text-foreground" />
+                      <p className="text-sm text-foreground">Select Service</p>
+                    </div>
+                    <select
+                      value={selectedService?.id ?? ""}
+                      onChange={(e) => {
+                        const found =
+                          services.find((s) => s.id === e.target.value) ?? null;
+                        setSelectedService(found);
+                      }}
+                      className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground"
+                    >
+                      <option value="">Basic Appointment</option>
+                      {services.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name} — ${s.price}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <div className="flex justify-start gap-2 pb-2 border-b border-primary">
+                      <Clock2 size={18} className="text-foreground" />
+                      <p className="text-sm text-foreground">Select Time</p>
+                    </div>
+                    <Appoinements
+                      isLoading={isLoading}
+                      availableAppointments={availableAppointments}
+                      selectedTime={selectedTime}
+                      setSelectedTime={setSelectedTime}
+                      setIsDisabled={setIsDisabled}
+                    />
+                  </div>
+                </div>
               </div>
-              <select
-                value={selectedService?.id ?? ""}
-                onChange={(e) => {
-                  const found =
-                    services.find((s) => s.id === e.target.value) ?? null;
-                  setSelectedService(found);
-                }}
-                className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground"
-              >
-                <option value="">Basic Appointment</option>
-                {services.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} — ${s.price}
-                  </option>
-                ))}
-              </select>
-              <div className="flex justify-start gap-2 pb-2 border-b border-primary">
-                <Calendar size={18} className="text-foreground" />
-                <p className="text-sm text-foreground">Select Date</p>
-              </div>
-              <ContainerCalendar
-                setIsLoading={setIsLoading}
-                setAvailableAppointments={setAvailableAppointments}
-                date={date}
-                setDate={setDate}
-                providerId={providerId}
-                workingHours={workingHours}
-              />
-              <div className="flex justify-start gap-2 pb-2 border-b border-primary">
-                <Clock2 size={18} className="text-foreground" />
-                <p className="text-sm text-foreground">Select Time</p>
-              </div>
-              <Appoinements
-                isLoading={isLoading}
-                availableAppointments={availableAppointments}
-                selectedTime={selectedTime}
-                setSelectedTime={setSelectedTime}
-                setIsDisabled={setIsDisabled}
-              />
             </div>
             <div className="flex justify-center items-center mt-3 border-t border-primary pt-4">
               <MainButton type="submit" disabled={isDisabled}>
