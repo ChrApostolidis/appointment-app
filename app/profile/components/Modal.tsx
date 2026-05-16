@@ -1,6 +1,8 @@
 "use client";
 import MainButton from "@/app/components/MainButton";
 import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type ModalProps = {
   isOpen: boolean;
@@ -15,8 +17,24 @@ const sizeClasses: Record<NonNullable<ModalProps["size"]>, string> = {
 };
 
 export default function Modal({ isOpen, onClose, size = "md", children }: ModalProps) {
-  if (!isOpen) return null;
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isOpen]);
+
+  if (!isOpen || !mounted) return null;
+
+  return createPortal(
     <div
       className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 "
       onClick={onClose}
@@ -32,6 +50,7 @@ export default function Modal({ isOpen, onClose, size = "md", children }: ModalP
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
