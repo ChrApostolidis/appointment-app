@@ -82,6 +82,14 @@ body {
   .animate-infinite-scroll {
     animation: infinite-scroll 25s linear infinite;
   }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 

@@ -71,7 +71,11 @@ export default async function ProviderProfilePage({
               initialDate={initialDate}
               autoOpen={autoOpen}
             />
-            <ServiceSection provider={provider} />
+            <ServiceSection
+              provider={provider}
+              userName={currentUser.name}
+              userEmail={currentUser.email}
+            />
           </>
         ) : (
           <ProviderNotFound />
