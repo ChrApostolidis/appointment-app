@@ -53,7 +53,7 @@ export default function Filters() {
               key={category.id}
               scroll={false}
               href={createCategoryQuery(category.name)}
-              className={`mr-2 text-foreground block hover:bg-primary-hover rounded px-2 py-1 ${
+              className={`mr-2 text-foreground block hover:text-primary rounded px-2 py-1 transition-colors ${
                 selectedCategory === category.name
                   ? "bg-primary/50 font-medium"
                   : ""

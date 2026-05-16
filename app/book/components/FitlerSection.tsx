@@ -30,9 +30,7 @@ export default function FilterSection({
       >
         <div
           className={`pl-4 pb-3 text-gray-400 text-md ${
-            scrollable
-              ? "max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-foreground scrollbar-track-foreground"
-              : ""
+            scrollable ? "max-h-32 overflow-y-auto no-scrollbar" : ""
           }`}
         >
           {children}
