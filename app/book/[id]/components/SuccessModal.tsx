@@ -20,13 +20,15 @@ export default function SuccessModal({
   selectedTime,
 }: SuccessModalProps) {
   if (!date || !selectedTime)
+  {
     throw new Error("Date or selected time is undefined");
-  console.log(date, selectedTime);
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col items-center gap-6 text-center py-6 px-4">
-        <div className="rounded-full bg-primary/10 p-6">
-          <CheckCircle className="text-green-500" size={72} />
+      <div className="flex flex-col items-center gap-4 text-center py-2 px-4">
+        <div className="rounded-full bg-primary/10 p-4">
+          <CheckCircle className="text-green-500" size={64} />
         </div>
         <div className="space-y-2">
           <p className="text-sm uppercase tracking-widest text-primary/70">
