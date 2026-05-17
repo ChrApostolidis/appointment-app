@@ -33,7 +33,7 @@ export default function EditHours({
       {orderedDayNames.map((day) => (
         <div
           key={day}
-          className="lg:p-3 mb-2 flex items-center justify-between rounded-lg bg-muted/50 border border-border border-white rounded-2xl p-1 lg:p-4"
+          className="lg:p-3 mb-2 flex items-center justify-between rounded-lg bg-muted/50 border border-border"
         >
           <div className="flex flex-col gap-1 lg:gap-4 lg:flex-row">
             <span className="font-medium text-sm text-foreground lg:text-xl">
@@ -88,7 +88,7 @@ export default function EditHours({
           </div>
         </div>
       ))}
-      <div className="flex justify-center items-center mt-3 lg:px-10">
+      <div className="flex justify-center items-center mt-5 lg:px-10">
         <MainButton onClick={() => handleSave()} className="w-full">
           Save Changes
         </MainButton>
