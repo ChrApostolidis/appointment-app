@@ -53,10 +53,10 @@ export default function Profile({ user }: { user: userType }) {
             className="absolute right-3 mt-2 w-64 bg-background rounded-xl shadow-lg p-4 flex flex-col gap-2 border"
           >
            <div className="flex justify-between items-center">
-              <p className="text-foreground font-semibold">{user.name}</p>
+              <p className="text-foreground font-semibold">{user.name.length > 16 ? user.name.slice(0, 13) + "..." : user.name}</p>
               <ToggleTheme />
            </div>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
+            <p className="text-sm text-muted-foreground">{user.email.length > 20 ? user.email.slice(0, 17) + "..." : user.email}</p>
             <div className="mt-2 border-t pt-2">
               <Link
                 href="/profile"
