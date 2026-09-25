@@ -2,6 +2,26 @@
 
 > Providers join AppointMe so we can handle their availability, bookings, and client updates, and customers trust us to match them with the right verified provider for whatever service they need.
 
+## The Problem It Solves
+Almost everyone has been through a bad booking experience: calling a business three times with no answer, trading messages for a day to find a free slot, or showing up only to learn the appointment was never written down.
+
+It happens because many people who offer a service, from barbers and personal trainers to tutors, therapists and freelancers, still take bookings by phone, text message or DM. That causes the same problems over and over:
+- **Time lost on back-and-forth:** Owners spend part of their day answering "are you free on Tuesday?" instead of doing the work they're paid for.
+- **Double bookings and no-shows:** Without one shared schedule, two customers can end up with the same time slot, and nobody gets a reminder.
+- **Hard to find the right provider:** Customers have no easy way to compare providers, see what they offer, and check when they're actually available.
+
+AppointMe puts all of this in one place. Providers set their working hours once, and customers can only book times that are really free. Both sides get an email confirmation automatically, and customers can browse and filter providers by the service they need.
+
+## Why I Built It
+I wanted to build something that works like a real product, not a tutorial exercise. A booking platform was a good fit because it's a problem people deal with every day, and it has two kinds of users (providers and customers) who need different things from the same app.
+
+I also used the project to go deeper in three areas:
+- **Software architecture:** Organizing a growing codebase so each feature (booking, profiles, availability) lives in its own place and can change without breaking the others.
+- **Database design:** Modeling providers, clients, working hours and appointments so the data stays consistent and the scheduling rules that prevent double bookings are enforced properly.
+- **TypeScript:** Writing the whole app in strict TypeScript, from the database to the UI, so many mistakes are caught before the code ever runs.
+
+The goal was to take an idea from a blank page to a working application and to make, and be able to explain, the technical decisions along the way.
+
 ## Key Features
 - **Dual-role onboarding:** Guided, validated forms route each user into either the provider or client flow, storing their profile details and unlocking the right experience once onboarding is finished.
 - **Availability engine:** Providers configure weekly working hours that are normalized into JSON, enabling fast conflict checks and flexible business hours per weekday.
