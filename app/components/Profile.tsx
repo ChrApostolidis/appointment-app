@@ -6,8 +6,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import LogOutButton from "@/auth/components/LogOutButton";
 import ToggleTheme from "./ToggleTheme";
+import UnreadBadge from "./UnreadBadge";
 
-export default function Profile({ user }: { user: userType }) {
+export default function Profile({
+  user,
+  unreadCount = 0,
+  onOpenMessages,
+}: {
+  user: userType;
+  unreadCount?: number;
+  onOpenMessages?: () => void;
+}) {
   const [openProfile, setOpenProfile] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -27,11 +36,20 @@ export default function Profile({ user }: { user: userType }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpenProfile((s) => !s)}
-        className="bg-secondary cursor-pointer flex justify-center items-center border w-12 h-12 rounded-full mr-1  text-black"
+        className="relative bg-secondary cursor-pointer flex justify-center items-center border w-12 h-12 rounded-full mr-1  text-black"
         aria-expanded={openProfile}
         aria-haspopup="menu"
+        aria-label={
+          unreadCount > 0
+            ? `Account menu, ${unreadCount} unread ${unreadCount === 1 ? "message" : "messages"}`
+            : "Account menu"
+        }
       >
         <p className="text-xl">{user.name?.charAt(0).toUpperCase()}</p>
+        <UnreadBadge
+          count={unreadCount}
+          className="absolute -top-1 -right-1 ring-2 ring-second-background"
+        />
       </button>
 
       <AnimatePresence>
@@ -64,6 +82,19 @@ export default function Profile({ user }: { user: userType }) {
               >
                 My Profile
               </Link>
+              {onOpenMessages && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpenProfile(false);
+                    onOpenMessages();
+                  }}
+                  className="cursor-pointer w-full flex items-center justify-between px-2 py-1 text-sm text-foreground hover:text-primary transition-colors rounded"
+                >
+                  Messages
+                  <UnreadBadge count={unreadCount} />
+                </button>
+              )}
               {user.role === "provider" && (
                 <Link
                   href="/dashboard"

@@ -7,9 +7,12 @@ import { X } from "lucide-react";
 import { userType } from "../registerForms/components/LockedRegisterForm";
 import LogOutButton from "@/auth/components/LogOutButton";
 import ToggleTheme from "./ToggleTheme";
+import UnreadBadge from "./UnreadBadge";
 
 interface MobileDrawerProps {
   user: userType | null;
+  unreadCount?: number;
+  onOpenMessages?: () => void;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -37,7 +40,13 @@ function getNavLinks(user: userType | null): DrawerLink[] {
   return [];
 }
 
-export default function MobileDrawer({ user, isOpen, onClose }: MobileDrawerProps) {
+export default function MobileDrawer({
+  user,
+  unreadCount = 0,
+  onOpenMessages,
+  isOpen,
+  onClose,
+}: MobileDrawerProps) {
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -137,6 +146,16 @@ export default function MobileDrawer({ user, isOpen, onClose }: MobileDrawerProp
                     >
                       My Profile
                     </Link>
+                    {onOpenMessages && (
+                      <button
+                        type="button"
+                        onClick={onOpenMessages}
+                        className="cursor-pointer w-full flex items-center justify-between px-2 py-2 text-base text-foreground hover:text-primary transition-colors rounded"
+                      >
+                        Messages
+                        <UnreadBadge count={unreadCount} />
+                      </button>
+                    )}
                     {user.role === "provider" && (
                       <Link
                         href="/dashboard"
