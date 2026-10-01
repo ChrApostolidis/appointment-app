@@ -10,7 +10,7 @@ It happens because many people who offer a service, from barbers and personal tr
 - **Double bookings and no-shows:** Without one shared schedule, two customers can end up with the same time slot, and nobody gets a reminder.
 - **Hard to find the right provider:** Customers have no easy way to compare providers, see what they offer, and check when they're actually available.
 
-AppointMe puts all of this in one place. Providers set their working hours once, and customers can only book times that are really free. Both sides get an email confirmation automatically, and customers can browse and filter providers by the service they need.
+AppointMe puts all of this in one place. Providers set their working hours once, and customers can only book times that are really free. Both sides get an email confirmation automatically, customers can browse and filter providers by the service they need, and any questions before or after a booking happen in a built-in chat instead of scattered texts and DMs.
 
 ## Why I Built It
 I wanted to build something that works like a real product, not a tutorial exercise. A booking platform was a good fit because it's a problem people deal with every day, and it has two kinds of users (providers and customers) who need different things from the same app.
@@ -26,6 +26,7 @@ The goal was to take an idea from a blank page to a working application and to m
 - **Dual-role onboarding:** Guided, validated forms route each user into either the provider or client flow, storing their profile details and unlocking the right experience once onboarding is finished.
 - **Availability engine:** Providers configure weekly working hours that are normalized into JSON, enabling fast conflict checks and flexible business hours per weekday.
 - **Booking workflow:** Clients browse provider cards, filter by specialty, and reserve one-hour slots, server actions prevent double booking and send confirmations instantly.
+- **Customer–provider chat:** Customers message any provider straight from their profile page, and providers reply from a slide-in panel opened from the account menu. An unread badge on the avatar shows how many replies are waiting, and messages appear instantly for the sender while the recipient's view updates every few seconds.
 - **Transactional communications:** React Email templates plus Resend power welcome and booking notification emails without managing SMTP infrastructure.
 - **Asset pipeline:** Providers upload brand imagery through AWS S3 pre-signed URLs, letting the browser stream uploads directly while keeping credentials server-side.
 - **Secure sessions:** Passwords are Scrypt-hashed with per-user salts and session state lives in Upstash Redis for stateless server deployments.
@@ -38,11 +39,14 @@ The goal was to take an idea from a blank page to a working application and to m
 - **Messaging & Files:** Resend + React Email, AWS S3 (pre-signed uploads)
 
 ## Architecture & Technical Decisions
-- **Feature-first app directory:** Each page (`book`, `profile`, `myAppointments`, `authPage`) keeps its own actions, components, and schemas, so features move faster without stepping on each other.
+- **Feature-first app directory:** Each feature (`book`, `profile`, `myAppointments`, `authPage`, `messages`) keeps its own actions, components, and schemas, so features move faster without stepping on each other.
 - **Server actions + API routes:** Bookings, onboarding, and availability updates stay type-safe as server actions, while `/api/*` routes share clean contracts with calendars, mobile apps, or webhooks.
 - **Typed database layer:** `drizzle/schema.ts` describes every enum, table, and JSON field, and `drizzle-kit` migrations keep code and Postgres in sync.
 - **Session boundary:** Redis-backed sessions (`auth/core/session.ts`) keep auth state outside Next.js middleware, so the app can scale horizontally without sticky sessions.
 - **Asynchronous side effects:** Actions like `bookAppointment` fire Resend emails via async fetches, keeping the UI quick while still delivering notifications.
+- **Chat data model:** One `conversations` row per customer–provider pair (enforced by a unique index) and a `messages` table indexed by conversation and time. Unread state is derived from per-side "last read" timestamps instead of a flag on every message, so marking a chat as read is a single update.
+- **Polling over WebSockets:** The serverless stack (Neon HTTP driver, Upstash REST Redis) can't hold open connections, so the chat polls: every 3s for the open conversation (fetching only newer messages), 10s for the conversation list and 30s for the unread badge, all paused while the tab is hidden. Sending is optimistic, and a message plus its conversation update are written atomically with `db.batch`.
+- **Session-scoped authorization:** Chat server actions never trust a user id from the client. They read the user from the session and verify they belong to the conversation before reading or writing anything.
 
 ## Getting Started
 ### Prerequisites
@@ -93,6 +97,7 @@ Then visit http://localhost:3000.
 - Role-aware routing middleware to hide provider-only surfaces from clients until policies are enforced.
 - Booking lifecycle enhancements: reschedule, cancel, and reminders (email/SMS).
 - Analytics dashboards summarizing utilization, cancellations, and top services for providers.
+- Real-time chat delivery through a hosted WebSocket service (Pusher or Ably) instead of polling, plus email alerts for unread messages.
 
 ## Feedback & Contributions
 This project is still actively being developed—feel free to reach out with feature ideas, usability feedback, or bug reports so they can be prioritized in upcoming iterations.
