@@ -73,8 +73,9 @@ export default async function ProviderProfilePage({
             />
             <ServiceSection
               provider={provider}
-              userName={currentUser.name}
-              userEmail={currentUser.email}
+              providerId={id}
+              userRole={currentUser.role}
+              currentUserId={currentUser.id}
             />
           </>
         ) : (
