@@ -1,9 +1,11 @@
 import {
   boolean,
+  index,
   integer,
   pgEnum,
   pgTable,
   timestamp,
+  uniqueIndex,
   uuid,
   varchar,
   jsonb,
@@ -131,6 +133,63 @@ export const appoinmentsTable = pgTable("appointments", {
     .$onUpdate(() => new Date()),
 });
 
+export const conversationsTable = pgTable(
+  "conversations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    customerId: uuid("customer_id")
+      .notNull()
+      .references(() => UserTable.id, { onDelete: "cascade" }),
+    providerId: uuid("provider_id")
+      .notNull()
+      .references(() => ProviderTable.userId, { onDelete: "cascade" }),
+    lastMessageAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    customerLastReadAt: timestamp({ withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    providerLastReadAt: timestamp({ withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp({ withTimezone: true })
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [
+    uniqueIndex("conversations_customer_provider_idx").on(
+      table.customerId,
+      table.providerId
+    ),
+    index("conversations_provider_idx").on(table.providerId),
+  ]
+);
+
+export type Conversation = typeof conversationsTable.$inferSelect;
+
+export const messagesTable = pgTable(
+  "messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    conversationId: uuid("conversation_id")
+      .notNull()
+      .references(() => conversationsTable.id, { onDelete: "cascade" }),
+    senderId: uuid("sender_id")
+      .notNull()
+      .references(() => UserTable.id, { onDelete: "cascade" }),
+    body: varchar("body", { length: 2000 }).notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("messages_conversation_created_idx").on(
+      table.conversationId,
+      table.createdAt
+    ),
+  ]
+);
+
+export type Message = typeof messagesTable.$inferSelect;
+
 // Database mapping for drizzle generic
 export type Database = {
   UserTable: typeof UserTable;
@@ -138,4 +197,6 @@ export type Database = {
   ProviderTable: typeof ProviderTable;
   ProviderHoursTable: typeof ProviderHoursTable;
   servicesTable: typeof servicesTable;
+  conversationsTable: typeof conversationsTable;
+  messagesTable: typeof messagesTable;
 };

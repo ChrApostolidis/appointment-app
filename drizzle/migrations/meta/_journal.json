@@ -36,6 +36,13 @@
       "when": 1776587799138,
       "tag": "0004_yummy_pandemic",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790845421259,
+      "tag": "0005_lumpy_greymalkin",
+      "breakpoints": true
     }
   ]
 }
